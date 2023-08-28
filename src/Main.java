@@ -1,11 +1,8 @@
-import entities.Customer;
-import entities.IdentityInfo;
-import entities.InvoiceTemplate;
-import entities.User;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        User u = new User();
-        u.set
+        Scanner scanner = new Scanner(System.in);
+        
     }
 }

@@ -13,19 +13,19 @@ public class Invoice {
     private static int autoInvNo;
     private static int autoTransactionId;
     @Setter(AccessLevel.NONE)
-    private int invId;
+    private int invoiceId;
 
     @Setter(AccessLevel.NONE)
     private int transactionId;
 
     @Setter(AccessLevel.NONE)
-    private int invNo;
+    private int invoiceNo;
 
-    private LocalDateTime invDateTime;
+    private LocalDateTime invoiceDate;
     private String description;
     private Seller seller;
     private Customer customer;
-    private InvoiceTemplate invTemplate;
+    private InvoiceTemplate invoiceTemplate;
     private int paymentMethod;
     private double totalVATPrice;
     private double totalPrice;
@@ -33,15 +33,15 @@ public class Invoice {
     private int invoiceStatus;
     private List<ProductInvoiceDetail> productInvoiceDetails;
 
-    public Invoice(LocalDateTime invDateTime, String description, Seller seller, Customer customer, InvoiceTemplate invTemplate, int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
-        this.invId = ++invId;
+    public Invoice(LocalDateTime invoiceDate, String description, Seller seller, Customer customer, InvoiceTemplate invoiceTemplate, int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
+        this.invoiceId = ++autoId;
         this.transactionId = ++autoTransactionId;
-        this.invNo = ++invNo;
-        this.invDateTime = invDateTime;
+        this.invoiceNo = ++autoInvNo;
+        this.invoiceDate = invoiceDate;
         this.description = description;
         this.seller = seller;
         this.customer = customer;
-        this.invTemplate = invTemplate;
+        this.invoiceTemplate = invoiceTemplate;
         this.paymentMethod = paymentMethod;
         this.totalVATPrice = totalVATPrice;
         this.totalPrice = totalPrice;

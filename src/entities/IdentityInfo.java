@@ -19,9 +19,6 @@ public class IdentityInfo {
     private int phoneNumber;
     private String bankAccount;
 
-    public IdentityInfo() {
-    }
-
     public IdentityInfo(int taxCode, String name, String address, String email, int phoneNumber, String bankAccount) {
         this.identityId = ++autoId;
         this.taxCode = taxCode;

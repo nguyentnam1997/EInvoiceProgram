@@ -13,11 +13,13 @@ public class Product {
     @Setter(AccessLevel.NONE)
     private int productId;
     private String productCode;
+    private String productName;
     private String description;
 
-    public Product(String productCode, String description) {
+    public Product(String productCode, String productName, String description) {
         this.productId = ++autoId;
         this.productCode = productCode;
+        this.productName = productName;
         this.description = description;
     }
 }

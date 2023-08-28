@@ -1,14 +1,13 @@
 package entities;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+@Data
 public class InvoiceTemplate {
-    @Getter @Setter
     private String templateSerial;
-    @Getter @Setter
     private String templateName;
-    @Getter @Setter
     private int templateType;
 
     public InvoiceTemplate(String templateSerial, String templateName, int templateType) {

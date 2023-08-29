@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-public class IdentityInfo {
+public abstract class IdentityInfo {
     @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
     private static int autoId;
 

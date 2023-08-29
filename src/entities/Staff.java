@@ -5,17 +5,14 @@ import lombok.Setter;
 
 import java.util.List;
 
-
-public class Staff extends Account {
-    @Getter @Setter
+@Data
+public class Staff extends Account{
     private int sellerTaxCode;
-    @Getter @Setter
     private boolean isAdmin;
-    @Getter @Setter
     private List<Invoice> staffInvoiceList;
 
-    public Staff(String username, String password, int sellerTaxCode, boolean isAdmin) {
-        super(username, password);
+    public Staff(String username, String password, String email, int sellerTaxCode, boolean isAdmin) {
+        super(username, password, email);
         this.sellerTaxCode = sellerTaxCode;
         this.isAdmin = isAdmin;
         this.staffInvoiceList = null;

@@ -3,13 +3,62 @@ package service;
 import entities.Seller;
 import entities.Account;
 import entities.Staff;
+import view.Menu;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class StaffService {
-    public void enterPassword(Scanner scanner, Staff staff, StaffService staffService, Map<Integer, Seller> sellers) {
+    public Staff login(Scanner scanner, Map<Integer, Seller> sellers, Map<String, Staff> staffs, SellerService sellerService) {
+        do {
+            System.out.println("========= LOGIN ==========");
+            System.out.println("Enter your company's tax code:");
+            int taxCode = Integer.parseInt(scanner.nextLine());
+            if (sellers.isEmpty()) {
+                System.out.println("There are currently no sellers, please register for the service first!");
+                Seller seller = sellerService.registerService(scanner, staffs);
+                sellers.put(taxCode, seller);
+            }
+            else if (!sellers.containsKey(taxCode)) {
+                reEnterTaxCodeOrRegister(scanner, taxCode, staffs, sellers, sellerService);
+            }
+            else {
+                Seller seller = sellers.get(taxCode);
+                do {
+                    System.out.println("Enter your username:");
+                    String username = scanner.nextLine();
+                    if (!seller.getStaffs().containsKey(username)) {
+                        System.out.println("Staff does not exist with tax code " + taxCode + ", please try again!");
+                        continue;
+                    }
+                    else {
+                        Staff staff = staffs.get(username);
+                        enterPassword(scanner, staff, sellers);
+                        return staff;
+                    }
+                }
+                while (true);
+            }
+        }
+        while (true);
+    }
+    public void reEnterTaxCodeOrRegister(Scanner scanner, int taxCode, Map<String, Staff> staffs, Map<Integer, Seller> sellers, SellerService sellerService) {
+        System.out.println("Tax code doesn't exist, choose options:");
+        System.out.println("1. Re-enter tax code.");
+        System.out.println("2. Register service.");
+        int choose = Integer.parseInt(scanner.nextLine());
+        switch (choose) {
+            case 1 -> {
+                login(scanner, sellers, staffs, sellerService);
+            }
+            case 2 -> {
+                Seller seller = sellerService.registerService(scanner, staffs);
+                sellers.put(taxCode, seller);
+            }
+        }
+    }
+    public void enterPassword(Scanner scanner, Staff staff,  Map<Integer, Seller> sellers) {
         do {
             System.out.println("Enter your password:");
             String password = scanner.nextLine();
@@ -23,7 +72,7 @@ public class StaffService {
                         continue;
                     }
                     case 2 -> {
-                        staffService.forgotPassword(scanner, sellers);
+                        forgotPassword(scanner, sellers);
                     }
                 }
             }

@@ -44,7 +44,7 @@ public class Menu {
         System.out.println("Choose options:");
     }
     public void menuEditUserInformation() {
-        System.out.println("------- Edit user -------");
+        System.out.println("------- 2. Edit user -------");
         System.out.println("1. Change this user's password.");
         System.out.println("2. Change this user's email.");
         System.out.println("3. Back to previous menu.");

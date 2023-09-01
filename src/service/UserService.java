@@ -23,21 +23,6 @@ public class UserService {
         }
         while (true);
     }
-    /*public void reEnterTaxCodeOrRegister(Scanner scanner, int taxCode, Map<String, User> users, SellerService sellerService) {
-        System.out.println("Tax code doesn't exist, choose options:");
-        System.out.println("1. Re-enter tax code.");
-        System.out.println("2. Register service.");
-        int choose = Integer.parseInt(scanner.nextLine());
-        switch (choose) {
-            case 1 -> {
-                //login(scanner, sellers, users, sellerService);
-                break;
-            }
-            case 2 -> {
-                Seller seller = sellerService.registerService(scanner, users);
-            }
-        }
-    }*/
     public void enterPassword(Scanner scanner, User user, Seller seller) {
         do {
             System.out.println("Enter your password:");
@@ -67,7 +52,7 @@ public class UserService {
         do {
             System.out.println("Please enter your username:");
             String inputUsername = scanner.nextLine();
-            if (seller.getUsers().containsKey(inputUsername)) {
+            if (!seller.getUsers().containsKey(inputUsername)) {
                 System.out.println("Username " + inputUsername + " doesn't exist, please try again!");
                 continue;
             }
@@ -75,17 +60,25 @@ public class UserService {
                 do {
                     System.out.println("Please enter your email:");
                     String inputEmail = scanner.nextLine();
-                    if (seller.getUsers().get(inputUsername).getEmail().equalsIgnoreCase(inputEmail)) {
+                    if (!seller.getUsers().get(inputUsername).getEmail().equalsIgnoreCase(inputEmail)) {
                         System.out.println("Wrong email, please try again!");
                         continue;
                     }
                     else {
-                        System.out.println("Enter your new password:");
-                        String newPassword = scanner.nextLine();
-                        seller.getUsers().get(inputUsername).setPassword(newPassword);
-                        System.out.println("Created new password successful!");
+                        do {
+                            System.out.println("Enter your new password:");
+                            String newPassword = scanner.nextLine();
+                            if (seller.getUsers().get(inputUsername).getPassword().equalsIgnoreCase(newPassword)) {
+                                System.out.println("New password can't be the same as old password, try again!");
+                                continue;
+                            }
+                            seller.getUsers().get(inputUsername).setPassword(newPassword);
+                            System.out.println("Created new password successful!");
+                            break;
+                        }
+                        while (true);
                     }
-                    break;
+                    break;  //LOOXI VL
                 }
                 while (true);
             }
@@ -114,7 +107,7 @@ public class UserService {
                     break;
                 }
             }
-            if (utils.wantContinue(scanner)) continue;
+            //if (utils.wantContinue(scanner)) continue;
             break;
         }
         while (true);
@@ -126,13 +119,11 @@ public class UserService {
             switch (chooseEdit) {
                 case 1 -> changePassword(scanner, user);
                 case 2 -> changeEmail(scanner, user);
-                case 3 -> editUserInformation(scanner, menu, utils, user);   //quay trở lại menu trước đó, CẦN CHECK LẠI
             }
-            if (utils.wantContinue(scanner)) continue;
+            //if (utils.wantContinue(scanner)) continue;
             break;
         }
         while (true);
-
     }
     public void changePassword(Scanner scanner, User user) {
         do {

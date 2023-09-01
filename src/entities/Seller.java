@@ -11,9 +11,9 @@ public class Seller extends IdentityInfo {
     @Getter @Setter
     private List<Invoice> invoiceList;
 
-    public Seller(int taxCode, String name, String address, String email, int hotline, String bankAccount) {
+   /* public Seller(int taxCode, String name, String address, String email, int hotline, String bankAccount) {
         super(taxCode, name, address, email, hotline, bankAccount);
-    }
+    }*/
 
     public Seller(int taxCode, String name, String address, String email, int hotline, String bankAccount, Map<String, User> users) {
         super(taxCode, name, address, email, hotline, bankAccount);

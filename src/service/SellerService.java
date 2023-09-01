@@ -98,7 +98,7 @@ public class SellerService {
                case 5 -> editCompanyBankAccount(scanner, seller);
                case 6 -> handleEditCompanyInformation(scanner, menu, utils, seller);
            }
-           if (utils.wantContinue(scanner)) continue;
+           //if (utils.wantContinue(scanner)) continue;
            break;
        }
        while (true);

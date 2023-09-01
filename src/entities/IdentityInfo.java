@@ -7,11 +7,6 @@ import lombok.Setter;
 
 @Data
 public abstract class IdentityInfo {
-    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
-    private static int autoId;
-
-    @Setter(AccessLevel.NONE)
-    private int identityId;
     @Setter(AccessLevel.NONE)
     private int taxCode;
     private String name;
@@ -21,7 +16,6 @@ public abstract class IdentityInfo {
     private String bankAccount;
 
     public IdentityInfo(int taxCode, String name, String address, String email, int hotline, String bankAccount) {
-        this.identityId = ++autoId;
         this.taxCode = taxCode;
         this.name = name;
         this.address = address;
@@ -32,8 +26,7 @@ public abstract class IdentityInfo {
 
     @Override
     public String toString() {
-        return "identityId=" + identityId +
-                ", taxCode=" + taxCode +
+        return ", taxCode=" + taxCode +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +

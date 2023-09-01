@@ -25,6 +25,7 @@ public class Invoice {
     private String description;
     private Seller seller;
     private Customer customer;
+    private User user;
     private InvoiceTemplate invoiceTemplate;
     private int paymentMethod;
     private double totalVATPrice;
@@ -33,7 +34,7 @@ public class Invoice {
     private int invoiceStatus;
     private List<ProductInvoiceDetail> productInvoiceDetails;
 
-    public Invoice(LocalDateTime invoiceDate, String description, Seller seller, Customer customer, InvoiceTemplate invoiceTemplate, int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
+    public Invoice(LocalDateTime invoiceDate, String description, Seller seller, Customer customer, User user, InvoiceTemplate invoiceTemplate, int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
         this.invoiceId = ++autoId;
         this.transactionId = ++autoTransactionId;
         this.invoiceNo = ++autoInvNo;
@@ -41,6 +42,7 @@ public class Invoice {
         this.description = description;
         this.seller = seller;
         this.customer = customer;
+        this.user = user;
         this.invoiceTemplate = invoiceTemplate;
         this.paymentMethod = paymentMethod;
         this.totalVATPrice = totalVATPrice;

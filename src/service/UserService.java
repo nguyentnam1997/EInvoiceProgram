@@ -135,10 +135,10 @@ public class UserService {
         while (true);
     }
     public void changePassword(Scanner scanner, User user) {
-        do {
+        while (true) {
             if (!checkCurrentUserPassword(scanner, user)) continue;
             else {
-                do {
+                while (true) {
                     if (!checkCurrentUserEmail(scanner, user)) continue;
                     else {
                         System.out.println("\n" + "Enter your new password");
@@ -154,11 +154,9 @@ public class UserService {
                     }
                     break;
                 }
-                while (true);
             }
             break;
         }
-        while (true);
     }
     public void changeEmail(Scanner scanner, User user) {
         do {
@@ -190,12 +188,12 @@ public class UserService {
         }
         else {
             System.out.println("------- Create new User -------");
-            do {
+            while (true) {
                 System.out.println("Enter your username:");
                 String username = scanner.nextLine();
                 if (!checkExistsUsername(username, users)) continue;
                 else {
-                    do {
+                    while (true) {
                         System.out.println("Enter your email:");
                         String email = scanner.nextLine();
                         if (checkExistsEmail(email, users)) continue;
@@ -213,11 +211,9 @@ public class UserService {
                         }
                         break;
                     }
-                    while (true);
                 }
                 break;
             }
-            while (true);
         }
     }
     public void changeStatusUser(Scanner scanner, User user, Map<String, User> users) {

@@ -16,14 +16,14 @@ public class SellerService {
         do {
             User user = userService.login(scanner, seller, users, sellerService);
             handleAfterLogin(scanner, menu, user, seller, users, userService);
-        }
-        while (true);
+        } while (true);
 
         //if (utils.wantContinue(scanner)) continue;
         //break;
 
 
     }
+
     public Seller registerService(Scanner scanner, Map<String, User> users) {
         System.out.println("Please register for the service first!");
         while (true) {
@@ -45,77 +45,81 @@ public class SellerService {
                         System.out.println("Invalid email, please try again!");
                         continue;
                     }
-                        while (true) {
-                            System.out.println("\n" + "Enter your company's hotline:");
-                            try {
-                                int hotline = Integer.parseInt(scanner.nextLine());
-                                System.out.println("\n" + "Enter your company's bank account:");
-                                String bankAccount = scanner.nextLine();
-                                System.out.println("\n" + "-------- Enter admin account --------");
+                    while (true) {
+                        System.out.println("\n" + "Enter your company's hotline:");
+                        try {
+                            int hotline = Integer.parseInt(scanner.nextLine());
+                            System.out.println("\n" + "Enter your company's bank account:");
+                            String bankAccount = scanner.nextLine();
+                            System.out.println("\n" + "-------- Enter admin account --------");
+                            while (true) {
+                                System.out.println("Enter username:");
+                                String username = scanner.nextLine();
+                                if (!Utils.isValidUsername(username)) {
+                                    System.out.println("Invalid username, please try again!");
+                                    continue;
+                                }
                                 while (true) {
-                                    System.out.println("Enter username:");
-                                    String username = scanner.nextLine();
-                                    if (!Utils.isValidUsername(username)) {
-                                        System.out.println("Invalid username, please try again!");
+                                    System.out.println("\n" + "Enter password:");
+                                    String password = scanner.nextLine();
+                                    if (!Utils.isValidPassword(password)) {
+                                        System.out.println("Invalid password, please try again!");
                                         continue;
                                     }
-                                        while (true) {
-                                            System.out.println("\n" + "Enter password:");
-                                            String password = scanner.nextLine();
-                                            if (!Utils.isValidPassword(password)) {
-                                                System.out.println("Invalid password, please try again!");
-                                                continue;
-                                            }
-                                                while (true) {
-                                                    System.out.println("\n" + "Enter email:");
-                                                    String accountEmail = scanner.nextLine();
-                                                    if (!Utils.isValidEmail(accountEmail)) {
-                                                        System.out.println("Invalid email, please try again!");
-                                                        continue;
-                                                    }
-                                                        User user = new User(username, password, accountEmail, true, taxCode);
-                                                        users.put(username, user);
-                                                        System.out.println("\n" + "Register successful!");
-                                                        return new Seller(taxCode, companyName, companyAddress, companyEmail, hotline, bankAccount, users);
-                                                }
+                                    while (true) {
+                                        System.out.println("\n" + "Enter email:");
+                                        String accountEmail = scanner.nextLine();
+                                        if (!Utils.isValidEmail(accountEmail)) {
+                                            System.out.println("Invalid email, please try again!");
+                                            continue;
                                         }
+                                        User user = new User(username, password, accountEmail, true, taxCode);
+                                        users.put(username, user);
+                                        System.out.println("\n" + "Register successful!");
+                                        return new Seller(taxCode, companyName, companyAddress, companyEmail, hotline, bankAccount, users);
+                                    }
                                 }
-                            } catch (Exception e) {
-                                System.out.println("Invalid value Integer, please try again!");
                             }
+                        } catch (Exception e) {
+                            System.out.println("Invalid value Integer, please try again!");
                         }
+                    }
 
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
-     public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, UserService userService) {
-         while (true) {
-             menu.menuOptionsAfterLogin();
-             int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
-             switch (chooseAfterLogin) {
-                 case 1 -> {
-                     handleManageCompany(scanner, menu, seller);
-                 }
-                 case 2 -> userService.handleManageUser(scanner, menu, user, seller, users);
-                 case 3 -> {
-                 }
-                 case 4 -> {}
-                 case 5 -> {}
-                 case 6 -> {
-                     if (!Utils.stayMenu(scanner)) return;//chức năng Logout;
-                 }
-             }
-         }
-     }
+
+    public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, UserService userService) {
+        while (true) {
+            menu.menuOptionsAfterLogin();
+            int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
+            switch (chooseAfterLogin) {
+                case 1 -> {
+                    handleManageCompany(scanner, menu, seller);
+                }
+                case 2 -> userService.handleManageUser(scanner, menu, user, seller, users);
+                case 3 -> {
+
+                }
+                case 4 -> {
+                }
+                case 5 -> {
+                }
+                case 6 -> {
+                    if (!Utils.stayMenu(scanner)) return;//chức năng Logout;
+                }
+            }
+        }
+    }
+
     public void handleManageCompany(Scanner scanner, Menu menu, Seller seller) {
         do {
             menu.menuManageCompany();
-            int chooseCase1 = Integer.parseInt(scanner.nextLine());
-            switch (chooseCase1) {
+            int choose = Integer.parseInt(scanner.nextLine());
+            switch (choose) {
                 case 1 -> {
                     System.out.println(seller);   //view information
                 }
@@ -128,30 +132,30 @@ public class SellerService {
             }
             /*if (Utils.stayMenu(scanner)) continue;
             break;*/
-        }
-        while (true);
+        } while (true);
 
     }
+
     public void handleEditCompanyInformation(Scanner scanner, Menu menu, Seller seller) {
-       do {
-           menu.menuEditCompanyInformation();
-           int chooseEdit = Integer.parseInt(scanner.nextLine());
-           switch (chooseEdit) {
-               case 1 -> editCompanyName(scanner, seller);
-               case 2 -> editCompanyAddress(scanner, seller);
-               case 3 -> editCompanyEmail(scanner, seller);
-               case 4 -> editCompanyHotline(scanner, seller);
-               case 5 -> editCompanyBankAccount(scanner, seller);
-               case 6 -> {
-                   //handleEditCompanyInformation(scanner, menu, seller);
-                   return;
-               }
-           }
-           //if (utils.wantContinue(scanner)) continue;
-           //break;
-       }
-       while (true);
+        do {
+            menu.menuEditCompanyInformation();
+            int chooseEdit = Integer.parseInt(scanner.nextLine());
+            switch (chooseEdit) {
+                case 1 -> editCompanyName(scanner, seller);
+                case 2 -> editCompanyAddress(scanner, seller);
+                case 3 -> editCompanyEmail(scanner, seller);
+                case 4 -> editCompanyHotline(scanner, seller);
+                case 5 -> editCompanyBankAccount(scanner, seller);
+                case 6 -> {
+                    //handleEditCompanyInformation(scanner, menu, seller);
+                    return;
+                }
+            }
+            //if (utils.wantContinue(scanner)) continue;
+            //break;
+        } while (true);
     }
+
     public void editCompanyName(Scanner scanner, Seller seller) {
         System.out.println("Old company's name was " + "'" + seller.getName() + "'");
         do {
@@ -160,16 +164,15 @@ public class SellerService {
             if (seller.getName().equalsIgnoreCase(newCompanyName)) {
                 System.out.println("New company's name can't be the same as old name, try again!");
                 continue;
-            }
-            else {
+            } else {
                 System.out.println("Company's name was successfully changed!");
                 seller.setName(newCompanyName);
             }
             break;
-        }
-        while (true);
+        } while (true);
 
     }
+
     public void editCompanyAddress(Scanner scanner, Seller seller) {
         System.out.println("Old company's address was " + "'" + seller.getAddress() + "'");
         do {
@@ -178,15 +181,14 @@ public class SellerService {
             if (seller.getAddress().equalsIgnoreCase(newCompanyAddress)) {
                 System.out.println("New company's address can't be the same as old address, try again!");
                 continue;
-            }
-            else {
+            } else {
                 System.out.println("Company's address was successfully changed!");
                 seller.setAddress(newCompanyAddress);
             }
             break;
-        }
-        while (true);
+        } while (true);
     }
+
     public void editCompanyEmail(Scanner scanner, Seller seller) {
         System.out.println("Old company's email was " + "'" + seller.getEmail() + "'");
         do {
@@ -195,15 +197,14 @@ public class SellerService {
             if (seller.getEmail().equalsIgnoreCase(newCompanyEmail)) {
                 System.out.println("New company's email can't be the same as old email, try again!");
                 continue;
-            }
-            else {
+            } else {
                 System.out.println("Company's email was successfully changed!");
                 seller.setEmail(newCompanyEmail);
             }
             break;
-        }
-        while (true);
+        } while (true);
     }
+
     public void editCompanyHotline(Scanner scanner, Seller seller) {
         System.out.println("Old company's hotline was " + "'" + seller.getHotline() + "'");
         do {
@@ -212,15 +213,14 @@ public class SellerService {
             if (seller.getHotline() == newCompanyHotline) {
                 System.out.println("New company's hotline can't be the same as old hotline, try again!");
                 continue;
-            }
-            else {
+            } else {
                 System.out.println("Company's hotline was successfully changed!");
                 seller.setHotline(newCompanyHotline);
             }
             break;
-        }
-        while (true);
+        } while (true);
     }
+
     public void editCompanyBankAccount(Scanner scanner, Seller seller) {
         System.out.println("Old company's bank account was " + "'" + seller.getBankAccount() + "'");
         System.out.println("Enter the new company's bank account:");

@@ -78,7 +78,7 @@ public class UserService {
                         }
                         while (true);
                     }
-                    break;  //LOOXI VL
+                    break;
                 }
                 while (true);
             }
@@ -86,7 +86,7 @@ public class UserService {
         }
         while (true);
     }
-    public void handleManageUser(Scanner scanner, Menu menu, Utils utils, User user, Seller seller, Map<String, User> users) {
+    public void handleManageUser(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users) {
         do {
             menu.menuManageUser();
             int choose = Integer.parseInt(scanner.nextLine());
@@ -95,32 +95,35 @@ public class UserService {
                     System.out.println(user);   //view information
                 }
                 case 2 -> {
-                    editUserInformation(scanner, menu, utils, user);
+                    editUserInformation(scanner, menu, user);
                 }
                 case 3 -> {
                     createUser(scanner, seller, user, users);
                 }
                 case 4 -> {
-                    changeStatusUser(scanner, utils, user, users);
+                    changeStatusUser(scanner, user, users);
                 }
                 case 5 -> {
-                    break;
+                    return;
                 }
             }
-            //if (utils.wantContinue(scanner)) continue;
-            break;
+            /*if (Utils.wantContinue(scanner)) continue;
+            break;*/
         }
         while (true);
     }
-    public void editUserInformation(Scanner scanner, Menu menu, Utils utils, User user) {
+    public void editUserInformation(Scanner scanner, Menu menu, User user) {
         do {
             menu.menuEditUserInformation();
             int chooseEdit = Integer.parseInt(scanner.nextLine());
             switch (chooseEdit) {
                 case 1 -> changePassword(scanner, user);
                 case 2 -> changeEmail(scanner, user);
+                case 3 -> {
+                    return;
+                }
             }
-            //if (utils.wantContinue(scanner)) continue;
+            if (Utils.stayMenu(scanner)) continue;
             break;
         }
         while (true);
@@ -210,7 +213,7 @@ public class UserService {
             while (true);
         }
     }
-    public void changeStatusUser(Scanner scanner, Utils utils, User user, Map<String, User> users) {
+    public void changeStatusUser(Scanner scanner, User user, Map<String, User> users) {
         if (!checkUserIsAdmin(scanner, user)) {
             System.out.println("This user don't have permission to perform this function!");
         }
@@ -220,7 +223,7 @@ public class UserService {
                 String username = scanner.nextLine();
                 if (!users.containsKey(username)) {
                     System.out.println("Username " + username + " doesn't exist.");
-                    if (utils.wantContinue(scanner)) continue;
+                    if (Utils.stayMenu(scanner)) continue;
                 }
                 else {
                     User thisUser = users.get(username);

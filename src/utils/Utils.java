@@ -8,8 +8,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Utils {
-    public boolean wantContinue(Scanner scanner) {
-        System.out.println("Do you want to continue? (Y/N)");
+    public static boolean stayMenu(Scanner scanner) {
+        System.out.println("Stay on this menu? (Y/N)");
         String chooseContinue = scanner.nextLine();
         return chooseContinue.equalsIgnoreCase("Y");
     }
@@ -34,7 +34,7 @@ public class Utils {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
-    public String checkExistsEmail(String email, Map<String, User> staffs) {
+    public static String checkExistsEmail(String email, Map<String, User> staffs) {
         for (Map.Entry<String, User> entry : staffs.entrySet()) {
             if (entry.getValue().getEmail().equalsIgnoreCase(email)) {
                 System.out.println("Email already exists, try again!");
@@ -43,4 +43,5 @@ public class Utils {
         }
         return email;
     }
+
 }

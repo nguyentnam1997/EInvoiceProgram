@@ -9,18 +9,22 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class SellerService {
-    public void loginService(Scanner scanner, Menu menu, Utils utils, Map<String, User> users, UserService userService, SellerService sellerService) {
+    public void loginService(Scanner scanner, Menu menu, Map<String, User> users, UserService userService, SellerService sellerService) {
         System.out.println("======= WELCOME TO INVOICE PROGRAM =======");
         Seller seller = registerService(scanner, users);
-        User user = userService.login(scanner, seller, users, sellerService);
-        handleAfterLogin(scanner, menu, utils, user, seller, users, userService);
+        do {
+            User user = userService.login(scanner, seller, users, sellerService);
+            handleAfterLogin(scanner, menu, user, seller, users, userService);
+        }
+        while (true);
+
         //if (utils.wantContinue(scanner)) continue;
         //break;
 
 
     }
     public Seller registerService(Scanner scanner, Map<String, User> users) {
-        System.out.println("There are currently no seller, please register for the service first!");
+        System.out.println("Please register for the service first!");
         System.out.println("Enter your company's tax code:");
         int taxCode = Integer.parseInt(scanner.nextLine());
         System.out.println("Enter your company's name:");
@@ -45,27 +49,27 @@ public class SellerService {
         System.out.println("Register successful!");
         return new Seller(taxCode, companyName, companyAddress, companyEmail, hotline, bankAccount, users);
     }
-     public void handleAfterLogin(Scanner scanner, Menu menu, Utils utils, User user, Seller seller, Map<String, User> users, UserService userService) {
+     public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, UserService userService) {
          do {
              menu.menuOptionsAfterLogin();
              int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
              switch (chooseAfterLogin) {
-                 case 1:
-                     handleManageCompany(scanner, menu, seller, utils);
-                 case 2:
-                     userService.handleManageUser(scanner, menu, utils, user, seller, users);
-                 case 3:
-                 case 4:
-                 case 5:
-
-                 case 6:
-
+                 case 1 -> {
+                     handleManageCompany(scanner, menu, seller);
+                 }
+                 case 2 -> userService.handleManageUser(scanner, menu, user, seller, users);
+                 case 3 -> {
+                 }
+                 case 4 -> {}
+                 case 5 -> {}
+                 case 6 -> {
+                     return;//chức năng Logout
+                 }
              }
-             break;
          }
          while (true);
      }
-    public void handleManageCompany(Scanner scanner, Menu menu, Seller seller, Utils utils) {
+    public void handleManageCompany(Scanner scanner, Menu menu, Seller seller) {
         do {
             menu.menuManageCompany();
             int chooseCase1 = Integer.parseInt(scanner.nextLine());
@@ -74,19 +78,19 @@ public class SellerService {
                     System.out.println(seller);   //view information
                 }
                 case 2 -> {
-                    handleEditCompanyInformation(scanner, menu, utils, seller);
+                    handleEditCompanyInformation(scanner, menu, seller);
                 }
                 case 3 -> {
-                    break;
+                    return;
                 }
             }
-            if (utils.wantContinue(scanner)) continue;
+            if (Utils.stayMenu(scanner)) continue;
             break;
         }
         while (true);
 
     }
-    public void handleEditCompanyInformation(Scanner scanner, Menu menu, Utils utils, Seller seller) {
+    public void handleEditCompanyInformation(Scanner scanner, Menu menu, Seller seller) {
        do {
            menu.menuEditCompanyInformation();
            int chooseEdit = Integer.parseInt(scanner.nextLine());
@@ -96,7 +100,7 @@ public class SellerService {
                case 3 -> editCompanyEmail(scanner, seller);
                case 4 -> editCompanyHotline(scanner, seller);
                case 5 -> editCompanyBankAccount(scanner, seller);
-               case 6 -> handleEditCompanyInformation(scanner, menu, utils, seller);
+               case 6 -> handleEditCompanyInformation(scanner, menu, seller);
            }
            //if (utils.wantContinue(scanner)) continue;
            break;

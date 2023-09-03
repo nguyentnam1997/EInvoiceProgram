@@ -18,6 +18,6 @@ public class Main {
         Utils utils = new Utils();
         UserService userService = new UserService();
         SellerService sellerService = new SellerService();
-        sellerService.loginService(scanner, menu, utils, users, userService, sellerService);
+        sellerService.loginService(scanner, menu, users, userService, sellerService);
     }
 }

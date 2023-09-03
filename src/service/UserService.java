@@ -14,7 +14,13 @@ public class UserService {
         do {
             System.out.println("Enter your username:");
             String username = scanner.nextLine();
-            if (!seller.getUsers().containsKey(username)) System.out.println("User does not exist, please try again!");
+            if (!seller.getUsers().containsKey(username))
+            {
+                System.out.println("User does not exist, please try again!" + "\n");
+            }
+            else if (!seller.getUsers().get(username).isActive()) {
+                System.out.println("This user has been inactivated, please try again!" + "\n");
+            }
             else {
                 User user = users.get(username);
                 enterPassword(scanner, user, seller);
@@ -25,10 +31,10 @@ public class UserService {
     }
     public void enterPassword(Scanner scanner, User user, Seller seller) {
         do {
-            System.out.println("Enter your password:");
+            System.out.println("\n" + "Enter your password:");
             String password = scanner.nextLine();
             if (!user.getPassword().equals(password)) {
-                System.out.println("Enter wrong password, choose the options:");
+                System.out.println("\n" + "Enter wrong password, choose the options:");
                 System.out.println("1. Re-enter password.");
                 System.out.println("2. Forgot password?");
                 int choose = Integer.parseInt(scanner.nextLine());
@@ -50,7 +56,7 @@ public class UserService {
     }
     public void forgotPassword(Scanner scanner, Seller seller) {
         do {
-            System.out.println("Please enter your username:");
+            System.out.println("\n" + "Enter your username:");
             String inputUsername = scanner.nextLine();
             if (!seller.getUsers().containsKey(inputUsername)) {
                 System.out.println("Username " + inputUsername + " doesn't exist, please try again!");
@@ -58,7 +64,7 @@ public class UserService {
             }
             else {
                 do {
-                    System.out.println("Please enter your email:");
+                    System.out.println("\n" + "Enter your email:");
                     String inputEmail = scanner.nextLine();
                     if (!seller.getUsers().get(inputUsername).getEmail().equalsIgnoreCase(inputEmail)) {
                         System.out.println("Wrong email, please try again!");
@@ -66,7 +72,7 @@ public class UserService {
                     }
                     else {
                         do {
-                            System.out.println("Enter your new password:");
+                            System.out.println("\n" + "Enter your new password:");
                             String newPassword = scanner.nextLine();
                             if (seller.getUsers().get(inputUsername).getPassword().equalsIgnoreCase(newPassword)) {
                                 System.out.println("New password can't be the same as old password, try again!");
@@ -135,7 +141,7 @@ public class UserService {
                 do {
                     if (!checkCurrentUserEmail(scanner, user)) continue;
                     else {
-                        System.out.println("Enter your new password");
+                        System.out.println("\n" + "Enter your new password");
                         String newPass = scanner.nextLine();
                         if (user.getPassword().equalsIgnoreCase(newPass)) {
                             System.out.println("New password can't be the same as old password, try again!");
@@ -203,6 +209,7 @@ public class UserService {
                             else isAdmin = false;
                             User newUser = new User(username, password, email, isAdmin, seller.getTaxCode());
                             users.put(username, newUser);
+                            System.out.println("Create user " + username + " successful!");
                         }
                         break;
                     }

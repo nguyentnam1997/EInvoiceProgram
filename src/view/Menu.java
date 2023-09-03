@@ -8,7 +8,7 @@ public class Menu {
         System.out.println("Choose options:");
     }*/
     public void menuOptionsAfterLogin() {
-        System.out.println("------- Welcome -------");
+        System.out.println("\n" + "------------- Welcome ---------------");
         System.out.println("1. Company management.");
         System.out.println("2. User management.");
         System.out.println("3. Invoices management.");
@@ -18,14 +18,14 @@ public class Menu {
         System.out.println("Choose options:");
     }
     public void menuManageCompany() {
-        System.out.println("------- 1. Company management -------");
+        System.out.println("\n" + "---------- 1. Company management ----------");
         System.out.println("1.1. Show company's information.");
         System.out.println("1.2. Edit company's information.");
         System.out.println("1.3. Back to main menu.");
         System.out.println("Choose options:");
     }
     public void menuEditCompanyInformation() {
-        System.out.println("------- 1.2. Edit company's information -------");
+        System.out.println("\n" + "---------- 1.2. Edit company's information ----------");
         System.out.println("1.2.1 Edit company's name.");
         System.out.println("1.2.2 Edit company's address.");
         System.out.println("1.2.3. Edit company's email.");
@@ -35,7 +35,7 @@ public class Menu {
         System.out.println("Choose options:");
     }
     public void menuManageUser() {
-        System.out.println("------- 2. User management -------");
+        System.out.println("\n" + "---------- 2. User management ----------");
         System.out.println("2.1. Show this user's information.");
         System.out.println("2.2. Edit user's information.");
         System.out.println("2.3. Create new user.");
@@ -44,7 +44,7 @@ public class Menu {
         System.out.println("Choose options:");
     }
     public void menuEditUserInformation() {
-        System.out.println("------- 2.2. Edit user's information -------");
+        System.out.println("\n" + "---------- 2.2. Edit user's information ----------");
         System.out.println("2.2.1. Change this user's password.");
         System.out.println("2.2.2. Change this user's email.");
         System.out.println("2.2.3. Back to previous menu.");

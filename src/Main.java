@@ -15,7 +15,7 @@ public class Main {
         Map<Integer, Seller> sellers = new HashMap<>();
         Map<String, User> users = new HashMap<>();
         Menu menu = new Menu();
-        Utils utils = new Utils();
+        //Utils utils = new Utils();
         UserService userService = new UserService();
         SellerService sellerService = new SellerService();
         sellerService.loginService(scanner, menu, users, userService, sellerService);

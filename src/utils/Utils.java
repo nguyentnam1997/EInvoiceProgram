@@ -24,7 +24,8 @@ public class Utils {
         if (in)
     }*/
     public static boolean isValidTaxCode(int taxCode) {
-        return taxCode == 10;
+        String taxCodeStr = String.valueOf(taxCode);
+        return taxCodeStr.length() == 10;
     }
     public static boolean isValidPassword(String password) {
         // Định dạng regex cho mật khẩu

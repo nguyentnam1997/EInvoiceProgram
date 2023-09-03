@@ -15,8 +15,8 @@ public class Invoice {
     @Setter(AccessLevel.NONE)
     private int invoiceId;
 
-    @Setter(AccessLevel.NONE)
-    private int transactionId;
+//    @Setter(AccessLevel.NONE)
+//    private int transactionId;
 
     @Setter(AccessLevel.NONE)
     private int invoiceNo;
@@ -36,7 +36,7 @@ public class Invoice {
 
     public Invoice(LocalDateTime invoiceDate, String description, Seller seller, Customer customer, User user, InvoiceTemplate invoiceTemplate, int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
         this.invoiceId = ++autoId;
-        this.transactionId = ++autoTransactionId;
+        //this.transactionId = ++autoTransactionId;
         this.invoiceNo = ++autoInvNo;
         this.invoiceDate = invoiceDate;
         this.description = description;

@@ -20,6 +20,12 @@ public class Utils {
         Matcher matcher = pattern.matcher(username);
         return matcher.matches() && !username.isEmpty();
     }
+    /*public static boolean isValidInteger(int inputInt) {
+        if (in)
+    }*/
+    public static boolean isValidTaxCode(int taxCode) {
+        return taxCode == 10;
+    }
     public static boolean isValidPassword(String password) {
         // Định dạng regex cho mật khẩu
         String passwordRegex = "^(?=.*[A-Z])(?=.*[.,-_;])(?!.*\\s).{7,15}$";

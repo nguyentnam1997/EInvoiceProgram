@@ -2,6 +2,7 @@ package service;
 
 import entities.Seller;
 import entities.User;
+import jdk.jshell.execution.Util;
 import utils.Utils;
 import view.Menu;
 
@@ -25,29 +26,71 @@ public class SellerService {
     }
     public Seller registerService(Scanner scanner, Map<String, User> users) {
         System.out.println("Please register for the service first!");
-        System.out.println("Enter your company's tax code:");
-        int taxCode = Integer.parseInt(scanner.nextLine());
-        System.out.println("Enter your company's name:");
-        String companyName = scanner.nextLine();
-        System.out.println("Enter your company's address:");
-        String companyAddress = scanner.nextLine();
-        System.out.println("Enter your company's email:");
-        String companyEmail = scanner.nextLine();
-        System.out.println("Enter your company's hotline:");
-        int hotline = Integer.parseInt(scanner.nextLine());
-        System.out.println("Enter your company's bank account:");
-        String bankAccount = scanner.nextLine();
-        System.out.println("---- Enter admin account ----");
-        System.out.println("Enter username:");
-        String username = scanner.nextLine();
-        System.out.println("Enter password:");
-        String password = scanner.nextLine();
-        System.out.println("Enter email:");
-        String accountEmail = scanner.nextLine();
-        User user = new User(username, password, accountEmail, true, taxCode);
-        users.put(username, user);
-        System.out.println("Register successful!");
-        return new Seller(taxCode, companyName, companyAddress, companyEmail, hotline, bankAccount, users);
+        while (true) {
+            System.out.println("Enter your company's tax code:");
+            try {
+                int taxCode = Integer.parseInt(scanner.nextLine());
+                System.out.println("Enter your company's name:");
+                String companyName = scanner.nextLine();
+                System.out.println("Enter your company's address:");
+                String companyAddress = scanner.nextLine();
+                while (true) {
+                    System.out.println("Enter your company's email:");
+                    String companyEmail = scanner.nextLine();
+                    if (!Utils.isValidEmail(companyEmail)) {
+                        System.out.println("Invalid email, please try again!");
+                    }
+                    else {
+                        while (true) {
+                            System.out.println("Enter your company's hotline:");
+                            try {
+                                int hotline = Integer.parseInt(scanner.nextLine());
+                                System.out.println("Enter your company's bank account:");
+                                String bankAccount = scanner.nextLine();
+                                System.out.println("---- Enter admin account ----");
+                                while (true) {
+                                    System.out.println("Enter username:");
+                                    String username = scanner.nextLine();
+                                    if (!Utils.isValidUsername(username)) {
+                                        System.out.println("Invalid username, please try again!");
+                                    }
+                                    else {
+                                        while (true) {
+                                            System.out.println("Enter password:");
+                                            String password = scanner.nextLine();
+                                            if (!Utils.isValidPassword(password)) {
+                                                System.out.println("Invalid password, please try again!");
+                                            }
+                                            else {
+                                                while (true) {
+                                                    System.out.println("Enter email:");
+                                                    String accountEmail = scanner.nextLine();
+                                                    if (!Utils.isValidEmail(accountEmail)) {
+                                                        System.out.println("Invalid email, please try again!");
+                                                    }
+                                                    else {
+                                                        User user = new User(username, password, accountEmail, true, taxCode);
+                                                        users.put(username, user);
+                                                        System.out.println("Register successful!");
+                                                        return new Seller(taxCode, companyName, companyAddress, companyEmail, hotline, bankAccount, users);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                            } catch (Exception e) {
+                                System.out.println("Invalid value Integer, please try again!");
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
+            }
+        }
     }
      public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, UserService userService) {
          do {

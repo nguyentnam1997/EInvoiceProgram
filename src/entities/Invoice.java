@@ -10,23 +10,17 @@ import java.util.List;
 @Data
 public class Invoice {
     private static int autoId;
-    private static int autoInvNo;
-    private static int autoTransactionId;
+    //private static int autoInvNo;
     @Setter(AccessLevel.NONE)
     private int invoiceId;
-
-//    @Setter(AccessLevel.NONE)
-//    private int transactionId;
-
     @Setter(AccessLevel.NONE)
     private int invoiceNo;
-
+    private InvoiceTemplate invoiceTemplate;
     private LocalDateTime invoiceDate;
     private String description;
     private Seller seller;
     private Customer customer;
     private User user;
-    private InvoiceTemplate invoiceTemplate;
     private int paymentMethod;
     private double totalVATPrice;
     private double totalPrice;
@@ -34,16 +28,14 @@ public class Invoice {
     private int invoiceStatus;
     private List<ProductInvoiceDetail> productInvoiceDetails;
 
-    public Invoice(LocalDateTime invoiceDate, String description, Seller seller, Customer customer, User user, InvoiceTemplate invoiceTemplate, int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
+    public Invoice(InvoiceTemplate invoiceTemplate, LocalDateTime invoiceDate, String description, Seller seller, Customer customer, User user,  int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
         this.invoiceId = ++autoId;
-        //this.transactionId = ++autoTransactionId;
-        this.invoiceNo = ++autoInvNo;
+        this.invoiceTemplate = invoiceTemplate;
         this.invoiceDate = invoiceDate;
         this.description = description;
         this.seller = seller;
         this.customer = customer;
         this.user = user;
-        this.invoiceTemplate = invoiceTemplate;
         this.paymentMethod = paymentMethod;
         this.totalVATPrice = totalVATPrice;
         this.totalPrice = totalPrice;

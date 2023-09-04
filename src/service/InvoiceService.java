@@ -1,15 +1,15 @@
 package service;
 
-import entities.InvoiceTemplate;
-import entities.User;
+import entities.*;
 import utils.Utils;
 import view.Menu;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class InvoiceService {
+public class InvoiceService extends  IdentityInfoService {
     public void handleManageInvoice(Scanner scanner, Menu menu, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         while (true) {
             menu.menuManageInvoice();
@@ -112,7 +112,7 @@ public class InvoiceService {
             }
         }
     }
-    public void createInvoice(Scanner scanner, Map<String, InvoiceTemplate> invoiceTemplates) {
+    public void createInvoice(Scanner scanner, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
         while (true) {
             System.out.println("Enter invoice template serial:");
             String invTempSerial = scanner.nextLine();
@@ -120,8 +120,78 @@ public class InvoiceService {
                 System.out.println("Template with serial '" + invTempSerial + "' doesn't exist, try again!");
                 continue;
             }
-            System.out.println("--------- Enter information of customer ---------");
+            LocalDateTime invoiceDate = LocalDateTime.now();
+            System.out.println("Enter description of invoice:");
+            String description = scanner.nextLine();
+
+
         }
 
+    }
+    public Customer inputCustomerInInvoice(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
+        System.out.println("Information of customer:");
+        while (true) {
+            System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
+            boolean isOrganization;
+            int choose = Integer.parseInt(scanner.nextLine());
+            if (choose == 1) {
+                isOrganization = true;
+                while (true) {
+                    System.out.println("\n" + "Enter customer ID:");
+                    String customerId = scanner.nextLine();
+                    if (customerId == null) {
+                        System.out.println("Value can't null, please try again!");
+                    }
+                    else if (customers.containsKey(customerId)) {
+                        System.out.println("Customer with id = '" + customerId + "' is already in the customer list, auto enter information? (Y/N)");
+                        String chooseAutoEnter = scanner.nextLine();
+                        if (chooseAutoEnter.equalsIgnoreCase("Y")) {
+                            return customers.get(customerId);
+                        }
+                        else {
+                            System.out.println("Enter buyer name:");
+                            String buyerName = scanner.nextLine();
+                            return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
+                        }
+                    }
+                    else {
+                        System.out.println("Enter buyer name:");
+                        String buyerName = scanner.nextLine();
+                        return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
+                    }
+                }
+            }
+            else if (choose == 2 ) {
+                isOrganization = false;
+                while (true) {
+                    System.out.println("\n" + "Enter customer ID:");
+                    String customerId = scanner.nextLine();
+                    if (customerId == null) {
+                        System.out.println("Value can't null, please try again!");
+                    }
+                    else if (customers.containsKey(customerId)) {
+                        System.out.println("Customer with id = '" + customerId + "' is already in the customer list, auto enter information? (Y/N)");
+                        String chooseAutoEnter = scanner.nextLine();
+                        if (chooseAutoEnter.equalsIgnoreCase("Y")) {
+                            return customers.get(customerId);
+                        }
+                        else {
+                            System.out.println("Enter buyer name:");
+                            String buyerName = scanner.nextLine();
+                            return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
+                        }
+                    }
+                    else {
+                        System.out.println("Enter buyer name:");
+                        String buyerName = scanner.nextLine();
+                        return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
+                    }
+                }
+            }
+            else {
+                System.out.println("Invalid input value, try again!");
+                continue;
+            }
+        }
     }
 }

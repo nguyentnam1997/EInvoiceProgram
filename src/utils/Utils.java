@@ -41,6 +41,13 @@ public class Utils {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+    public static boolean isValidTemplateSeries(String templateSeries) {
+        // Định dạng regex cho địa chỉ email
+        String templateSeriesRegex = "^[a-zA-Z]{2}$";
+        Pattern pattern = Pattern.compile(templateSeriesRegex);
+        Matcher matcher = pattern.matcher(templateSeries);
+        return matcher.matches();
+    }
     public static String checkExistsEmail(String email, Map<String, User> staffs) {
         for (Map.Entry<String, User> entry : staffs.entrySet()) {
             if (entry.getValue().getEmail().equalsIgnoreCase(email)) {
@@ -50,5 +57,7 @@ public class Utils {
         }
         return email;
     }
-
+    public static boolean checkUserIsAdmin(User user) {
+        return user.isAdmin();
+    }
 }

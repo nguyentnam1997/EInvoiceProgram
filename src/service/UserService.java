@@ -183,7 +183,7 @@ public class UserService {
     }
 
     public void createUser(Scanner scanner, Seller seller, User user, Map<String, User> users) {
-        if (!checkUserIsAdmin(scanner, user)) {
+        if (!Utils.checkUserIsAdmin(user)) {
             System.out.println("This user don't have permission to perform this function!");
         }
         else {
@@ -217,7 +217,7 @@ public class UserService {
         }
     }
     public void changeStatusUser(Scanner scanner, User user, Map<String, User> users) {
-        if (!checkUserIsAdmin(scanner, user)) {
+        if (!Utils.checkUserIsAdmin(user)) {
             System.out.println("This user don't have permission to perform this function!");
         }
         else {
@@ -287,7 +287,5 @@ public class UserService {
         }
         else return true;
     }
-    public boolean checkUserIsAdmin(Scanner scanner, User user) {
-        return user.isAdmin();
-    }
+
 }

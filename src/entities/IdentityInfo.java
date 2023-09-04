@@ -21,7 +21,15 @@ public abstract class IdentityInfo {
         this.address = address;
         this.email = email;
         this.hotline = hotline;
-        this.bankAccount = bankAccount;
+        this.bankAccount = email;
+    }
+    public IdentityInfo(int taxCode, String name, String address) {
+        this.taxCode = taxCode;
+        this.name = name;
+        this.address = address;
+        this.email = "";
+        this.hotline = 0;
+        this.bankAccount = "";
     }
 
     @Override

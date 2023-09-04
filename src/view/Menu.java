@@ -63,6 +63,7 @@ public class Menu {
         System.out.println("3.1.1. Show list of invoice template.");
         System.out.println("3.1.2. Create invoice template.");
         System.out.println("3.1.3. Change active status.");
+        System.out.println("3.1.4. Back to previous menu.");
         System.out.println("Choose options:");
     }
     public void menuFunctionInvoice() {

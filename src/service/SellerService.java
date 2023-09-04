@@ -1,5 +1,6 @@
 package service;
 
+import entities.InvoiceTemplate;
 import entities.Seller;
 import entities.User;
 import jdk.jshell.execution.Util;
@@ -10,12 +11,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class SellerService {
-    public void loginService(Scanner scanner, Menu menu, Map<String, User> users, UserService userService, SellerService sellerService) {
+    public void loginService(Scanner scanner, Menu menu, Map<String, User> users, Map<String, InvoiceTemplate> invoiceTemplates, UserService userService, SellerService sellerService, InvoiceService invoiceService) {
         System.out.println("\n" + "========== WELCOME TO INVOICE PROGRAM ===========");
         Seller seller = registerService(scanner, users);
         do {
             User user = userService.login(scanner, seller, users, sellerService);
-            handleAfterLogin(scanner, menu, user, seller, users, userService);
+            handleAfterLogin(scanner, menu, user, seller, users, invoiceTemplates, userService, invoiceService);
         } while (true);
 
         //if (utils.wantContinue(scanner)) continue;
@@ -92,17 +93,17 @@ public class SellerService {
         }
     }
 
-    public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, UserService userService) {
+    public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, Map<String, InvoiceTemplate> invoiceTemplates, UserService userService, InvoiceService invoiceService) {
         while (true) {
             menu.menuOptionsAfterLogin();
             int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
             switch (chooseAfterLogin) {
                 case 1 -> {
-                    handleManageCompany(scanner, menu, seller);
+                    handleManageCompany(scanner, menu, user, seller);
                 }
                 case 2 -> userService.handleManageUser(scanner, menu, user, seller, users);
                 case 3 -> {
-
+                    invoiceService.handleManageInvoice(scanner, menu, user,invoiceTemplates);
                 }
                 case 4 -> {
                 }
@@ -115,7 +116,7 @@ public class SellerService {
         }
     }
 
-    public void handleManageCompany(Scanner scanner, Menu menu, Seller seller) {
+    public void handleManageCompany(Scanner scanner, Menu menu, User user, Seller seller) {
         do {
             menu.menuManageCompany();
             int choose = Integer.parseInt(scanner.nextLine());
@@ -124,7 +125,7 @@ public class SellerService {
                     System.out.println(seller);   //view information
                 }
                 case 2 -> {
-                    handleEditCompanyInformation(scanner, menu, seller);
+                    handleEditCompanyInformation(scanner, menu, user, seller);
                 }
                 case 3 -> {
                     return;
@@ -136,24 +137,28 @@ public class SellerService {
 
     }
 
-    public void handleEditCompanyInformation(Scanner scanner, Menu menu, Seller seller) {
-        do {
-            menu.menuEditCompanyInformation();
-            int chooseEdit = Integer.parseInt(scanner.nextLine());
-            switch (chooseEdit) {
-                case 1 -> editCompanyName(scanner, seller);
-                case 2 -> editCompanyAddress(scanner, seller);
-                case 3 -> editCompanyEmail(scanner, seller);
-                case 4 -> editCompanyHotline(scanner, seller);
-                case 5 -> editCompanyBankAccount(scanner, seller);
-                case 6 -> {
-                    //handleEditCompanyInformation(scanner, menu, seller);
-                    return;
+    public void handleEditCompanyInformation(Scanner scanner, Menu menu, User user, Seller seller) {
+        if (!Utils.checkUserIsAdmin(user)) {
+            System.out.println("This user don't have permission to perform this function!");
+        } else {
+            while (true) {
+                menu.menuEditCompanyInformation();
+                int chooseEdit = Integer.parseInt(scanner.nextLine());
+                switch (chooseEdit) {
+                    case 1 -> editCompanyName(scanner, seller);
+                    case 2 -> editCompanyAddress(scanner, seller);
+                    case 3 -> editCompanyEmail(scanner, seller);
+                    case 4 -> editCompanyHotline(scanner, seller);
+                    case 5 -> editCompanyBankAccount(scanner, seller);
+                    case 6 -> {
+                        //handleEditCompanyInformation(scanner, menu, seller);
+                        return;
+                    }
                 }
+                //if (utils.wantContinue(scanner)) continue;
+                //break;
             }
-            //if (utils.wantContinue(scanner)) continue;
-            //break;
-        } while (true);
+        }
     }
 
     public void editCompanyName(Scanner scanner, Seller seller) {

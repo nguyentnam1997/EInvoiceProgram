@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-public class InvoiceService extends  IdentityInfoService {
+public class InvoiceService extends IdentityInfoService {
     public void handleManageInvoice(Scanner scanner, Menu menu, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         while (true) {
             menu.menuManageInvoice();
@@ -30,6 +30,7 @@ public class InvoiceService extends  IdentityInfoService {
             }
         }
     }
+
     public void handleInvoiceTemplate(Scanner scanner, Menu menu, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         while (true) {
             menu.menuManageInvoiceTemplate();
@@ -53,54 +54,40 @@ public class InvoiceService extends  IdentityInfoService {
         }
     }
 
-    public void createInvoiceTemplate(Scanner scanner,User user, Map<String, InvoiceTemplate> invoiceTemplates) {
+    public void createInvoiceTemplate(Scanner scanner, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         if (!Utils.checkUserIsAdmin(user)) {
             System.out.println("This user don't have permission to perform this function!");
-        }
-        else {
+        } else {
             System.out.println("----------- Create invoice template ------------");
             while (true) {
-                System.out.println("Enter invoice template type: (1. VAT / 2. Sales)");
-                try {
-                    int templateType = Integer.parseInt(scanner.nextLine());
-                    if (templateType > 2 || templateType <= 0) {
-                        System.out.println("Invalid type, please try again!" + "\n");
-                        continue;
-                    }
-                    while (true) {
-                        System.out.println("\n" + "Enter invoice template series:");
-                        String templateSeries = scanner.nextLine();
-                        if (!Utils.isValidTemplateSeries(templateSeries)) {
-                            System.out.println("Invalid template series, please try again!");
-                            continue;
-                        }
-                        InvoiceTemplate invTemp = new InvoiceTemplate(templateSeries, templateType);
-                        invoiceTemplates.put(invTemp.getTemplateSerial(), invTemp);
-                        System.out.println("Create new invoice template successful!");
-                        break;
-                    }
-                    break;
-                } catch (Exception e) {
-                    System.out.println("Invalid value Integer, please try again!");
+                System.out.println("\n" + "Enter invoice template series:");
+                String templateSeries = scanner.nextLine();
+                if (!Utils.isValidTemplateSeries(templateSeries)) {
+                    System.out.println("Invalid template series, please try again!");
+                    continue;
                 }
+                InvoiceTemplate invTemp = new InvoiceTemplate(templateSeries);
+                invoiceTemplates.put(invTemp.getTemplateSerial(), invTemp);
+                System.out.println("Create new invoice template successful!");
+                break;
+
             }
         }
     }
+
     public void changeStatusTemplate(Scanner scanner, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         if (!Utils.checkUserIsAdmin(user)) {
             System.out.println("This user don't have permission to perform this function!");
-        }
-        else {
+        } else {
             while (true) {
                 System.out.println("Enter invoice template serial want to change status: ");
                 String templateSerial = scanner.nextLine();
                 if (!invoiceTemplates.containsKey(templateSerial)) {
                     System.out.println("Invoice template with serial " + templateSerial + " doesn't exist.");
                     if (Utils.stayMenu(scanner)) continue;
-                }
-                else {
+                } else {
                     InvoiceTemplate invoiceTemplate = invoiceTemplates.get(templateSerial);
-                    System.out.println("Invoice template "+ templateSerial + " with status as '" +
+                    System.out.println("Invoice template " + templateSerial + " with status as '" +
                             invoiceTemplate.getActiveStatus() + "', do you want to change? (Y/N)");
                     String choose = scanner.nextLine();
                     if (choose.equalsIgnoreCase("Y")) {
@@ -112,6 +99,7 @@ public class InvoiceService extends  IdentityInfoService {
             }
         }
     }
+
     public void createInvoice(Scanner scanner, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
         while (true) {
             System.out.println("Enter invoice template serial:");
@@ -128,69 +116,56 @@ public class InvoiceService extends  IdentityInfoService {
         }
 
     }
+
     public Customer inputCustomerInInvoice(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
-        System.out.println("Information of customer:");
+        System.out.println("----------  information of customer: ---------");
         while (true) {
-            System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
-            boolean isOrganization;
-            int choose = Integer.parseInt(scanner.nextLine());
-            if (choose == 1) {
-                isOrganization = true;
+            System.out.println("Do you want to enter existing customer information? (Y/N)");
+            String chooseAutoEnter = scanner.nextLine();
+            if (chooseAutoEnter.equalsIgnoreCase("Y")) {
                 while (true) {
                     System.out.println("\n" + "Enter customer ID:");
                     String customerId = scanner.nextLine();
                     if (customerId == null) {
                         System.out.println("Value can't null, please try again!");
                     }
-                    else if (customers.containsKey(customerId)) {
-                        System.out.println("Customer with id = '" + customerId + "' is already in the customer list, auto enter information? (Y/N)");
-                        String chooseAutoEnter = scanner.nextLine();
-                        if (chooseAutoEnter.equalsIgnoreCase("Y")) {
-                            return customers.get(customerId);
-                        }
-                        else {
-                            System.out.println("Enter buyer name:");
-                            String buyerName = scanner.nextLine();
-                            return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
-                        }
+                    else if (!customers.containsKey(customerId)) {
+                        System.out.println("Customer with id = '" + customerId + "' doesn't exist, re-enter? (Y/N)");
+                        String chooseReEnter = scanner.nextLine();
+                        if (chooseReEnter.equalsIgnoreCase("Y")) continue;
+                        else break;
                     }
                     else {
-                        System.out.println("Enter buyer name:");
-                        String buyerName = scanner.nextLine();
-                        return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
-                    }
-                }
-            }
-            else if (choose == 2 ) {
-                isOrganization = false;
-                while (true) {
-                    System.out.println("\n" + "Enter customer ID:");
-                    String customerId = scanner.nextLine();
-                    if (customerId == null) {
-                        System.out.println("Value can't null, please try again!");
-                    }
-                    else if (customers.containsKey(customerId)) {
-                        System.out.println("Customer with id = '" + customerId + "' is already in the customer list, auto enter information? (Y/N)");
-                        String chooseAutoEnter = scanner.nextLine();
-                        if (chooseAutoEnter.equalsIgnoreCase("Y")) {
-                            return customers.get(customerId);
-                        }
-                        else {
-                            System.out.println("Enter buyer name:");
-                            String buyerName = scanner.nextLine();
-                            return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
-                        }
-                    }
-                    else {
-                        System.out.println("Enter buyer name:");
-                        String buyerName = scanner.nextLine();
-                        return new Customer(identityInfoService.inputIdentityInfo(scanner), customerId, true, buyerName);
+                        return customers.get(customerId);
                     }
                 }
             }
             else {
-                System.out.println("Invalid input value, try again!");
-                continue;
+                System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
+                boolean isOrganization;
+                int choose = Integer.parseInt(scanner.nextLine());
+                if (choose == 1) {
+                    isOrganization = true;
+                    System.out.println("Enter buyer name:");
+                    String buyerName = scanner.nextLine();
+                    return new Customer(identityInfoService.inputIdentityAsOrganization(scanner), null, true, buyerName);
+                }
+                else if (choose == 2) {
+                    isOrganization = false;
+                    while (true) {
+                        System.out.println("Enter buyer name:");
+                        String buyerName = scanner.nextLine();
+                        if (buyerName.trim().isEmpty()) {
+                            System.out.println("Buyer name can't be null, please re-enter!");
+                            continue;
+                        }
+                        return new Customer(identityInfoService.inputIdentityAsPersonal(scanner), null, false, buyerName);
+                    }
+
+                } else {
+                    System.out.println("Invalid input value, try again!");
+                    continue;
+                }
             }
         }
     }

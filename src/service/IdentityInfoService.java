@@ -6,30 +6,34 @@ import utils.Utils;
 import java.util.Scanner;
 
 public class IdentityInfoService {
-    public IdentityInfo inputIdentityInfo(Scanner scanner) {
+    public IdentityInfo inputIdentityAsOrganization(Scanner scanner) {
         while (true) {
-            System.out.println("\n" + "Enter your company's tax code:");
+            System.out.println("\n" + "Enter the company's tax code:");
             try {
                 int taxCode = Integer.parseInt(scanner.nextLine());
                 if (!Utils.isValidTaxCode(taxCode)) {
-                    System.out.println("Tax code length is required 10 characters, please try again!");
+                    System.out.println("Tax code length is required 10 characters, please re-enter!");
                     continue;
                 }
-                System.out.println("\n" + "Enter your company's name:");
+                System.out.println("\n" + "Enter the company's name:");
                 String companyName = scanner.nextLine();
-                System.out.println("\n" + "Enter your company's address:");
+                System.out.println("\n" + "Enter the company's address:");
                 String companyAddress = scanner.nextLine();
                 while (true) {
-                    System.out.println("\n" + "Enter your company's email:");
+                    System.out.println("\n" + "Enter the company's email:");
                     String companyEmail = scanner.nextLine();
                     if (!Utils.isValidEmail(companyEmail)) {
-                        System.out.println("Invalid email, please try again!");
+                        System.out.println("Invalid email, please re-enter!");
                         continue;
                     }
                     while (true) {
-                        System.out.println("\n" + "Enter your company's hotline:");
+                        System.out.println("\n" + "Enter the company's hotline:");
                         try {
                             int hotline = Integer.parseInt(scanner.nextLine());
+                            if (String.valueOf(hotline).length() != 10) {
+                                System.out.println("Hotline must have 10 numbers, please re-enter!");
+                                continue;
+                            }
                             System.out.println("\n" + "Enter your company's bank account:");
                             String bankAccount = scanner.nextLine();
                             return new IdentityInfo(taxCode, companyName, companyAddress, companyEmail, hotline, bankAccount);
@@ -42,6 +46,39 @@ public class IdentityInfoService {
                 System.out.println("Invalid value Integer, please try again!");
             }
         }
+    }
 
+    public IdentityInfo inputIdentityAsPersonal(Scanner scanner) {
+        while (true) {
+            try {
+                System.out.println("\n" + "Enter the personal's address:");
+                String personalAddress = scanner.nextLine();
+                while (true) {
+                    System.out.println("\n" + "Enter the personal's email:");
+                    String personalEmail = scanner.nextLine();
+                    if (!Utils.isValidEmail(personalEmail)) {
+                        System.out.println("Invalid email, please try again!");
+                        continue;
+                    }
+                    while (true) {
+                        System.out.println("\n" + "Enter the personal's phone number:");
+                        try {
+                            int phoneNumber = Integer.parseInt(scanner.nextLine());
+                            if (String.valueOf(phoneNumber).length() != 10) {
+                                System.out.println("Phone number must have 10 numbers, please re-enter!");
+                                continue;
+                            }
+                            System.out.println("\n" + "Enter the personal's bank account:");
+                            String bankAccount = scanner.nextLine();
+                            return new IdentityInfo(personalAddress, personalEmail, phoneNumber, bankAccount);
+                        } catch (Exception e) {
+                            System.out.println("Invalid value Integer, please try again!");
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
+            }
+        }
     }
 }

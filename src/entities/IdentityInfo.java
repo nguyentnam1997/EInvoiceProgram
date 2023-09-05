@@ -8,14 +8,14 @@ import lombok.Setter;
 @Data
 public class IdentityInfo {
     @Setter(AccessLevel.NONE)
-    private int taxCode;
+    private Integer taxCode;
     private String name;
     private String address;
     private String email;
     private int hotline;
     private String bankAccount;
 
-    public IdentityInfo(int taxCode, String name, String address, String email, int hotline, String bankAccount) {
+    public IdentityInfo(int taxCode, String name, String address, String email, int hotline, String bankAccount) { //constructor for Organization
         this.taxCode = taxCode;
         this.name = name;
         this.address = address;
@@ -31,9 +31,9 @@ public class IdentityInfo {
         this.hotline = 0;
         this.bankAccount = "";
     }
-    public IdentityInfo(String address, String email, int hotline, String bankAccount) {
-        this.taxCode = 0;
-        this.name = "";
+    public IdentityInfo(String address, String email, int hotline, String bankAccount) {   //constructor for Personal
+        this.taxCode = null;
+        this.name = null;
         this.address = address;
         this.email = email;
         this.hotline = hotline;

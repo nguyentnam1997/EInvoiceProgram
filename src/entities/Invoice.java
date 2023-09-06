@@ -21,7 +21,7 @@ public class Invoice {
     private Seller seller;
     private Customer customer;
     private User user;
-    private int paymentMethod;
+    private String paymentMethod;
     private double totalVATPrice;
     private double totalPrice;
     private boolean isInvoicePublished;
@@ -36,11 +36,16 @@ public class Invoice {
         this.seller = seller;
         this.customer = customer;
         this.user = user;
-        this.paymentMethod = paymentMethod;
+        this.paymentMethod = getPaymentMethod(paymentMethod);
         this.totalVATPrice = totalVATPrice;
         this.totalPrice = totalPrice;
         this.isInvoicePublished = isInvoicePublished;
         this.invoiceStatus = invoiceStatus;
         this.productInvoiceDetails = productInvoiceDetails;
+    }
+    public String getPaymentMethod(int paymentMethod) {
+        if (paymentMethod == 1) return "TM";
+        else if (paymentMethod == 2) return "CK";
+        else return "TM/CK";
     }
 }

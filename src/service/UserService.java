@@ -183,10 +183,7 @@ public class UserService {
     }
 
     public void createUser(Scanner scanner, Seller seller, User user, Map<String, User> users) {
-        if (!Utils.checkUserIsAdmin(user)) {
-            System.out.println("This user don't have permission to perform this function!");
-        }
-        else {
+        if (Utils.checkUserIsAdmin(user)) {
             System.out.println("------- Create new User -------");
             while (true) {
                 System.out.println("Enter your username:");
@@ -217,11 +214,8 @@ public class UserService {
         }
     }
     public void changeStatusUser(Scanner scanner, User user, Map<String, User> users) {
-        if (!Utils.checkUserIsAdmin(user)) {
-            System.out.println("This user don't have permission to perform this function!");
-        }
-        else {
-            do {
+        if (Utils.checkUserIsAdmin(user)) {
+            while (true) {
                 System.out.println("Enter username want to change status: ");
                 String username = scanner.nextLine();
                 if (!users.containsKey(username)) {
@@ -248,7 +242,6 @@ public class UserService {
                 }
                 break;
             }
-            while (true);
         }
     }
     public boolean checkExistsUsername(String username, Map<String, User> users) {

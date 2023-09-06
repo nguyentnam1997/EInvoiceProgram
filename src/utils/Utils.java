@@ -57,7 +57,25 @@ public class Utils {
         }
         return email;
     }
+    public static boolean checkValidPositiveInt(int number) {
+        if (number <= 0) {
+            System.out.println("Number entered can't be less than or equal to 0, please re-enter!");
+            return false;
+        }
+        else return true;
+    }
+    public static boolean checkValidPositiveDouble(double number) {
+        if (number <= 0) {
+            System.out.println("Number entered can't be less than or equal to 0, please re-enter!");
+            return false;
+        }
+        else return true;
+    }
     public static boolean checkUserIsAdmin(User user) {
-        return user.isAdmin();
+        if (!user.isAdmin()) {
+            System.out.println("This user don't have permission to perform this function!");
+            return false;
+        }
+        else return true;
     }
 }

@@ -1,16 +1,29 @@
 package entities;
 
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 public class ProductInvoiceDetail {
-    private int invoiceId;
-    private int quantity;
-    private ProductPrice productPrice;
+    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+    private static int autoId;
 
-    public ProductInvoiceDetail(int invoiceId, int quantity, ProductPrice productPrice) {
-        this.invoiceId = invoiceId;
+    @Setter(AccessLevel.NONE)
+    private int productInvoiceId;
+    private Invoice invoice;
+    private Product product;
+    private int quantity;
+    private float discountRate;
+    private double totalPrice;
+
+    public ProductInvoiceDetail(Invoice invoice, Product product, int quantity, float discountRate, double totalPrice) {
+        this.productInvoiceId = ++autoId;
+        this.invoice = invoice;
+        this.product = product;
         this.quantity = quantity;
-        this.productPrice = productPrice;
+        this.discountRate = discountRate;
+        this.totalPrice = totalPrice;
     }
 }

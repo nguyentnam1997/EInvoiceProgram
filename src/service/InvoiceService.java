@@ -151,17 +151,14 @@ public class InvoiceService extends IdentityInfoService {
             } else {
                 while (true) {
                     System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
-                    boolean isOrganization;
                     int choose = Integer.parseInt(scanner.nextLine());
                     switch (choose) {
                         case 1 -> {
-                            isOrganization = true;
                             System.out.println("Enter buyer name:");
                             String buyerName = scanner.nextLine();
                             return new Customer(identityInfoService.inputIdentityAsOrganization(scanner), null, true, buyerName);
                         }
                         case 2 -> {
-                            isOrganization = false;
                             while (true) {
                                 System.out.println("Enter buyer name:");
                                 String buyerName = scanner.nextLine();

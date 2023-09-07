@@ -15,15 +15,24 @@ public class ProductInvoiceDetail {
     private Invoice invoice;
     private Product product;
     private int quantity;
-    private float discountRate;
+    private double discountRate;
+    private String discountRateString;
     private double totalPrice;
 
-    public ProductInvoiceDetail(Invoice invoice, Product product, int quantity, float discountRate, double totalPrice) {
+    public ProductInvoiceDetail(Invoice invoice, Product product, int quantity, double discountRate) {
         this.productInvoiceId = ++autoId;
         this.invoice = invoice;
         this.product = product;
         this.quantity = quantity;
         this.discountRate = discountRate;
-        this.totalPrice = totalPrice;
+        this.discountRateString = getDiscountRate(this.discountRate);
+        this.totalPrice = calculateTotalPrice(getProduct());
+    }
+    public String getDiscountRate(double discountRate) {
+       return discountRate + "%";
+    }
+    public double calculateTotalPrice(Product product) {
+        return (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * getQuantity() +
+                (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * product.getVATRate();
     }
 }

@@ -179,47 +179,91 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public ProductInvoiceDetail inputProductToInvoice(Scanner scanner, Map<String, Product> products, IdentityInfoService identityInfoService) {
+    public List<ProductInvoiceDetail> inputProductListToInvoice(Scanner scanner, Map<String, Product> products, IdentityInfoService identityInfoService) {
         System.out.println("\n" + "----------  Information of products / services: ---------");
         while (true) {
             try {
                 System.out.println("Enter the number of products / services line:");
                 int countProduct = Integer.parseInt(scanner.nextLine());
-                if (Utils.checkValidPositiveInt(countProduct)) {
+                if (!Utils.checkValidPositiveNumber(countProduct)) continue;
+                else {
                     for (int i = 0; i < countProduct; i++) {
                         System.out.println("\n" + (i + 1) + ". Product line " + (i + 1) + ":");
-                        System.out.println("Enter product / service code:");
-                        String productCode = scanner.nextLine();
-                        if (products.containsKey(productCode)) {
-                            System.out.println("Code '" + productCode + "' already exist in products list, auto enter existing product / service? (Y/N)");
-                            String chooseAutoEnter = scanner.nextLine();
-                            if (chooseAutoEnter.equalsIgnoreCase("Y")) {
-                                Product product = products.get(productCode);
-                            } else {
-                                System.out.println("Enter product / service name:");
-                                String productName = scanner.nextLine();
-                                System.out.println("Enter description of product / service:");
-                                String description = scanner.nextLine();
-                                while (true) {
-                                    System.out.println("Enter unit price of product / service:");
-                                    double unitPrice = Double.parseDouble(scanner.nextLine());
-                                    if (Utils.checkValidPositiveDouble(unitPrice)) {
-                                        System.out.println("Enter VAT rate of product / service:");
-                                        /////////đang làm dở đến đây
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                        while (true) {
 
-                        }
                     }
                 }
             } catch (Exception e) {
                 System.out.println("Invalid value Integer, please try again!" + "\n");
             }
+            break;
+        }
+        return null;  //fix lại
+    }
+    public Product inputProduct(Scanner scanner, Map<String, Product> products) {
+        System.out.println("Enter product / service code:");
+        String productCode = scanner.nextLine();
+        if (products.containsKey(productCode)) {
+            System.out.println("Code '" + productCode + "' already exist in products list, auto enter existing product / service? (Y/N)");
+            String chooseAutoEnter = scanner.nextLine();
+            if (chooseAutoEnter.equalsIgnoreCase("Y")) {
+                return products.get(productCode);
+            }
+            else {
+                System.out.println("Enter product / service name:");
+                String productName = scanner.nextLine();
+                System.out.println("Enter description of this product / service:");
+                String description = scanner.nextLine();
+                while (true) {
+                    System.out.println("Enter unit price of product / service:");
+                    double unitPrice = Double.parseDouble(scanner.nextLine());
+                    if (!Utils.checkValidPositiveNumber(unitPrice)) continue;
+                    else {
+                        while (true) {
+                            System.out.println("Enter VAT rate of this product / service: (1. 0% / 2. 5% / 3. 10%)");
+                            try {
+                                int input = Integer.parseInt(scanner.nextLine());
+                                if (!Utils.checkValidPositiveNumber(input) || input > 3) continue;
+                                else {
+                                   return new Product(productCode, productName, description, unitPrice, input);   //tạo Product để thêm vào ProductInvoice
+                                }
+                            } catch (Exception e) {
+                                System.out.println("Invalid value Integer, please try again!" + "\n");
+                            }
+                            break;
+                        }
+                        break;
+                    }
+                    break;
+                }
+            }
+        }
 
+    }
+    public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, Map<String, Product> products, Invoice invoice, IdentityInfoService identityInfoService) {
+        while (true) {
+            System.out.println("Enter quantity of this product / service:");
+            try {
+                int quantity = Integer.parseInt(scanner.nextLine());
+                if (!Utils.checkValidPositiveInt(quantity)) continue;
+                else {
+                    while (true) {
+                        try {
+                            System.out.println("Enter discount rate of this product / service:");
+                            double discountRate = Double.parseDouble(scanner.nextLine());
+                            if (!Utils.checkValidPositiveNumber(discountRate)) continue;
+                            else {
+                                return new ProductInvoiceDetail(invoice, product, quantity, discountRate);
+                            }
+                        } catch (Exception e) {
+                            System.out.println("Invalid value Integer, please try again!" + "\n");
+                        }
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!" + "\n");
+            }
+            break;
         }
     }
 }

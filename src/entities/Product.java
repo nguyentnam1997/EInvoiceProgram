@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Scanner;
+
 @Data
 public class Product {
     @Setter(AccessLevel.NONE)
@@ -13,13 +15,36 @@ public class Product {
     private String productName;
     private String description;
     private double unitPrice;
-    private float VATRate;
+    private double VATRate;
+    private String VATRateString;
 
-    public Product(String productCode, String productName, String description, double unitPrice, float VATRate) {
+    public Product(String productCode, String productName, String description, double unitPrice, int input) {
         this.productCode = productCode;
         this.productName = productName;
         this.description = description;
         this.unitPrice = unitPrice;
-        this.VATRate = VATRate;
+        this.VATRate = getVATRate(input);
+        this.VATRateString = getVATRateString(getVATRate());
+    }
+
+    public double getVATRate(int input) {
+        switch (input) {
+            case 1 -> {
+                return 0;
+            }
+            case 2 -> {
+                return 0.05;
+            }
+            case 3 -> {
+                return 0.1;
+            }
+            default -> {
+                System.out.println("Invalid input, please re-enter!");
+                return 1;
+            }
+        }
+    }
+    public String getVATRateString(double VATRate) {
+        return VATRate + "%";
     }
 }

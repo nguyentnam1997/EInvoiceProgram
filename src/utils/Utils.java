@@ -64,9 +64,9 @@ public class Utils {
         }
         else return true;
     }
-    public static boolean checkValidPositiveDouble(double number) {
+    public static boolean checkValidPositiveNumber(double number) {
         if (number <= 0) {
-            System.out.println("Number entered can't be less than or equal to 0, please re-enter!");
+            System.out.println("Number entered is outside the valid range, please re-enter!");
             return false;
         }
         else return true;

@@ -103,11 +103,12 @@ public class SellerService {
                 }
                 case 2 -> userService.handleManageUser(scanner, menu, user, seller, users);
                 case 3 -> {
-                    invoiceService.handleManageInvoice(scanner, menu, user,invoiceTemplates);
+                    invoiceService.handleManageInvoice(scanner, menu, user, seller, invoiceTemplates);
                 }
                 case 4 -> {
                 }
                 case 5 -> {
+
                 }
                 case 6 -> {
                     if (!Utils.stayMenu(scanner)) return;//chức năng Logout;

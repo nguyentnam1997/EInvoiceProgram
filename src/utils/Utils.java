@@ -57,12 +57,12 @@ public class Utils {
         }
         return email;
     }
-    public static boolean checkValidPositiveInt(int number) {
-        if (number <= 0) {
-            System.out.println("Number entered can't be less than or equal to 0, please re-enter!");
-            return false;
+    public static boolean checkValidStringIsNull(String input) {
+        if (input.trim().isEmpty()) {
+            System.out.println("Value can't null, please try again!");
+            return true;
         }
-        else return true;
+        else return false;
     }
     public static boolean checkValidPositiveNumber(double number) {
         if (number <= 0) {

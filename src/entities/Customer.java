@@ -1,11 +1,13 @@
 package entities;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
 public class Customer extends IdentityInfo {
-    @Getter @Setter
-    private String customerId;
+    private static int autoId;
+    @Getter @Setter(AccessLevel.NONE)
+    private int customerId;
     @Getter
     private String customerCode;
     @Getter
@@ -15,16 +17,16 @@ public class Customer extends IdentityInfo {
     @Setter
     private boolean isOrganization;
 
-    public Customer(String customerId, boolean isOrganization, int taxCode, String name, String address, String email, int phoneNumber, String bankAccount, String buyerName) {
+    public Customer(boolean isOrganization, int taxCode, String name, String address, String email, int phoneNumber, String bankAccount, String buyerName) {
         super(taxCode, name, address, email, phoneNumber, bankAccount);
-        this.customerId = customerId;
+        this.customerId = ++autoId;
         this.isOrganization = isOrganization;
         this.buyerName = buyerName;
     }
 
-    public Customer(String customerId, boolean isOrganization, String address, String email, int phoneNumber, String bankAccount, String buyerName) {
+    public Customer(boolean isOrganization, String address, String email, int phoneNumber, String bankAccount, String buyerName) {
         super(address, email, phoneNumber, bankAccount);
-        this.customerId = customerId;
+        this.customerId = ++autoId;
         this.isOrganization = isOrganization;
         this.buyerName = buyerName;
     }
@@ -32,9 +34,9 @@ public class Customer extends IdentityInfo {
     public Customer() {
 
     }
-    public Customer(IdentityInfo identityInfo, String customerId, boolean isOrganization, String buyerName) {
+    public Customer(IdentityInfo identityInfo, boolean isOrganization, String buyerName) {
         super(identityInfo.getTaxCode(), identityInfo.getName(), identityInfo.getAddress(), identityInfo.getEmail(), identityInfo.getHotline(), identityInfo.getBankAccount());
-        this.customerId = customerId;
+        this.customerId = ++autoId;
         this.isOrganization = isOrganization;
         this.buyerName = buyerName;
     }

@@ -95,7 +95,7 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public void createInvoice(Scanner scanner, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
+    public void createInvoice(Scanner scanner, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
         while (true) {
             System.out.println("\n" + "Enter invoice template serial:");
             String invTempSerial = scanner.nextLine();
@@ -106,7 +106,7 @@ public class InvoiceService extends IdentityInfoService {
             LocalDateTime invoiceDate = LocalDateTime.now();
             System.out.println("\n" + "Enter description of invoice:");
             String description = scanner.nextLine();
-            Customer customer = inputCustomerInInvoice(scanner, customers, identityInfoService);  //nhập thông tin customer
+            Customer customer = inputCustomerInInvoice(scanner, customers, identityInfoService, customerService);  //nhập thông tin customer
             int paymentMethod = 0;
             while (true) {
                 System.out.println("\n" + "Enter payment method of invoice: (1. TM / 2. CK / 3. TM/CK) ");
@@ -122,59 +122,30 @@ public class InvoiceService extends IdentityInfoService {
                 }
                 break;
             }
-
-
         }
-
     }
 
-    public Customer inputCustomerInInvoice(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
+    public Customer inputCustomerInInvoice(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
         System.out.println("----------  Information of customer: ---------");
         while (true) {
             System.out.println("Do you want to enter existing customer information? (Y/N)");
             String chooseAutoEnter = scanner.nextLine();
             if (chooseAutoEnter.equalsIgnoreCase("Y")) {
                 while (true) {
-                    System.out.println("\n" + "Enter customer ID:");
-                    String customerId = scanner.nextLine();
-                    if (customerId.trim().isEmpty()) {
-                        System.out.println("Value can't null, please try again!");
-                    } else if (!customers.containsKey(customerId)) {
-                        System.out.println("Customer with id = '" + customerId + "' doesn't exist, re-enter? (Y/N)");
+                    System.out.println("\n" + "Enter customer code:");
+                    String customerCode = scanner.nextLine();
+                    if (!customers.containsKey(customerCode)) {
+                        System.out.println("Customer with id = '" + customerCode + "' doesn't exist, re-enter? (Y/N)");
                         String chooseReEnter = scanner.nextLine();
                         if (chooseReEnter.equalsIgnoreCase("Y")) continue;
                         else break;
                     } else {
-                        return customers.get(customerId);
+                        return customers.get(customerCode);
                     }
                 }
-            } else {
-                while (true) {
-                    System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
-                    int choose = Integer.parseInt(scanner.nextLine());
-                    switch (choose) {
-                        case 1 -> {
-                            System.out.println("Enter buyer name:");
-                            String buyerName = scanner.nextLine();
-                            return new Customer(identityInfoService.inputIdentityAsOrganization(scanner), null, true, buyerName);
-                        }
-                        case 2 -> {
-                            while (true) {
-                                System.out.println("Enter buyer name:");
-                                String buyerName = scanner.nextLine();
-                                if (buyerName.trim().isEmpty()) {
-                                    System.out.println("Buyer name can't be null, please re-enter!");
-                                    continue;
-                                }
-                                return new Customer(identityInfoService.inputIdentityAsPersonal(scanner), null, false, buyerName);
-                            }
-                        }
-                        default -> {
-                            System.out.println("Invalid input value, try again!");
-                        }
-                    }
-                }
-
+            }
+            else {
+                return customerService.inputCustomer(scanner, customers, identityInfoService);
             }
         }
     }
@@ -199,52 +170,13 @@ public class InvoiceService extends IdentityInfoService {
         }
         return null;  //fix lại
     }
-    public Product inputProduct(Scanner scanner, Map<String, Product> products) {
-        System.out.println("Enter product / service code:");
-        String productCode = scanner.nextLine();
-        if (products.containsKey(productCode)) {
-            System.out.println("Code '" + productCode + "' already exist in products list, auto enter existing product / service? (Y/N)");
-            String chooseAutoEnter = scanner.nextLine();
-            if (chooseAutoEnter.equalsIgnoreCase("Y")) {
-                return products.get(productCode);
-            }
-            else {
-                System.out.println("Enter product / service name:");
-                String productName = scanner.nextLine();
-                System.out.println("Enter description of this product / service:");
-                String description = scanner.nextLine();
-                while (true) {
-                    System.out.println("Enter unit price of product / service:");
-                    double unitPrice = Double.parseDouble(scanner.nextLine());
-                    if (!Utils.checkValidPositiveNumber(unitPrice)) continue;
-                    else {
-                        while (true) {
-                            System.out.println("Enter VAT rate of this product / service: (1. 0% / 2. 5% / 3. 10%)");
-                            try {
-                                int input = Integer.parseInt(scanner.nextLine());
-                                if (!Utils.checkValidPositiveNumber(input) || input > 3) continue;
-                                else {
-                                   return new Product(productCode, productName, description, unitPrice, input);   //tạo Product để thêm vào ProductInvoice
-                                }
-                            } catch (Exception e) {
-                                System.out.println("Invalid value Integer, please try again!" + "\n");
-                            }
-                            break;
-                        }
-                        break;
-                    }
-                    break;
-                }
-            }
-        }
 
-    }
     public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, Map<String, Product> products, Invoice invoice, IdentityInfoService identityInfoService) {
         while (true) {
             System.out.println("Enter quantity of this product / service:");
             try {
                 int quantity = Integer.parseInt(scanner.nextLine());
-                if (!Utils.checkValidPositiveInt(quantity)) continue;
+                if (!Utils.checkValidPositiveNumber(quantity)) continue;
                 else {
                     while (true) {
                         try {

@@ -53,7 +53,7 @@ public class Menu {
     public void menuManageInvoice() {
         System.out.println("\n" + "---------- 3. Invoices management ----------");
         System.out.println("3.1. Invoice templates management.");
-        System.out.println("3.2. Show list of invoices.");
+        System.out.println("3.2. Show list and handle invoices.");
         System.out.println("3.3. Create new invoice.");
         //System.out.println("3.4. Invoice report.");
         System.out.println("Choose options:");
@@ -72,18 +72,12 @@ public class Menu {
         System.out.println("3.2.2. Back to previous menu.");
         System.out.println("Choose options:");
     }
-    public void menuFunctionUnpublishedInvoice() {
-        System.out.println("\n" + "------------- 3.2.1. Unpublished Invoice --------------");
+    public void menuHandleInvoice() {
+        System.out.println("\n" + "------------- 3.2.1. Handle Invoice --------------");
         System.out.println("3.2.1.1. Edit information of invoice.");
         System.out.println("3.2.1.2. Publish invoice.");
         System.out.println("3.2.1.3. Delete invoice.");
         System.out.println("3.2.1.4. Back to previous menu.");
-        System.out.println("Choose options:");
-    }
-    public void menuFunctionPublishedInvoice() {
-        System.out.println("\n" + "------------- 3.2.1. Published Invoice --------------");
-        System.out.println("3.2.1.1. Delete invoice.");
-        System.out.println("3.2.1.2. Replace invoice.");
         System.out.println("Choose options:");
     }
     public void menuManageProduct() {

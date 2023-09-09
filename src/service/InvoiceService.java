@@ -5,26 +5,34 @@ import utils.Utils;
 import view.Menu;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
 public class InvoiceService extends IdentityInfoService {
-    public void handleManageInvoice(Scanner scanner, Menu menu, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates) {
+    public void handleManageInvoice(Scanner scanner, Menu menu, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
+                                    Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
+        //3. Invoices management
         while (true) {
             menu.menuManageInvoice();
             int choose = Integer.parseInt(scanner.nextLine());
             switch (choose) {
                 case 1 -> {
+                    //3.1. Invoice templates management.
                     handleInvoiceTemplate(scanner, menu, user, invoiceTemplates);
                 }
                 case 2 -> {
-                    //createInvoice
+                    //3.2. Show list of invoices.
+                    System.out.println(invoices);
                 }
                 case 3 -> {
-
+                    //3.3. Create new invoice.
+                    Invoice invoice = createInvoice(scanner, user, seller, products, invoiceTemplates, customers, identityInfoService, customerService);
+                    invoices.put(invoice.getInvoiceId(), invoice);
                 }
                 case 4 -> {
+                    //back
                     return;
                 }
             }
@@ -95,7 +103,8 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public void createInvoice(Scanner scanner, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
+    public Invoice createInvoice(Scanner scanner, User user, Seller seller, Map<String, Product> products, Map<String, InvoiceTemplate> invoiceTemplates,
+                                 Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
         while (true) {
             System.out.println("\n" + "Enter invoice template serial:");
             String invTempSerial = scanner.nextLine();
@@ -103,24 +112,27 @@ public class InvoiceService extends IdentityInfoService {
                 System.out.println("Template with serial '" + invTempSerial + "' doesn't exist, try again!");
                 continue;
             }
+            InvoiceTemplate invoiceTemplate = invoiceTemplates.get(invTempSerial);
             LocalDateTime invoiceDate = LocalDateTime.now();
             System.out.println("\n" + "Enter description of invoice:");
             String description = scanner.nextLine();
             Customer customer = inputCustomerInInvoice(scanner, customers, identityInfoService, customerService);  //nhập thông tin customer
-            int paymentMethod = 0;
+            //int paymentMethod = 0;
             while (true) {
                 System.out.println("\n" + "Enter payment method of invoice: (1. TM / 2. CK / 3. TM/CK) ");
                 try {
-                    paymentMethod = Integer.parseInt(scanner.nextLine());
+                    int paymentMethod = Integer.parseInt(scanner.nextLine());
                     if (paymentMethod <= 0 || paymentMethod > 3) {
                         System.out.println("Wrong value entered, please re-enter!");
-                        continue;
+                    } else {
+                        Map<Integer, ProductInvoiceDetail> productInvoiceDetails = inputProductListToInvoice(scanner, products);
+                        System.out.println("Create invoice successful!");
+                        return new Invoice(invoiceTemplate, invoiceDate, description, seller, customer, user, paymentMethod, productInvoiceDetails);
                     }
 
                 } catch (Exception e) {
                     System.out.println("Invalid value Integer, please try again!");
                 }
-                break;
             }
         }
     }
@@ -143,59 +155,78 @@ public class InvoiceService extends IdentityInfoService {
                         return customers.get(customerCode);
                     }
                 }
-            }
-            else {
+            } else {
                 return customerService.inputCustomer(scanner, customers, identityInfoService);
             }
         }
     }
 
-    public List<ProductInvoiceDetail> inputProductListToInvoice(Scanner scanner, Map<String, Product> products, IdentityInfoService identityInfoService) {
-        System.out.println("\n" + "----------  Information of products / services: ---------");
+    public Map<Integer, ProductInvoiceDetail> inputProductListToInvoice(Scanner scanner, Map<String, Product> products) {
+        Map<Integer, ProductInvoiceDetail> productInvoiceDetails = new HashMap<>();
+        System.out.println("\n" + "----------  Information of products: ---------");
         while (true) {
             try {
-                System.out.println("Enter the number of products / services line:");
+                System.out.println("Enter the number of product lines:");
                 int countProduct = Integer.parseInt(scanner.nextLine());
-                if (!Utils.checkValidPositiveNumber(countProduct)) continue;
-                else {
+                if (Utils.checkValidPositiveNumber(countProduct)) {
                     for (int i = 0; i < countProduct; i++) {
-                        System.out.println("\n" + (i + 1) + ". Product line " + (i + 1) + ":");
-
+                        ProductInvoiceDetail productInvoiceDetail = inputProductInvoiceDetail(scanner, i, products);
+                        productInvoiceDetails.put(productInvoiceDetail.getProductInvoiceId(), productInvoiceDetail);
                     }
+                    return productInvoiceDetails;
                 }
             } catch (Exception e) {
                 System.out.println("Invalid value Integer, please try again!" + "\n");
             }
-            break;
         }
-        return null;  //fix lại
     }
 
-    public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, Map<String, Product> products, Invoice invoice, IdentityInfoService identityInfoService) {
+    public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, int index, Map<String, Product> products) {
+        System.out.println("\n" + (index + 1) + ". Product line " + (index + 1) + ":");
         while (true) {
-            System.out.println("Enter quantity of this product / service:");
-            try {
-                int quantity = Integer.parseInt(scanner.nextLine());
-                if (!Utils.checkValidPositiveNumber(quantity)) continue;
-                else {
-                    while (true) {
-                        try {
-                            System.out.println("Enter discount rate of this product / service:");
-                            double discountRate = Double.parseDouble(scanner.nextLine());
-                            if (!Utils.checkValidPositiveNumber(discountRate)) continue;
-                            else {
-                                return new ProductInvoiceDetail(invoice, product, quantity, discountRate);
+            System.out.println("Enter product code:");
+            String productCode = scanner.nextLine();
+            if (!products.containsKey(productCode)) {
+                System.out.println("Product with code = '" + productCode + "' doesn't exist, please re-enter!");
+            } else {
+                Product product = products.get(productCode);
+                while (true) {
+                    System.out.println("Enter quantity of this product / service:");
+                    try {
+                        int quantity = Integer.parseInt(scanner.nextLine());
+                        if (Utils.checkValidPositiveNumber(quantity)) {
+                            while (true) {
+                                try {
+                                    System.out.println("Enter discount rate (%) of this product:");
+                                    double discountRate = Double.parseDouble(scanner.nextLine());
+                                    if (Utils.checkValidPositiveNumber(discountRate)) {
+                                        return new ProductInvoiceDetail(product, quantity, discountRate);
+                                    }
+                                } catch (Exception e) {
+                                    System.out.println("Invalid value Integer, please try again!" + "\n");
+                                }
                             }
-                        } catch (Exception e) {
-                            System.out.println("Invalid value Integer, please try again!" + "\n");
                         }
-                        break;
+                    } catch (Exception e) {
+                        System.out.println("Invalid value Integer, please try again!" + "\n");
                     }
                 }
-            } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
             }
-            break;
+        }
+    }
+    public void handleInvoice(Scanner scanner, Menu menu, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
+                              Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
+        System.out.println(invoices);
+        menu.menuFunctionInvoice();
+        int choose = Integer.parseInt(scanner.nextLine());
+        switch (choose) {
+            case 1 -> {
+                System.out.println("Enter invoice ID: ");
+
+            }
+            case 2 -> {
+
+            }
         }
     }
 }

@@ -12,24 +12,27 @@ public class ProductInvoiceDetail {
 
     @Setter(AccessLevel.NONE)
     private int productInvoiceId;
-    private Invoice invoice;
     private Product product;
     private int quantity;
     private double discountRate;
-    private String discountRateString;
+    //private String discountRateString;
+    private double VATPrice;
     private double totalPrice;
 
-    public ProductInvoiceDetail(Invoice invoice, Product product, int quantity, double discountRate) {
+    public ProductInvoiceDetail(Product product, int quantity, double discountRate) {
         this.productInvoiceId = ++autoId;
-        this.invoice = invoice;
         this.product = product;
         this.quantity = quantity;
         this.discountRate = discountRate;
-        this.discountRateString = getDiscountRate(this.discountRate);
+        //this.discountRateString = getDiscountRate(this.discountRate);
+        this.VATPrice = calculateVATPrice(getProduct());
         this.totalPrice = calculateTotalPrice(getProduct());
     }
-    public String getDiscountRate(double discountRate) {
-       return discountRate + "%";
+//    public String getDiscountRate(double discountRate) {
+//       return discountRate + "%";
+//    }
+    public double calculateVATPrice(Product product) {
+        return product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100) * product.getVATRate();
     }
     public double calculateTotalPrice(Product product) {
         return (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * getQuantity() +

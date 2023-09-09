@@ -9,11 +9,11 @@ import java.util.Scanner;
 
 @Data
 public class Product {
-    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
-    private static int autoId;
-
-    @Setter(AccessLevel.NONE)
-    private int productId;
+//    @Getter(AccessLevel.NONE) @Setter(AccessLevel.NONE)
+//    private static int autoId;
+//
+//    @Setter(AccessLevel.NONE)
+//    private int productId;
     @Setter(AccessLevel.NONE)
     private String productCode;
 
@@ -24,7 +24,7 @@ public class Product {
     private String VATRateString;
 
     public Product(String productCode, String productName, double unitPrice, int input) {
-        this.productId = ++autoId;
+        //this.productId = ++autoId;
         this.productCode = productCode;
         this.productName = productName;
         this.unitPrice = unitPrice;

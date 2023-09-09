@@ -1,8 +1,6 @@
 package service;
 
-import entities.InvoiceTemplate;
-import entities.Seller;
-import entities.User;
+import entities.*;
 import jdk.jshell.execution.Util;
 import utils.Utils;
 import view.Menu;
@@ -93,7 +91,9 @@ public class SellerService {
         }
     }
 
-    public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, Map<String, InvoiceTemplate> invoiceTemplates, UserService userService, InvoiceService invoiceService) {
+    public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, Map<String, InvoiceTemplate> invoiceTemplates,
+                                 Map<String, Product> products, Map<String, Customer> customers,Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService,
+                                 CustomerService customerService, UserService userService, InvoiceService invoiceService) {
         while (true) {
             menu.menuOptionsAfterLogin();
             int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
@@ -103,7 +103,7 @@ public class SellerService {
                 }
                 case 2 -> userService.handleManageUser(scanner, menu, user, seller, users);
                 case 3 -> {
-                    invoiceService.handleManageInvoice(scanner, menu, user, seller, invoiceTemplates);
+                    invoiceService.handleManageInvoice(scanner, menu, user, seller, invoiceTemplates, products, customers,invoices, identityInfoService, customerService);
                 }
                 case 4 -> {
                 }

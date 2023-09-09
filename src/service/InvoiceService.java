@@ -222,7 +222,7 @@ public class InvoiceService extends IdentityInfoService {
         switch (choose) {
             case 1 -> {
                 System.out.println("Enter invoice ID: ");
-
+                int selectInvId = Integer.parseInt(scanner.nextLine());
             }
             case 2 -> {
 

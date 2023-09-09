@@ -12,16 +12,15 @@ public class ProductInvoiceDetail {
 
     @Setter(AccessLevel.NONE)
     private int productInvoiceId;
-    private Invoice invoice;
+    private Integer invoiceId;
     private Product product;
     private int quantity;
     private double discountRate;
     private String discountRateString;
     private double totalPrice;
 
-    public ProductInvoiceDetail(Invoice invoice, Product product, int quantity, double discountRate) {
+    public ProductInvoiceDetail(Product product, int quantity, double discountRate) {
         this.productInvoiceId = ++autoId;
-        this.invoice = invoice;
         this.product = product;
         this.quantity = quantity;
         this.discountRate = discountRate;

@@ -12,40 +12,37 @@ public class Invoice {
     private static int autoId;
     //private static int autoInvNo;
     @Setter(AccessLevel.NONE)
-    private int invoiceId;
+    private Integer invoiceId;
     @Setter(AccessLevel.NONE)
-    private int invoiceNo;
+    private Integer invoiceNo;
     private InvoiceTemplate invoiceTemplate;
     private LocalDateTime invoiceDate;
-    private String description;
     private Seller seller;
     private Customer customer;
     private User user;
-    private String paymentMethod;
     private double totalVATPrice;
     private double totalPrice;
     private boolean isInvoicePublished;
     private int invoiceStatus;
     private List<ProductInvoiceDetail> productInvoiceDetails;
 
-    public Invoice(InvoiceTemplate invoiceTemplate, LocalDateTime invoiceDate, String description, Seller seller, Customer customer, User user,  int paymentMethod, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
+    public Invoice(InvoiceTemplate invoiceTemplate, LocalDateTime invoiceDate, Seller seller, Customer customer, User user, double totalVATPrice, double totalPrice, boolean isInvoicePublished, int invoiceStatus, List<ProductInvoiceDetail> productInvoiceDetails) {
         this.invoiceId = ++autoId;
         this.invoiceTemplate = invoiceTemplate;
         this.invoiceDate = invoiceDate;
-        this.description = description;
         this.seller = seller;
         this.customer = customer;
         this.user = user;
-        this.paymentMethod = getPaymentMethod(paymentMethod);
         this.totalVATPrice = totalVATPrice;
         this.totalPrice = totalPrice;
         this.isInvoicePublished = isInvoicePublished;
         this.invoiceStatus = invoiceStatus;
         this.productInvoiceDetails = productInvoiceDetails;
     }
-    public String getPaymentMethod(int paymentMethod) {
-        if (paymentMethod == 1) return "TM";
-        else if (paymentMethod == 2) return "CK";
-        else return "TM/CK";
-    }
+    public Invoice() {}
+//    public String getPaymentMethod(int paymentMethod) {
+//        if (paymentMethod == 1) return "TM";
+//        else if (paymentMethod == 2) return "CK";
+//        else return "TM/CK";
+//    }
 }

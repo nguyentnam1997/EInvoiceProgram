@@ -214,6 +214,7 @@ public class InvoiceService extends IdentityInfoService {
             }
         }
     }
+
     public void handleInvoice(Scanner scanner, Menu menu, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
                               Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
         System.out.println(invoices);
@@ -221,12 +222,42 @@ public class InvoiceService extends IdentityInfoService {
         int choose = Integer.parseInt(scanner.nextLine());
         switch (choose) {
             case 1 -> {
-                System.out.println("Enter invoice ID: ");
-                int selectInvId = Integer.parseInt(scanner.nextLine());
-            }
-            case 2 -> {
+                while (true) {
+                    System.out.println("Enter invoice ID: ");
+                    int selectInvId = Integer.parseInt(scanner.nextLine());
+                    if (!invoices.containsKey(selectInvId)) {
+                        System.out.println("Invoice with ID = '" + selectInvId + "' doesn't exist, please re-enter!");
+                    } else {
+                        menu.menuHandleInvoice();
+                        int chooseHandleInv = Integer.parseInt(scanner.nextLine());
+                        switch (chooseHandleInv) {
+                            case 1 -> {
+                                //Edit information of invoice.
+                            }
+                            case 2 -> {
+                                //Publish invoice
+                            }
+                            case 3 -> {
+                                //Delete invoice
+                            }
+                            case 4 -> {
+                                return;
+                            }
+                        }
+                    }
+                }
 
             }
+            case 2 -> {
+                return;
+            }
         }
+    }
+
+    public void editInvoice(Scanner scanner, Invoice invoice) {
+        if (invoice.isInvoicePublished()) {
+            System.out.println("This invoice has been published and can't be edited!");
+        }
+
     }
 }

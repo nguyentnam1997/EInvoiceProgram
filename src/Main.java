@@ -1,9 +1,5 @@
-import entities.InvoiceTemplate;
-import entities.Seller;
-import entities.User;
-import service.InvoiceService;
-import service.SellerService;
-import service.UserService;
+import entities.*;
+import service.*;
 import utils.Utils;
 import view.Menu;
 
@@ -14,14 +10,20 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
+        Menu menu = new Menu();
         Map<Integer, Seller> sellers = new HashMap<>();
         Map<String, User> users = new HashMap<>();
         Map<String, InvoiceTemplate> invoiceTemplates = new HashMap<>();
-        Menu menu = new Menu();
-        //Utils utils = new Utils();
+        Map<String, Product > products = new HashMap<>();
+        Map<String, Customer > customers = new HashMap<>();
+        Map<Integer, Invoice> invoices = new HashMap<>();
+        IdentityInfoService identityInfoService = new IdentityInfoService();
         UserService userService = new UserService();
         SellerService sellerService = new SellerService();
         InvoiceService invoiceService = new InvoiceService();
-        sellerService.loginService(scanner, menu, users,invoiceTemplates, userService, sellerService, invoiceService);
+        CustomerService customerService = new CustomerService();
+        ProductService productService = new ProductService();
+        sellerService.loginService(scanner,  menu,  users, products, customers, invoices, invoiceTemplates,
+                userService, sellerService, invoiceService, identityInfoService, customerService, productService);
     }
 }

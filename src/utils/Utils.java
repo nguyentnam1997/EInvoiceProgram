@@ -59,7 +59,7 @@ public class Utils {
     }
     public static boolean checkValidStringIsNull(String input) {
         if (input.trim().isEmpty()) {
-            System.out.println("Value can't null, please try again!");
+            System.out.println("Value String can't null, please try again!");
             return true;
         }
         else return false;

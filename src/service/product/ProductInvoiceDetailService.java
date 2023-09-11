@@ -1,4 +1,4 @@
-package service;
+package service.product;
 
 import entities.Customer;
 import entities.Invoice;

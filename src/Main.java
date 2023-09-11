@@ -1,6 +1,11 @@
 import entities.*;
-import service.*;
-import utils.Utils;
+import service.identity.CustomerService;
+import service.identity.IdentityInfoService;
+import service.identity.SellerService;
+import service.identity.UserService;
+import service.invoice.InvoiceService;
+import service.invoice.InvoiceTemplateService;
+import service.product.ProductService;
 import view.Menu;
 
 import java.util.HashMap;

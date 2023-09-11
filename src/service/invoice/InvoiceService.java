@@ -1,12 +1,13 @@
-package service;
+package service.invoice;
 
 import entities.*;
+import service.identity.CustomerService;
+import service.identity.IdentityInfoService;
 import utils.Utils;
 import view.Menu;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -54,6 +55,7 @@ public class InvoiceService extends IdentityInfoService {
             System.out.println("\n" + "Enter description of invoice:");
             String description = scanner.nextLine();
             Customer customer = inputCustomerInInvoice(scanner, customers, identityInfoService, customerService);  //nhập thông tin customer
+            customers.put(customer.getCustomerCode(), customer);  //tự động thêm customer vào list customers
             //int paymentMethod = 0;
             while (true) {
                 System.out.println("\n" + "Enter payment method of invoice: (1. TM / 2. CK / 3. TM/CK) ");
@@ -77,14 +79,15 @@ public class InvoiceService extends IdentityInfoService {
     public Customer inputCustomerInInvoice(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
         System.out.println("----------  Information of customer: ---------");
         while (true) {
-            System.out.println("Do you want to enter existing customer information? (Y/N)");
+            System.out.println("Do you want to select existing customer? (Y/N)");
             String chooseAutoEnter = scanner.nextLine();
             if (chooseAutoEnter.equalsIgnoreCase("Y")) {
+                System.out.println(customers);  //Show list customers
                 while (true) {
                     System.out.println("\n" + "Enter customer code:");
                     String customerCode = scanner.nextLine();
                     if (!customers.containsKey(customerCode)) {
-                        System.out.println("Customer with id = '" + customerCode + "' doesn't exist, re-enter? (Y/N)");
+                        System.out.println("Customer with code '" + customerCode + "' doesn't exist, re-enter? (Y/N)");
                         String chooseReEnter = scanner.nextLine();
                         if (chooseReEnter.equalsIgnoreCase("Y")) continue;
                         else break;
@@ -152,7 +155,7 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public void handleInvoice(Scanner scanner, Menu menu, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
+    public void handleInvoice(Scanner scanner, Menu menu, User user, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
                               Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
         System.out.println(invoices);
         menu.menuFunctionInvoice();
@@ -171,6 +174,8 @@ public class InvoiceService extends IdentityInfoService {
                             switch (chooseHandleInv) {
                                 case 1 -> {
                                     //Edit information of invoice.
+                                    editInvoice(scanner, menu, invoice, invoiceTemplates, customers,
+                                            identityInfoService, customerService);
                                 }
                                 case 2 -> {
                                     //Publish invoice
@@ -195,11 +200,11 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public void editInvoice(Scanner scanner, Menu menu, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates) {
+    public void editInvoice(Scanner scanner, Menu menu, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers,
+                            IdentityInfoService identityInfoService, CustomerService customerService) {
         if (invoice.isInvoicePublished()) {
             System.out.println("This invoice has been published and can't be edited!");
-        }
-        else {
+        } else {
             while (true) {
                 menu.menuEditInvoice();
                 try {
@@ -212,6 +217,7 @@ public class InvoiceService extends IdentityInfoService {
                         }
                         case 2 -> {
                             //Edit invoice's customer
+                            editCustomerInInvoice(scanner, invoice, customers, identityInfoService, customerService);
                         }
                         case 3 -> {
                             //Edit invoice's products
@@ -226,6 +232,7 @@ public class InvoiceService extends IdentityInfoService {
             }
         }
     }
+
     public void editTemplateInInvoice(Scanner scanner, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates) {
         //Show list templates of invoice
         System.out.println(invoiceTemplates);
@@ -235,9 +242,10 @@ public class InvoiceService extends IdentityInfoService {
             String templateSerial = scanner.nextLine();
             if (!invoiceTemplates.containsKey(templateSerial)) {
                 System.out.println("Template with serial = '" + templateSerial + "' doesn't exist, please re-enter!");
-            }
-            else {
-                System.out.println("Are you sure to replace to template '"+ templateSerial + "' ? (Y/N)");
+            } else if (invoice.getInvoiceTemplate().getTemplateSerial().equalsIgnoreCase(templateSerial)) {
+                System.out.println("New template can't be the same as old template, please re-enter!");
+            } else {
+                System.out.println("Are you sure to replace to template '" + templateSerial + "' ? (Y/N)");
                 String choose = scanner.nextLine();
                 if (choose.equalsIgnoreCase("Y")) {
                     System.out.println("Invoice template was replaced successfully!");
@@ -248,6 +256,10 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
+    public void editCustomerInInvoice(Scanner scanner, Invoice invoice, Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
+        invoice.setCustomer(inputCustomerInInvoice(scanner, customers, identityInfoService, customerService));
+        System.out.println("Customer edited successfully!");
+    }
 
 
     public void publishInvoice(Scanner scanner, Invoice invoice) {
@@ -268,8 +280,7 @@ public class InvoiceService extends IdentityInfoService {
                 System.out.println("Invoice deleted successfully!");
                 invoice.setInvoiceDeleted(true);
             }
-        }
-        else if ((!invoice.isInvoicePublished() && Utils.checkUserIsAdmin(user)) || ((!invoice.isInvoicePublished() && !Utils.checkUserIsAdmin(user)))) {
+        } else if ((!invoice.isInvoicePublished() && Utils.checkUserIsAdmin(user)) || ((!invoice.isInvoicePublished() && !Utils.checkUserIsAdmin(user)))) {
             System.out.println("This invoice hasn't been published, are you sure to delete? (Y/N)");
             String choose = scanner.nextLine();
             if (choose.equalsIgnoreCase("Y")) {

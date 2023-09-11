@@ -1,4 +1,4 @@
-package service;
+package service.identity;
 
 import entities.IdentityInfo;
 import utils.Utils;

@@ -1,4 +1,4 @@
-package service;
+package service.identity;
 
 import entities.Customer;
 import utils.Utils;
@@ -14,7 +14,7 @@ public class CustomerService {
             if (customerCode.trim().isEmpty()) {
                 System.out.println("Value can't null, please try again!");
             } else if (customers.containsKey(customerCode)) {
-                System.out.println("Customer with id = '" + customerCode + "' already exist, please re-enter!");
+                System.out.println("Customer with code '" + customerCode + "' already exist, please re-enter!");
             } else {
                 while (true) {
                     System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");

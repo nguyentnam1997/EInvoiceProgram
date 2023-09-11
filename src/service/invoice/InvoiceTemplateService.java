@@ -1,4 +1,4 @@
-package service;
+package service.invoice;
 
 import entities.InvoiceTemplate;
 import entities.User;

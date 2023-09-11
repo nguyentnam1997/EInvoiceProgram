@@ -23,7 +23,8 @@ public class Main {
         InvoiceService invoiceService = new InvoiceService();
         CustomerService customerService = new CustomerService();
         ProductService productService = new ProductService();
+        InvoiceTemplateService invoiceTemplateService = new InvoiceTemplateService();
         sellerService.loginService(scanner,  menu,  users, products, customers, invoices, invoiceTemplates,
-                userService, sellerService, invoiceService, identityInfoService, customerService, productService);
+                userService, sellerService, invoiceService, identityInfoService, customerService, productService, invoiceTemplateService);
     }
 }

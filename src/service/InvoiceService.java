@@ -12,7 +12,8 @@ import java.util.Scanner;
 
 public class InvoiceService extends IdentityInfoService {
     public void handleManageInvoice(Scanner scanner, Menu menu, User user, Seller seller, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
-                                    Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
+                                    Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService,
+                                    InvoiceTemplateService invoiceTemplateService) {
         //3. Invoices management
         while (true) {
             menu.menuManageInvoice();
@@ -20,7 +21,7 @@ public class InvoiceService extends IdentityInfoService {
             switch (choose) {
                 case 1 -> {
                     //3.1. Invoice templates management.
-                    handleInvoiceTemplate(scanner, menu, user, invoiceTemplates);
+                    invoiceTemplateService.handleInvoiceTemplate(scanner, menu, user, invoiceTemplates);
                 }
                 case 2 -> {
                     //3.2. Show list of invoices.
@@ -35,70 +36,6 @@ public class InvoiceService extends IdentityInfoService {
                     //back
                     return;
                 }
-            }
-        }
-    }
-
-    public void handleInvoiceTemplate(Scanner scanner, Menu menu, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
-        while (true) {
-            menu.menuManageInvoiceTemplate();
-            int choose = Integer.parseInt(scanner.nextLine());
-            switch (choose) {
-                case 1 -> {
-                    if (invoiceTemplates.isEmpty()) {
-                        System.out.println("Invoice template list is empty, please create!");
-                    } else System.out.println(invoiceTemplates);  //in danh sách, XEM LẠI
-                }
-                case 2 -> {
-                    createInvoiceTemplate(scanner, user, invoiceTemplates);
-                }
-                case 3 -> {
-                    changeStatusTemplate(scanner, user, invoiceTemplates);
-                }
-                case 4 -> {
-                    return;
-                }
-            }
-        }
-    }
-
-    public void createInvoiceTemplate(Scanner scanner, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
-        if (Utils.checkUserIsAdmin(user)) {
-            System.out.println("----------- Create invoice template ------------");
-            while (true) {
-                System.out.println("\n" + "Enter invoice template series:");
-                String templateSeries = scanner.nextLine();
-                if (!Utils.isValidTemplateSeries(templateSeries)) {
-                    System.out.println("Invalid template series, please try again!");
-                    continue;
-                }
-                InvoiceTemplate invTemp = new InvoiceTemplate(templateSeries);
-                invoiceTemplates.put(invTemp.getTemplateSerial(), invTemp);
-                System.out.println("Create new invoice template successful!");
-                break;
-            }
-        }
-    }
-
-    public void changeStatusTemplate(Scanner scanner, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
-        if (Utils.checkUserIsAdmin(user)) {
-            while (true) {
-                System.out.println("Enter invoice template serial want to change status: ");
-                String templateSerial = scanner.nextLine();
-                if (!invoiceTemplates.containsKey(templateSerial)) {
-                    System.out.println("Invoice template with serial " + templateSerial + " doesn't exist.");
-                    if (Utils.stayMenu(scanner)) continue;
-                } else {
-                    InvoiceTemplate invoiceTemplate = invoiceTemplates.get(templateSerial);
-                    System.out.println("Invoice template " + templateSerial + " with status as '" +
-                            invoiceTemplate.getActiveStatus() + "', do you want to change? (Y/N)");
-                    String choose = scanner.nextLine();
-                    if (choose.equalsIgnoreCase("Y")) {
-                        invoiceTemplate.setActive(!invoiceTemplate.isActive());   //thay đổi ngược lại trạng thái hoạt động hiện tại
-                        System.out.println("Change active status successful!");
-                    }
-                }
-                break;
             }
         }
     }
@@ -228,20 +165,24 @@ public class InvoiceService extends IdentityInfoService {
                     if (!invoices.containsKey(selectInvId)) {
                         System.out.println("Invoice with ID = '" + selectInvId + "' doesn't exist, please re-enter!");
                     } else {
-                        menu.menuHandleInvoice();
-                        int chooseHandleInv = Integer.parseInt(scanner.nextLine());
-                        switch (chooseHandleInv) {
-                            case 1 -> {
-                                //Edit information of invoice.
-                            }
-                            case 2 -> {
-                                //Publish invoice
-                            }
-                            case 3 -> {
-                                //Delete invoice
-                            }
-                            case 4 -> {
-                                return;
+                        while (true) {
+                            menu.menuHandleInvoice();
+                            int chooseHandleInv = Integer.parseInt(scanner.nextLine());
+                            switch (chooseHandleInv) {
+                                case 1 -> {
+                                    //Edit information of invoice.
+                                }
+                                case 2 -> {
+                                    //Publish invoice
+                                    publishInvoice(scanner, invoices.get(selectInvId));
+                                }
+                                case 3 -> {
+                                    //Delete invoice
+                                    deleteInvoice(scanner, user, invoices.get(selectInvId), invoices);
+                                }
+                                case 4 -> {
+                                    return;
+                                }
                             }
                         }
                     }
@@ -254,10 +195,87 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public void editInvoice(Scanner scanner, Invoice invoice) {
+    public void editInvoice(Scanner scanner, Menu menu, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates) {
         if (invoice.isInvoicePublished()) {
             System.out.println("This invoice has been published and can't be edited!");
         }
+        else {
+            while (true) {
+                menu.menuEditInvoice();
+                try {
+                    int choose = Integer.parseInt(scanner.nextLine());
+                    if (!Utils.checkValidPositiveNumber(choose)) continue;
+                    switch (choose) {
+                        case 1 -> {
+                            //Edit invoice's template
+                            editTemplateInInvoice(scanner, invoice, invoiceTemplates);
+                        }
+                        case 2 -> {
+                            //Edit invoice's customer
+                        }
+                        case 3 -> {
+                            //Edit invoice's products
+                        }
+                        case 4 -> {
+                            return;
+                        }
+                    }
+                } catch (Exception e) {
+                    System.out.println("Invalid value Integer, please try again!" + "\n");
+                }
+            }
+        }
+    }
+    public void editTemplateInInvoice(Scanner scanner, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates) {
+        //Show list templates of invoice
+        System.out.println(invoiceTemplates);
+        //Select template want to replace
+        while (true) {
+            System.out.println("Select template by serial you want to replace:");
+            String templateSerial = scanner.nextLine();
+            if (!invoiceTemplates.containsKey(templateSerial)) {
+                System.out.println("Template with serial = '" + templateSerial + "' doesn't exist, please re-enter!");
+            }
+            else {
+                System.out.println("Are you sure to replace to template '"+ templateSerial + "' ? (Y/N)");
+                String choose = scanner.nextLine();
+                if (choose.equalsIgnoreCase("Y")) {
+                    System.out.println("Invoice template was replaced successfully!");
+                    invoice.setInvoiceTemplate(invoiceTemplates.get(templateSerial));
+                }
+                break;
+            }
+        }
+    }
 
+
+
+    public void publishInvoice(Scanner scanner, Invoice invoice) {
+        System.out.println("Are you sure to publish this invoice? (Y/N)");
+        String choose = scanner.nextLine();
+        if (choose.equalsIgnoreCase("Y")) {
+            System.out.println("Invoice published successfully!");
+            invoice.setInvoicePublished(true);
+        }
+    }
+
+    public void deleteInvoice(Scanner scanner, User user, Invoice invoice, Map<Integer, Invoice> invoices) {
+        if (!Utils.checkUserIsAdmin(user)) return;
+        else if (invoice.isInvoicePublished() && Utils.checkUserIsAdmin(user)) {
+            System.out.println("This invoice has been published, are you sure to delete? (Y/N)");
+            String choose = scanner.nextLine();
+            if (choose.equalsIgnoreCase("Y")) {
+                System.out.println("Invoice deleted successfully!");
+                invoice.setInvoiceDeleted(true);
+            }
+        }
+        else if ((!invoice.isInvoicePublished() && Utils.checkUserIsAdmin(user)) || ((!invoice.isInvoicePublished() && !Utils.checkUserIsAdmin(user)))) {
+            System.out.println("This invoice hasn't been published, are you sure to delete? (Y/N)");
+            String choose = scanner.nextLine();
+            if (choose.equalsIgnoreCase("Y")) {
+                System.out.println("Invoice deleted successfully!");
+                invoices.remove(invoice.getInvoiceId());
+            }
+        }
     }
 }

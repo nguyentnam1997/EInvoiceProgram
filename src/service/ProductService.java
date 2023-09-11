@@ -20,7 +20,7 @@ public class ProductService {
                     case 1 -> {
                         System.out.println(products);
                         //Select product
-
+                        handleSelectProduct(scanner, menu, products);
 
                     }
                     //Create new product
@@ -39,7 +39,7 @@ public class ProductService {
     }
 
     public void createProduct(Scanner scanner, User user, Map<String, Product> products) {
-
+        System.out.println("-------- 5.2. Create product --------");
         while (true) {
             System.out.println("Enter product code:");
             String productCode = scanner.nextLine();
@@ -89,7 +89,7 @@ public class ProductService {
                 if (!Utils.checkValidPositiveNumber(chooseFunc)) continue;
                 switch (chooseFunc) {
                     case 1 -> {
-                        handleProductAfterSelect(scanner, menu, selectProduct(scanner, products));
+                        handleProductAfterSelect(scanner, menu, selectProduct(scanner, products), products);
                     }
                     case 2 -> {
                         return;
@@ -109,7 +109,7 @@ public class ProductService {
             }
         }
     }
-    public void handleProductAfterSelect(Scanner scanner, Menu menu, Product product) {
+    public void handleProductAfterSelect(Scanner scanner, Menu menu, Product product, Map<String, Product> products) {
         while (true) {
             menu.menuHandleProduct(); //Handle product
             try {
@@ -122,14 +122,14 @@ public class ProductService {
                     }
                     //Delete product
                     case 2 -> {
-
+                        deleteProduct(scanner, products);
                     }
                     //Back menu
                     case 3 -> {return;}
                 }
             }
             catch (Exception e) {
-
+                System.out.println("Invalid value Integer, please try again!" + "\n");
             }
         }
     }
@@ -189,7 +189,22 @@ public class ProductService {
             }
         }
     }
-    public void deleteProduct() {
+    public void deleteProduct(Scanner scanner, Map<String, Product> products) {
+        System.out.println("--------- Delete product ----------");
+        while (true) {
+            System.out.println("Enter product code want to delete:");
+            String productCode = scanner.nextLine();
+            if (!products.containsKey(productCode)) {
+                System.out.println("Product with code = '" + productCode + "' doesn't exist, re-enter? (Y/N)");
+                String choose = scanner.nextLine();
+                if (choose.equalsIgnoreCase("Y")) continue;
+                else break;
+            }
+            else {
+                System.out.println("Delete product with code '" + productCode + "' successful!");
+                products.remove(productCode);
+            }
+        }
 
     }
 }

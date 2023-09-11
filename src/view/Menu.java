@@ -80,6 +80,14 @@ public class Menu {
         System.out.println("3.2.1.4. Back to previous menu.");
         System.out.println("Choose options:");
     }
+    public void menuEditInvoice() {
+        System.out.println("\n" + "------------- 3.2.1.1 Edit information of invoice --------------");
+        System.out.println("3.2.1.1.1. Edit invoice's template.");
+        System.out.println("3.2.1.1.2. Edit invoice's customer.");
+        System.out.println("3.2.1.1.3. Edit invoice's products.");
+        System.out.println("3.2.1.1.4. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
     public void menuManageProduct() {
         System.out.println("\n" + "---------- 5. Products management ----------");
         System.out.println("5.1. Show product list information.");
@@ -96,16 +104,16 @@ public class Menu {
     public void menuHandleProduct() {
         System.out.println("\n" + "------------- 5.1.1. Handle product --------------");
         System.out.println("5.1.1.1. Edit information of product.");
-        System.out.println("3.2.1.2. Delete product.");
-        System.out.println("3.2.1.3. Back to previous menu.");
+        System.out.println("5.1.1.2. Delete product.");
+        System.out.println("5.1.1.3. Back to previous menu.");
         System.out.println("Choose options:");
     }
     public void menuEditProduct() {
         System.out.println("\n" + "------------- 5.1.1.1 Edit information of product --------------");
         System.out.println("5.1.1.1.1. Edit product's name.");
-        System.out.println("3.2.1.1.2. Edit product's unit price.");
-        System.out.println("3.2.1.1.3. Edit product's VAT rate.");
-        System.out.println("3.2.1.1.4. Back to previous menu.");
+        System.out.println("5.1.1.1.2. Edit product's unit price.");
+        System.out.println("5.1.1.1.3. Edit product's VAT rate.");
+        System.out.println("5.1.1.1.4. Back to previous menu.");
         System.out.println("Choose options:");
     }
 }

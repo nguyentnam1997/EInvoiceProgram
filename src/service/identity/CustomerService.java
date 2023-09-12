@@ -20,7 +20,7 @@ public class CustomerService {
                     System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
                     try {
                         int choose = Integer.parseInt(scanner.nextLine());
-                        if (Utils.checkValidPositiveNumber(choose) || choose > 2) continue;
+                        if (Utils.checkValidPositiveNumber(choose) && choose > 2) continue;
                         switch (choose) {
                             case 1 -> {
                                 System.out.println("Enter buyer name:");
@@ -37,6 +37,9 @@ public class CustomerService {
                                     }
                                     return new Customer(identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);
                                 }
+                            }
+                            default -> {
+                                System.out.println("Number entered is outside the valid range, please re-enter!");
                             }
                         }
                     } catch (Exception e) {

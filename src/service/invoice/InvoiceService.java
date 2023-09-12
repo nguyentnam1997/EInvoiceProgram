@@ -8,6 +8,7 @@ import view.Menu;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -110,8 +111,8 @@ public class InvoiceService extends IdentityInfoService {
                 int countProduct = Integer.parseInt(scanner.nextLine());
                 if (Utils.checkValidPositiveNumber(countProduct)) {
                     for (int i = 0; i < countProduct; i++) {
-                        ProductInvoiceDetail productInvoiceDetail = inputProductInvoiceDetail(scanner, i, products);
-                        productInvoiceDetails.put(productInvoiceDetail.getProductInvoiceId(), productInvoiceDetail);
+                        ProductInvoiceDetail productInvoiceDetail = inputProductInvoiceDetail(scanner, i, products, productInvoiceDetails); //tạo dòng hàng hoá trong hoá đơn
+                        productInvoiceDetails.put(productInvoiceDetail.getProductInvoiceId(), productInvoiceDetail);  //thêm vào list hàng hoá trong hoá đơn
                     }
                     return productInvoiceDetails;
                 }
@@ -120,15 +121,20 @@ public class InvoiceService extends IdentityInfoService {
             }
         }
     }
-
-    public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, int index, Map<String, Product> products) {
+//Map<Integer, ProductInvoiceDetail>
+    public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, int index, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         System.out.println("\n" + (index + 1) + ". Product line " + (index + 1) + ":");
         while (true) {
             System.out.println("Enter product code:");
             String productCode = scanner.nextLine();
+            var a = productInvoiceDetails.entrySet().stream().filter(e -> e.getValue().getProduct().getProductCode().equalsIgnoreCase(productCode));
             if (!products.containsKey(productCode)) {
                 System.out.println("Product with code = '" + productCode + "' doesn't exist, please re-enter!");
-            } else {
+            }
+            else if (a.findAny().isPresent()) {
+            System.out.println("Product with code = '" + productCode + "' has been added, please re-enter!");
+            }
+            else {
                 Product product = products.get(productCode);
                 while (true) {
                     System.out.println("Enter quantity of this product / service:");

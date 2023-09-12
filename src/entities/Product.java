@@ -18,7 +18,6 @@ public class Product {
     private String productCode;
 
     private String productName;
-    private String description;
     private double unitPrice;
     private double VATRate;
     private String VATRateString;
@@ -50,6 +49,6 @@ public class Product {
         }
     }
     public String getVATRateString(double VATRate) {
-        return VATRate + "%";
+        return (VATRate * 100) + "%";
     }
 }

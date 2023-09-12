@@ -19,9 +19,10 @@ public class ProductService {
                     //Show product list information
                     case 1 -> {
                         System.out.println(products);
-                        //Select product
-                        handleSelectProduct(scanner, menu, products);
-
+                        if (Utils.checkUserIsAdmin(user)) {
+                            //Select product
+                            handleSelectProduct(scanner, menu, products);
+                        }
                     }
                     //Create new product
                     case 2 -> {
@@ -39,46 +40,49 @@ public class ProductService {
     }
 
     public void createProduct(Scanner scanner, User user, Map<String, Product> products) {
-        System.out.println("-------- 5.2. Create product --------");
-        while (true) {
-            System.out.println("Enter product code:");
-            String productCode = scanner.nextLine();
-            if (Utils.checkValidStringIsNull(productCode)) continue;
-            if (products.containsKey(productCode)) {
-                System.out.println("Product with code = '" + productCode + "' already exist, please re-enter!");
-            } else {
-                while (true) {
-                    System.out.println("Enter product name:");
-                    String productName = scanner.nextLine();
-                    if (Utils.checkValidStringIsNull(productName)) continue;
+        if (Utils.checkUserIsAdmin(user)) {
+            System.out.println("-------- 5.2. Create product --------");
+            while (true) {
+                System.out.println("Enter product code:");
+                String productCode = scanner.nextLine();
+                if (Utils.checkValidStringIsNull(productCode)) continue;
+                if (products.containsKey(productCode)) {
+                    System.out.println("Product with code = '" + productCode + "' already exist, please re-enter!");
+                    continue;
+                } else {
                     while (true) {
-                        System.out.println("Enter unit price of product:");
-                        try {
-                            double unitPrice = Double.parseDouble(scanner.nextLine());
-                            if (!Utils.checkValidPositiveNumber(unitPrice)) continue;
-                            while (true) {
-                                System.out.println("Enter VAT rate of this product: (1. 0% / 2. 5% / 3. 10%)");
-                                try {
-                                    int input = Integer.parseInt(scanner.nextLine());
-                                    if (!Utils.checkValidPositiveNumber(input) || input > 3) continue;
-                                    else {
-                                        Product product = new Product(productCode, productName, unitPrice, input);
-                                        products.put(productCode, product);
+                        System.out.println("Enter product name:");
+                        String productName = scanner.nextLine();
+                        if (Utils.checkValidStringIsNull(productName)) continue;
+                        while (true) {
+                            System.out.println("Enter unit price of product:");
+                            try {
+                                double unitPrice = Double.parseDouble(scanner.nextLine());
+                                if (!Utils.checkValidPositiveNumber(unitPrice)) continue;
+                                while (true) {
+                                    System.out.println("Enter VAT rate of this product: (1. 0% / 2. 5% / 3. 10%)");
+                                    try {
+                                        int input = Integer.parseInt(scanner.nextLine());
+                                        if (!Utils.checkValidPositiveNumber(input) || input > 3) continue;
+                                        else {
+                                            Product product = new Product(productCode, productName, unitPrice, input);
+                                            products.put(productCode, product);
+                                        }
+                                    } catch (Exception e) {
+                                        System.out.println("Invalid value Integer, please try again!" + "\n");
                                     }
-                                } catch (Exception e) {
-                                    System.out.println("Invalid value Integer, please try again!" + "\n");
+                                    break;
                                 }
                                 break;
+                            } catch (Exception e) {
+                                System.out.println("Invalid value Integer, please try again!" + "\n");
                             }
-                            break;
-                        } catch (Exception e) {
-                            System.out.println("Invalid value Integer, please try again!" + "\n");
                         }
+                        break;
                     }
-                    break;
                 }
+                break;
             }
-            break;
         }
     }
     public void handleSelectProduct(Scanner scanner, Menu menu, Map<String, Product> products) {

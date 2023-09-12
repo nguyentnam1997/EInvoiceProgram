@@ -47,7 +47,7 @@ public class InvoiceService extends IdentityInfoService {
         while (true) {
             System.out.println("\n" + "Enter invoice template serial:");
             String invTempSerial = scanner.nextLine();
-            if (!invoiceTemplates.containsKey(invTempSerial)) {
+            if (!invoiceTemplates.containsKey(invTempSerial.toUpperCase())) {
                 System.out.println("Template with serial '" + invTempSerial + "' doesn't exist, try again!");
                 continue;
             }
@@ -121,7 +121,8 @@ public class InvoiceService extends IdentityInfoService {
             }
         }
     }
-//Map<Integer, ProductInvoiceDetail>
+
+    //Map<Integer, ProductInvoiceDetail>
     public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, int index, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         System.out.println("\n" + (index + 1) + ". Product line " + (index + 1) + ":");
         while (true) {
@@ -130,11 +131,9 @@ public class InvoiceService extends IdentityInfoService {
             var a = productInvoiceDetails.entrySet().stream().filter(e -> e.getValue().getProduct().getProductCode().equalsIgnoreCase(productCode));
             if (!products.containsKey(productCode)) {
                 System.out.println("Product with code = '" + productCode + "' doesn't exist, please re-enter!");
-            }
-            else if (a.findAny().isPresent()) {
-            System.out.println("Product with code = '" + productCode + "' has been added, please re-enter!");
-            }
-            else {
+            } else if (a.findAny().isPresent()) {
+                System.out.println("Product with code = '" + productCode + "' has been added, please re-enter!");
+            } else {
                 Product product = products.get(productCode);
                 while (true) {
                     System.out.println("Enter quantity of this product / service:");
@@ -145,9 +144,9 @@ public class InvoiceService extends IdentityInfoService {
                                 try {
                                     System.out.println("Enter discount rate (%) of this product:");
                                     double discountRate = Double.parseDouble(scanner.nextLine());
-                                    if (Utils.checkValidPositiveNumber(discountRate)) {
+                                    if (discountRate >= 0 && discountRate <= 100) {
                                         return new ProductInvoiceDetail(product, quantity, discountRate);
-                                    }
+                                    } else System.out.println("Number entered is outside the valid range, please re-enter!");
                                 } catch (Exception e) {
                                     System.out.println("Invalid value Integer, please try again!" + "\n");
                                 }

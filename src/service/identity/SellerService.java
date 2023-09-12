@@ -57,6 +57,10 @@ public class SellerService {
                                 System.out.println("\n" + "Enter your company's hotline:");
                                 try {
                                     int hotline = Integer.parseInt(scanner.nextLine());
+                                    if (String.valueOf(hotline).length() != 10) {
+                                        System.out.println("Hotline must have 10 numbers, please re-enter!");
+                                        continue;
+                                    }
                                     System.out.println("\n" + "Enter your company's bank account:");
                                     String bankAccount = scanner.nextLine();
                                     System.out.println("\n" + "-------- Enter admin account --------");

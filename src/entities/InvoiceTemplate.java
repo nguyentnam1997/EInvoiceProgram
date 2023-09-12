@@ -13,7 +13,7 @@ public class InvoiceTemplate {
     private boolean isActive;
 
     public InvoiceTemplate(String templateSeries) {
-        this.templateSerial = "1C23T" + templateSeries;
+        this.templateSerial = "1C23T" + templateSeries.toUpperCase();
         this.isActive = true;
     }
     public String getActiveStatus() {

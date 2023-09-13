@@ -10,9 +10,9 @@ import java.util.Scanner;
 
 public class UserService {
     public User login(Scanner scanner, Seller seller, Map<String, User> users, SellerService sellerService) {
-        System.out.println("========= LOGIN ==========");
+        System.out.println("\n"+"========= LOGIN ==========");
         do {
-            System.out.println("Enter your username:");
+            System.out.print("Enter your username: ");
             String username = scanner.nextLine();
             if (!seller.getUsers().containsKey(username))
             {
@@ -30,8 +30,8 @@ public class UserService {
         while (true);
     }
     public void enterPassword(Scanner scanner, User user, Seller seller) {
-        do {
-            System.out.println("\n" + "Enter your password:");
+        while (true){
+            System.out.print("\n" + "Enter your password: ");
             String password = scanner.nextLine();
             if (!user.getPassword().equals(password)) {
                 System.out.println("\n" + "Enter wrong password, choose the options:");
@@ -45,6 +45,10 @@ public class UserService {
                     case 2 -> {
                         forgotPassword(scanner, seller);
                     }
+                    default -> {
+                        System.out.println("Invalid input, please re-enter!");
+                        continue;
+                    }
                 }
             }
             else {
@@ -52,7 +56,6 @@ public class UserService {
             }
             break;
         }
-        while (true);
     }
     public void forgotPassword(Scanner scanner, Seller seller) {
         do {

@@ -27,11 +27,14 @@ public class InvoiceService extends IdentityInfoService {
                 case 2 -> {
                     //3.2. Show list of invoices.
                     System.out.println(invoices);
+                    handleSelectInvoice(scanner, menu, user, invoiceTemplates, products, customers, invoices, identityInfoService, customerService);
                 }
                 case 3 -> {
                     //3.3. Create new invoice.
                     Invoice invoice = createInvoice(scanner, user, seller, products, invoiceTemplates, customers, identityInfoService, customerService);
-                    invoices.put(invoice.getInvoiceId(), invoice);
+                    if (invoice != null) {
+                        invoices.put(invoice.getInvoiceId(), invoice);
+                    }
                 }
                 case 4 -> {
                     //back
@@ -43,34 +46,47 @@ public class InvoiceService extends IdentityInfoService {
 
     public Invoice createInvoice(Scanner scanner, User user, Seller seller, Map<String, Product> products, Map<String, InvoiceTemplate> invoiceTemplates,
                                  Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
-        while (true) {
-            System.out.println("\n" + "Enter invoice template serial:");
-            String invTempSerial = scanner.nextLine();
-            if (!invoiceTemplates.containsKey(invTempSerial)) {
-                System.out.println("Template with serial '" + invTempSerial + "' doesn't exist, try again!");
-                continue;
-            }
-            InvoiceTemplate invoiceTemplate = invoiceTemplates.get(invTempSerial);
-            LocalDateTime invoiceDate = LocalDateTime.now();
-            System.out.println("\n" + "Enter description of invoice:");
-            String description = scanner.nextLine();
-            Customer customer = inputCustomerInInvoice(scanner, customers, identityInfoService, customerService);  //nhập thông tin customer
-            customers.put(customer.getCustomerCode(), customer);  //tự động thêm customer vào list customers
-            //int paymentMethod = 0;
+        if (invoiceTemplates.isEmpty()) {
+            System.out.println("List of invoice templates is empty, please create first!");
+            return null;
+        }
+        else if (products.isEmpty()) {
+            System.out.println("list of products is empty, please create first!");
+            return null;
+        }
+        else {
             while (true) {
-                System.out.println("\n" + "Enter payment method of invoice: (1. TM / 2. CK / 3. TM/CK) ");
-                try {
-                    int paymentMethod = Integer.parseInt(scanner.nextLine());
-                    if (paymentMethod <= 0 || paymentMethod > 3) {
-                        System.out.println("Wrong value entered, please re-enter!");
-                    } else {
-                        Map<Integer, ProductInvoiceDetail> productInvoiceDetails = inputProductListToInvoice(scanner, products);
-                        System.out.println("Create invoice successful!");
-                        return new Invoice(invoiceTemplate, invoiceDate, description, seller, customer, user, paymentMethod, productInvoiceDetails);
+                System.out.println("\n" + "Enter invoice template serial:");
+                String invTempSerial = scanner.nextLine();
+                if (!invoiceTemplates.containsKey(invTempSerial.toUpperCase())) {
+                    System.out.println("Template with serial '" + invTempSerial.toUpperCase() + "' doesn't exist, try again!");
+                    continue;
+                }
+                InvoiceTemplate invoiceTemplate = invoiceTemplates.get(invTempSerial);
+                LocalDateTime invoiceDate = LocalDateTime.now();
+                System.out.println("\n" + "Enter description of invoice:");
+                String description = scanner.nextLine();
+                Customer customer = inputCustomerInInvoice(scanner, customers, identityInfoService, customerService);  //nhập thông tin customer
+                customers.put(customer.getCustomerCode(), customer);  //tự động thêm customer vào list customers
+                //int paymentMethod = 0;
+                while (true) {
+                    System.out.println("\n" + "Enter payment method of invoice: (1. TM / 2. CK / 3. TM/CK) ");
+                    try {
+                        int paymentMethod = Integer.parseInt(scanner.nextLine());
+                        if (!Utils.checkValidPositiveNumber(paymentMethod) || paymentMethod > 3) continue;
+                        if (products.isEmpty()) {
+                            System.out.println("\n" + "----------  Information of products: ---------");
+                            System.out.println("Product list is empty, please create first!");
+                            return null;
+                        }
+                        else {
+                            Map<Integer, ProductInvoiceDetail> productInvoiceDetails = inputProductListToInvoice(scanner, products);
+                            System.out.println("Create invoice successful!");
+                            return new Invoice(invoiceTemplate, invoiceDate, description, seller, customer, user, paymentMethod, productInvoiceDetails);
+                        }
+                    } catch (Exception e) {
+                        System.out.println("Invalid value Integer, please try again!");
                     }
-
-                } catch (Exception e) {
-                    System.out.println("Invalid value Integer, please try again!");
                 }
             }
         }
@@ -110,7 +126,7 @@ public class InvoiceService extends IdentityInfoService {
                 int countProduct = Integer.parseInt(scanner.nextLine());
                 if (Utils.checkValidPositiveNumber(countProduct)) {
                     for (int i = 0; i < countProduct; i++) {
-                        ProductInvoiceDetail productInvoiceDetail = inputProductInvoiceDetail(scanner, i, products);
+                        ProductInvoiceDetail productInvoiceDetail = inputProductInvoiceDetail(scanner, i, products, productInvoiceDetails);
                         productInvoiceDetails.put(productInvoiceDetail.getProductInvoiceId(), productInvoiceDetail);
                     }
                     return productInvoiceDetails;
@@ -121,14 +137,19 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, int index, Map<String, Product> products) {
+    public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, int index, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         System.out.println("\n" + (index + 1) + ". Product line " + (index + 1) + ":");
         while (true) {
             System.out.println("Enter product code:");
             String productCode = scanner.nextLine();
+            var a = productInvoiceDetails.entrySet().stream().filter(e->e.getValue().getProduct().getProductCode().equalsIgnoreCase(productCode));
             if (!products.containsKey(productCode)) {
                 System.out.println("Product with code = '" + productCode + "' doesn't exist, please re-enter!");
-            } else {
+            }
+            else if (a.findAny().isPresent()) {
+                System.out.println("Product with code = '" + productCode + "' has been added, please re-enter!");
+            }
+            else {
                 Product product = products.get(productCode);
                 while (true) {
                     System.out.println("Enter quantity of this product / service:");
@@ -155,7 +176,7 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
-    public void handleInvoice(Scanner scanner, Menu menu, User user, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
+    public void handleSelectInvoice(Scanner scanner, Menu menu, User user, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
                               Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
         System.out.println(invoices);
         menu.menuFunctionInvoice();
@@ -174,7 +195,7 @@ public class InvoiceService extends IdentityInfoService {
                             switch (chooseHandleInv) {
                                 case 1 -> {
                                     //Edit information of invoice.
-                                    editInvoice(scanner, menu, invoice, invoiceTemplates, customers,
+                                    editInvoice(scanner, menu, invoices.get(selectInvId), invoiceTemplates, customers,
                                             identityInfoService, customerService);
                                 }
                                 case 2 -> {
@@ -261,13 +282,13 @@ public class InvoiceService extends IdentityInfoService {
         System.out.println("Customer edited successfully!");
     }
 
-
     public void publishInvoice(Scanner scanner, Invoice invoice) {
         System.out.println("Are you sure to publish this invoice? (Y/N)");
         String choose = scanner.nextLine();
         if (choose.equalsIgnoreCase("Y")) {
             System.out.println("Invoice published successfully!");
             invoice.setInvoicePublished(true);
+            invoice.setInvoiceNo();
         }
     }
 

@@ -52,23 +52,28 @@ public class InvoiceTemplateService {
 
     public void changeStatusTemplate(Scanner scanner, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         if (Utils.checkUserIsAdmin(user)) {
-            while (true) {
-                System.out.println("Enter invoice template serial want to change status: ");
-                String templateSerial = scanner.nextLine();
-                if (!invoiceTemplates.containsKey(templateSerial)) {
-                    System.out.println("Invoice template with serial " + templateSerial + " doesn't exist.");
-                    if (Utils.stayMenu(scanner)) continue;
-                } else {
-                    InvoiceTemplate invoiceTemplate = invoiceTemplates.get(templateSerial);
-                    System.out.println("Invoice template " + templateSerial + " with status as '" +
-                            invoiceTemplate.getActiveStatus() + "', do you want to change? (Y/N)");
-                    String choose = scanner.nextLine();
-                    if (choose.equalsIgnoreCase("Y")) {
-                        invoiceTemplate.setActive(!invoiceTemplate.isActive());   //thay đổi ngược lại trạng thái hoạt động hiện tại
-                        System.out.println("Change active status successful!");
+            if (invoiceTemplates.isEmpty()) {
+                System.out.println("Invoice template list is empty, please create!");
+            }
+            else {
+                while (true) {
+                    System.out.println("Enter invoice template serial want to change status: ");
+                    String templateSerial = scanner.nextLine();
+                    if (!invoiceTemplates.containsKey(templateSerial)) {
+                        System.out.println("Invoice template with serial " + templateSerial + " doesn't exist.");
+                        if (Utils.stayMenu(scanner)) continue;
+                    } else {
+                        InvoiceTemplate invoiceTemplate = invoiceTemplates.get(templateSerial);
+                        System.out.println("Invoice template " + templateSerial + " with status as '" +
+                                invoiceTemplate.getActiveStatus() + "', do you want to change? (Y/N)");
+                        String choose = scanner.nextLine();
+                        if (choose.equalsIgnoreCase("Y")) {
+                            invoiceTemplate.setActive(!invoiceTemplate.isActive());   //thay đổi ngược lại trạng thái hoạt động hiện tại
+                            System.out.println("Change active status successful!");
+                        }
                     }
+                    break;
                 }
-                break;
             }
         }
     }

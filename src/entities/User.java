@@ -13,16 +13,14 @@ public class User {
     private String email;
     private boolean isAdmin;
     private boolean isActive;
-    private int sellerTaxCode;
     private List<Invoice> userInvoiceList;
 
-    public User(String username, String password, String email, boolean isAdmin, int sellerTaxCode) {
+    public User(String username, String password, String email, boolean isAdmin) {
         this.username = username;
         this.password = password;
         this.email = email;
         this.isAdmin = isAdmin;
         this.isActive = true;
-        this.sellerTaxCode = sellerTaxCode;
         this.userInvoiceList = null;
     }
 

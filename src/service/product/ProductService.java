@@ -44,9 +44,11 @@ public class ProductService {
             System.out.println("Enter product code:");
             String productCode = scanner.nextLine();
             if (Utils.checkValidStringIsNull(productCode)) continue;
-            if (products.containsKey(productCode)) {
-                System.out.println("Product with code = '" + productCode + "' already exist, please re-enter!");
-            } else {
+            else if (products.containsKey(productCode)) {
+                System.out.println("Product with code '" + productCode + "' already exist, please re-enter!");
+                continue;
+            }
+            else {
                 while (true) {
                     System.out.println("Enter product name:");
                     String productName = scanner.nextLine();
@@ -64,6 +66,7 @@ public class ProductService {
                                     else {
                                         Product product = new Product(productCode, productName, unitPrice, input);
                                         products.put(productCode, product);
+                                        System.out.println("Create product '" + productName + "' successfully!");
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Invalid value Integer, please try again!" + "\n");
@@ -81,6 +84,7 @@ public class ProductService {
             break;
         }
     }
+
     public void handleSelectProduct(Scanner scanner, Menu menu, Map<String, Product> products) {
         while (true) {
             menu.menuFunctionProduct();
@@ -94,12 +98,16 @@ public class ProductService {
                     case 2 -> {
                         return;
                     }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
                 }
             } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
+
     public Product selectProduct(Scanner scanner, Map<String, Product> products) {
         while (true) {
             System.out.println("Enter product code:");
@@ -107,8 +115,12 @@ public class ProductService {
             if (products.containsKey(productCode)) {
                 return products.get(productCode);
             }
+            else {
+                System.out.println("Product with code '" + productCode + "' doesn't exist, please re-enter!");
+            }
         }
     }
+
     public void handleProductAfterSelect(Scanner scanner, Menu menu, Product product, Map<String, Product> products) {
         while (true) {
             menu.menuHandleProduct(); //Handle product
@@ -125,14 +137,16 @@ public class ProductService {
                         deleteProduct(scanner, products);
                     }
                     //Back menu
-                    case 3 -> {return;}
+                    case 3 -> {
+                        return;
+                    }
                 }
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 System.out.println("Invalid value Integer, please try again!" + "\n");
             }
         }
     }
+
     public void editProduct(Scanner scanner, Menu menu, Product product) {
         while (true) {
             menu.menuEditProduct();
@@ -147,6 +161,7 @@ public class ProductService {
                             String newProductName = scanner.nextLine();
                             if (Utils.checkValidStringIsNull(newProductName)) continue;
                             product.setProductName(newProductName);
+                            System.out.println("Change product's name successfully!");
                             break;
                         }
                     }
@@ -158,6 +173,7 @@ public class ProductService {
                                 double newUnitPrice = Double.parseDouble(scanner.nextLine());
                                 if (!Utils.checkValidPositiveNumber(newUnitPrice)) continue;
                                 product.setUnitPrice(newUnitPrice);
+                                System.out.println("Change product's unit price successfully!");
                                 break;
                             } catch (Exception e) {
                                 System.out.println("Invalid value Integer, please try again!" + "\n");
@@ -173,6 +189,7 @@ public class ProductService {
                                 if (!Utils.checkValidPositiveNumber(chooseVAT) || chooseVAT > 3) continue;
                                 product.setVATRate(product.getVATRate(chooseVAT));  //Set VAT rate
                                 product.setVATRateString(product.getVATRateString(product.getVATRate()));  //Set VAT rate String
+                                System.out.println("Change product's VAT rate successfully!");
                                 break;
                             } catch (Exception e) {
                                 System.out.println("Invalid value Integer, please try again!" + "\n");
@@ -189,6 +206,7 @@ public class ProductService {
             }
         }
     }
+
     public void deleteProduct(Scanner scanner, Map<String, Product> products) {
         System.out.println("--------- Delete product ----------");
         while (true) {
@@ -199,8 +217,7 @@ public class ProductService {
                 String choose = scanner.nextLine();
                 if (choose.equalsIgnoreCase("Y")) continue;
                 else break;
-            }
-            else {
+            } else {
                 System.out.println("Delete product with code '" + productCode + "' successful!");
                 products.remove(productCode);
             }

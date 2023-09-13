@@ -21,7 +21,9 @@ public class ProductInvoiceDetailService {
                     try {
                         System.out.println("Enter discount rate of this product / service:");
                         double discountRate = Double.parseDouble(scanner.nextLine());
-                        if (!Utils.checkValidPositiveNumber(discountRate)) continue;
+                        if (discountRate < 0 || discountRate > 100) {
+                            System.out.println("Number entered is outside the valid range, please re-enter!");
+                        }
                         else {
                             return new ProductInvoiceDetail(product, quantity, discountRate);
                         }

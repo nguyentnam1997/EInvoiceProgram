@@ -51,9 +51,16 @@ public class Invoice {
         else if (paymentMethod == 2) return "CK";
         else return "TM/CK";
     }
-//    public void getInvoiceNo(int autoInvNo) {
-//        if (isInvoicePublished()) autoInvNo++;
-//    }
+
+    public int getAutoInvNo(boolean isInvoicePublished) {
+        if (isInvoicePublished) return ++autoInvNo;
+        else return autoInvNo;
+    }
+
+    public void setInvoiceNo() {
+        this.invoiceNo = getAutoInvNo(isInvoicePublished);
+    }
+
     public double calculateTotalVATInvoice(Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         double totalVAT = 0;
         for (Map.Entry<Integer, ProductInvoiceDetail> entry: productInvoiceDetails.entrySet()) {
@@ -68,4 +75,5 @@ public class Invoice {
         }
         return totalPrice;
     }
+
 }

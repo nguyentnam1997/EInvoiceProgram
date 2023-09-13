@@ -32,7 +32,7 @@ public class CustomerService {
                                     System.out.println("Enter buyer name:");
                                     String buyerName = scanner.nextLine();
                                     if (buyerName.trim().isEmpty()) {
-                                        System.out.println("Buyer name can't be null, please re-enter!");
+                                        System.out.println("Buyer name is empty, please re-enter!");
                                         continue;
                                     }
                                     return new Customer(identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);

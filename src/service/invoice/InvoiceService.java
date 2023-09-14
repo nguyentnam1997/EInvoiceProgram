@@ -160,7 +160,7 @@ public class InvoiceService extends IdentityInfoService {
                                 try {
                                     System.out.println("Enter discount rate (%) of this product:");
                                     double discountRate = Double.parseDouble(scanner.nextLine());
-                                    if (Utils.checkValidPositiveNumber(discountRate)) {
+                                    if (discountRate >= 0 && discountRate <= 100) {
                                         return new ProductInvoiceDetail(product, quantity, discountRate);
                                     }
                                 } catch (Exception e) {

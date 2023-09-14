@@ -123,4 +123,37 @@ public class Menu {
         System.out.println("5.3. Back to main menu.");
         System.out.println("Choose options:");
     }
+    public void menuFunctionCustomer() {
+        System.out.println("\n" + "----------------------------------");
+        System.out.println("5.1.1. Select customer you want to work with.");
+        System.out.println("5.1.2. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
+    public void menuHandleCustomer() {
+        System.out.println("\n" + "------------- 5.1.1. Handle customer --------------");
+        System.out.println("5.1.1.1. Edit information of customer.");
+        System.out.println("5.1.1.2. Delete customer.");
+        System.out.println("5.1.1.3. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
+    public void menuEditCustomerIsOrganization() {
+        System.out.println("\n" + "------------- 5.1.1.1 Edit information of customer --------------");
+        System.out.println("5.1.1.1.1. Edit organization's name.");
+        System.out.println("5.1.1.1.2. Edit organization's address.");
+        System.out.println("5.1.1.1.3. Edit organization's email.");
+        System.out.println("5.1.1.1.4. Edit organization's hotline.");
+        System.out.println("5.1.1.1.5. Edit organization's bank account.");
+        System.out.println("5.1.1.1.6. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
+    public void menuEditCustomerIsPersonal() {
+        System.out.println("\n" + "------------- 5.1.1.1 Edit information of customer --------------");
+        System.out.println("4.1.1.1.1. Edit personal name.");
+        System.out.println("4.1.1.1.2. Edit personal address");
+        System.out.println("4.1.1.1.3. Edit personal email");
+        System.out.println("4.1.1.1.4. Edit personal phone number");
+        System.out.println("4.1.1.1.5. Edit personal bank account");
+        System.out.println("4.1.1.1.6. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
 }

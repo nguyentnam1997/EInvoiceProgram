@@ -20,7 +20,7 @@ public class ProductService {
                     case 1 -> {
                         System.out.println(products);
                         //Select product
-                        handleSelectProduct(scanner, menu, products);
+                        handleSelectProduct(scanner, menu, user, products);
 
                     }
                     //Create new product
@@ -30,6 +30,9 @@ public class ProductService {
                     //Back menu
                     case 3 -> {
                         return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
                     }
                 }
             } catch (Exception e) {
@@ -85,7 +88,7 @@ public class ProductService {
         }
     }
 
-    public void handleSelectProduct(Scanner scanner, Menu menu, Map<String, Product> products) {
+    public void handleSelectProduct(Scanner scanner, Menu menu, User user, Map<String, Product> products) {
         while (true) {
             menu.menuFunctionProduct();
             try {
@@ -93,7 +96,9 @@ public class ProductService {
                 if (!Utils.checkValidPositiveNumber(chooseFunc)) continue;
                 switch (chooseFunc) {
                     case 1 -> {
-                        handleProductAfterSelect(scanner, menu, selectProduct(scanner, products), products);
+                        if (Utils.checkUserIsAdmin(user)) {
+                            handleProductAfterSelect(scanner, menu, selectProduct(scanner, products), products);
+                        }
                     }
                     case 2 -> {
                         return;
@@ -134,11 +139,14 @@ public class ProductService {
                     }
                     //Delete product
                     case 2 -> {
-                        deleteProduct(scanner, products);
+                        deleteProduct(scanner, product, products);
                     }
                     //Back menu
                     case 3 -> {
                         return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
                     }
                 }
             } catch (Exception e) {
@@ -199,6 +207,9 @@ public class ProductService {
                     case 4 -> {
                         return;
                     }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
                 }
 
             } catch (Exception e) {
@@ -206,23 +217,14 @@ public class ProductService {
             }
         }
     }
-
-    public void deleteProduct(Scanner scanner, Map<String, Product> products) {
+    public void deleteProduct(Scanner scanner, Product product, Map<String, Product> products) {
         System.out.println("--------- Delete product ----------");
-        while (true) {
-            System.out.println("Enter product code want to delete:");
-            String productCode = scanner.nextLine();
-            if (!products.containsKey(productCode)) {
-                System.out.println("Product with code = '" + productCode + "' doesn't exist, re-enter? (Y/N)");
-                String choose = scanner.nextLine();
-                if (choose.equalsIgnoreCase("Y")) continue;
-                else break;
-            } else {
-                System.out.println("Delete product with code '" + productCode + "' successful!");
-                products.remove(productCode);
-            }
+        System.out.println("Do you want to delete this product? (Y/N)");
+        String choose = scanner.nextLine();
+        if (choose.equalsIgnoreCase("Y")) {
+            System.out.println("Delete product with code '" + product.getProductCode() + "' successfully!");
+            products.remove(product.getProductCode());
         }
-
     }
 }
 

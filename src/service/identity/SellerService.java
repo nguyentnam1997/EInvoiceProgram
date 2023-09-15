@@ -82,15 +82,12 @@ public class SellerService {
                 //Products management
                 case 4 -> productService.handleManageProduct(scanner, menu, user, products);
                 //Customers management
-                case 5 -> {
-
-                }
+                case 5 -> customerService.handleManageCustomer(scanner, menu, user, customers, identityInfoService);
                 case 6 -> {
                     if (!Utils.stayMenu(scanner)) return;//chức năng Logout;
                 }
                 default -> {
                     System.out.println("Invalid input, please re-enter");
-                    continue;
                 }
             }
         }

@@ -13,6 +13,11 @@ public class Utils {
         String chooseContinue = scanner.nextLine();
         return chooseContinue.equalsIgnoreCase("Y");
     }
+    public static boolean wantTryAgain(Scanner scanner) {
+        System.out.println("Re-enter? (Y/N)");
+        String choose = scanner.nextLine();
+        return choose.equalsIgnoreCase("Y");
+    }
     public static boolean isValidUsername(String username) {
         // Định dạng regex cho username
         String usernameRegex = "^[a-zA-Z0-9]+$";
@@ -72,10 +77,10 @@ public class Utils {
         else return true;
     }
     public static boolean checkUserIsAdmin(User user) {
-        if (!user.isAdmin()) {
+        if (user.isAdmin()) return true;
+        else {
             System.out.println("This user don't have permission to perform this function!");
             return false;
         }
-        else return true;
     }
 }

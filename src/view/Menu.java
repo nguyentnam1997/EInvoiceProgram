@@ -148,12 +148,12 @@ public class Menu {
     }
     public void menuEditCustomerIsPersonal() {
         System.out.println("\n" + "------------- 5.1.1.1 Edit information of customer --------------");
-        System.out.println("4.1.1.1.1. Edit personal name.");
-        System.out.println("4.1.1.1.2. Edit personal address");
-        System.out.println("4.1.1.1.3. Edit personal email");
-        System.out.println("4.1.1.1.4. Edit personal phone number");
-        System.out.println("4.1.1.1.5. Edit personal bank account");
-        System.out.println("4.1.1.1.6. Back to previous menu.");
+        System.out.println("5.1.1.1.1. Edit personal name.");
+        System.out.println("5.1.1.1.2. Edit personal address");
+        System.out.println("5.1.1.1.3. Edit personal email");
+        System.out.println("5.1.1.1.4. Edit personal phone number");
+        System.out.println("5.1.1.1.5. Edit personal bank account");
+        System.out.println("5.1.1.1.6. Back to previous menu.");
         System.out.println("Choose options:");
     }
 }

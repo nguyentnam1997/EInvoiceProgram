@@ -1,9 +1,6 @@
 package utils;
 
-import entities.Invoice;
-import entities.InvoiceTemplate;
-import entities.Product;
-import entities.User;
+import entities.*;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -103,6 +100,13 @@ public class Utils {
     public static boolean checkInvoicesIsEmpty(Map<Integer, Invoice> invoices) {
         if (invoices.isEmpty()) {
             System.out.println("List of invoices is empty, please create first!");
+            return true;
+        }
+        else return false;
+    }
+    public static boolean checkCustomersIsEmpty(Map<String, Customer> customers) {
+        if (customers.isEmpty()) {
+            System.out.println("List of customers is empty, please create first!");
             return true;
         }
         else return false;

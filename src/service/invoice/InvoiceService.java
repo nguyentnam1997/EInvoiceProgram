@@ -100,17 +100,19 @@ public class InvoiceService extends IdentityInfoService {
             System.out.println("Do you want to select existing customer? (Y/N)");
             String chooseAutoEnter = scanner.nextLine();
             if (chooseAutoEnter.equalsIgnoreCase("Y")) {
-                System.out.println(customers);  //Show list customers
-                while (true) {
-                    System.out.println("\n" + "Enter customer code:");
-                    String customerCode = scanner.nextLine();
-                    if (!customers.containsKey(customerCode)) {
-                        System.out.println("Customer with code '" + customerCode + "' doesn't exist, re-enter? (Y/N)");
-                        String chooseReEnter = scanner.nextLine();
-                        if (chooseReEnter.equalsIgnoreCase("Y")) continue;
-                        else break;
-                    } else {
-                        return customers.get(customerCode);
+                if (!Utils.checkCustomersIsEmpty(customers)) {
+                    System.out.println(customers);  //Show list customers
+                    while (true) {
+                        System.out.println("\n" + "Enter customer code:");
+                        String customerCode = scanner.nextLine();
+                        if (!customers.containsKey(customerCode)) {
+                            System.out.println("Customer with code '" + customerCode + "' doesn't exist, re-enter? (Y/N)");
+                            String chooseReEnter = scanner.nextLine();
+                            if (chooseReEnter.equalsIgnoreCase("Y")) continue;
+                            else break;
+                        } else {
+                            return customers.get(customerCode);
+                        }
                     }
                 }
             } else {

@@ -31,23 +31,23 @@ public class SellerService {
     public Seller registerService(Scanner scanner, Map<String, User> users, IdentityInfoService identityInfoService) {
         System.out.println("Please register for the service first!");
         IdentityInfo identity = identityInfoService.inputIdentityAsOrganization(scanner);
-        System.out.print("\n" + "-------- Enter admin account --------");
+        System.out.print("-------- Enter admin account --------");
         while (true) {
-            System.out.print("Enter username: ");
+            System.out.print("\n" + "Enter username: ");
             String username = scanner.nextLine();
             if (!Utils.isValidUsername(username)) {
                 System.out.println("Invalid username, please try again!" + "\n");
                 continue;
             }
             while (true) {
-                System.out.print("\n" + "Enter password:");
+                System.out.print("\n" + "Enter password: ");
                 String password = scanner.nextLine();
                 if (!Utils.isValidPassword(password)) {
                     System.out.println("Invalid password, please try again!");
                     continue;
                 }
                 while (true) {
-                    System.out.print("\n" + "Enter email:");
+                    System.out.print("\n" + "Enter email: ");
                     String accountEmail = scanner.nextLine();
                     if (!Utils.isValidEmail(accountEmail)) {
                         System.out.println("Invalid email, please try again!");
@@ -74,7 +74,7 @@ public class SellerService {
                 //Company management
                 case 1 -> handleManageCompany(scanner, menu, user, seller);
                 //User management
-                case 2 -> userService.handleManageUser(scanner, menu, user, seller, users);
+                case 2 -> userService.handleManageUser(scanner, menu, user, users);
                 //Invoices management
                 case 3 ->
                         invoiceService.handleManageInvoice(scanner, menu, user, seller, invoiceTemplates, products, customers,

@@ -95,7 +95,7 @@ public class UserService {
         }
         while (true);
     }
-    public void handleManageUser(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users) {
+    public void handleManageUser(Scanner scanner, Menu menu, User user, Map<String, User> users) {
         do {
             menu.menuManageUser();
             int choose = Integer.parseInt(scanner.nextLine());
@@ -107,7 +107,7 @@ public class UserService {
                     editUserInformation(scanner, menu, user);
                 }
                 case 3 -> {
-                    createUser(scanner, seller, user, users);
+                    createUser(scanner, user, users);
                 }
                 case 4 -> {
                     changeStatusUser(scanner, user, users);
@@ -185,7 +185,7 @@ public class UserService {
         while (true);
     }
 
-    public void createUser(Scanner scanner, Seller seller, User user, Map<String, User> users) {
+    public void createUser(Scanner scanner, User user, Map<String, User> users) {
         if (Utils.checkUserIsAdmin(user)) {
             System.out.println("------- Create new User -------");
             while (true) {
@@ -205,7 +205,7 @@ public class UserService {
                             int choose = Integer.parseInt(scanner.nextLine());
                             if (choose == 1) isAdmin = true;
                             else isAdmin = false;
-                            User newUser = new User(username, password, email, isAdmin, seller.getTaxCode());
+                            User newUser = new User(username, password, email, isAdmin);
                             users.put(username, newUser);
                             System.out.println("Create user " + username + " successful!");
                         }

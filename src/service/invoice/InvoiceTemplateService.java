@@ -12,22 +12,31 @@ public class InvoiceTemplateService {
     public void handleInvoiceTemplate(Scanner scanner, Menu menu, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         while (true) {
             menu.menuManageInvoiceTemplate();
-            int choose = Integer.parseInt(scanner.nextLine());
-            switch (choose) {
-                case 1 -> {
-                    if (invoiceTemplates.isEmpty()) {
-                        System.out.println("Invoice template list is empty, please create!");
-                    } else System.out.println(invoiceTemplates);  //in danh sách, XEM LẠI
+            try {
+                int choose = Integer.parseInt(scanner.nextLine());
+                switch (choose) {
+                    case 1 -> {
+                        if (!Utils.checkInvTemplatesIsEmpty(invoiceTemplates)) {
+                            System.out.println(invoiceTemplates);
+                        }  //in danh sách, XEM LẠI
+                    }
+                    case 2 -> {
+                        createInvoiceTemplate(scanner, user, invoiceTemplates);
+                    }
+                    case 3 -> {
+                        if (!Utils.checkInvTemplatesIsEmpty(invoiceTemplates)) {
+                            changeStatusTemplate(scanner, user, invoiceTemplates);
+                        }
+                    }
+                    case 4 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
                 }
-                case 2 -> {
-                    createInvoiceTemplate(scanner, user, invoiceTemplates);
-                }
-                case 3 -> {
-                    changeStatusTemplate(scanner, user, invoiceTemplates);
-                }
-                case 4 -> {
-                    return;
-                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
@@ -52,10 +61,7 @@ public class InvoiceTemplateService {
 
     public void changeStatusTemplate(Scanner scanner, User user, Map<String, InvoiceTemplate> invoiceTemplates) {
         if (Utils.checkUserIsAdmin(user)) {
-            if (invoiceTemplates.isEmpty()) {
-                System.out.println("Invoice template list is empty, please create!");
-            }
-            else {
+            if (!Utils.checkInvTemplatesIsEmpty(invoiceTemplates)) {
                 while (true) {
                     System.out.println("Enter invoice template serial want to change status: ");
                     String templateSerial = scanner.nextLine();

@@ -55,7 +55,7 @@ public class Menu {
         System.out.println("3.1. Invoice templates management.");
         System.out.println("3.2. Show list and handle invoices.");
         System.out.println("3.3. Create new invoice.");
-        //System.out.println("3.4. Invoice report.");
+        System.out.println("3.4. Back to previous menu.");
         System.out.println("Choose options:");
     }
     public void menuManageInvoiceTemplate() {

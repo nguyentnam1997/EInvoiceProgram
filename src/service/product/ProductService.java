@@ -18,10 +18,14 @@ public class ProductService {
                 switch (choose) {
                     //Show product list information
                     case 1 -> {
-                        System.out.println(products);
-                        //Select product
-                        handleSelectProduct(scanner, menu, user, products);
-
+                        if (products.isEmpty()) {
+                            System.out.println("List of products is empty, please create first!");
+                        }
+                        else {
+                            System.out.println(products);
+                            //Select product
+                            handleSelectProduct(scanner, menu, user, products);
+                        }
                     }
                     //Create new product
                     case 2 -> {

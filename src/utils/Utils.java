@@ -1,5 +1,8 @@
 package utils;
 
+import entities.Invoice;
+import entities.InvoiceTemplate;
+import entities.Product;
 import entities.User;
 
 import java.util.Map;
@@ -82,5 +85,26 @@ public class Utils {
             System.out.println("This user don't have permission to perform this function!");
             return false;
         }
+    }
+    public static boolean checkInvTemplatesIsEmpty(Map<String, InvoiceTemplate> invoiceTemplates) {
+        if (invoiceTemplates.isEmpty()) {
+            System.out.println("List of invoice templates is empty, please create first!");
+            return true;
+        }
+        else return false;
+    }
+    public static boolean checkProductsIsEmpty(Map<String, Product> products) {
+        if (products.isEmpty()) {
+            System.out.println("List of products is empty, please create first!");
+            return true;
+        }
+        else return false;
+    }
+    public static boolean checkInvoicesIsEmpty(Map<Integer, Invoice> invoices) {
+        if (invoices.isEmpty()) {
+            System.out.println("List of invoices is empty, please create first!");
+            return true;
+        }
+        else return false;
     }
 }

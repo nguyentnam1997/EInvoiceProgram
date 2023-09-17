@@ -46,7 +46,7 @@ public class ProductService {
     }
 
     public void createProduct(Scanner scanner, User user, Map<String, Product> products) {
-        System.out.println("-------- 5.2. Create product --------");
+        System.out.println("-------- 4.2. Create product --------");
         while (true) {
             System.out.println("Enter product code:");
             String productCode = scanner.nextLine();
@@ -69,16 +69,18 @@ public class ProductService {
                                 System.out.println("Enter VAT rate of this product: (1. 0% / 2. 5% / 3. 10%)");
                                 try {
                                     int input = Integer.parseInt(scanner.nextLine());
-                                    if (!Utils.checkValidPositiveNumber(input) || input > 3) continue;
+                                    if (!Utils.checkValidPositiveNumber(input) || input > 3) {
+                                        System.out.println("Invalid value, please re-enter!");
+                                    }
                                     else {
                                         Product product = new Product(productCode, productName, unitPrice, input);
                                         products.put(productCode, product);
                                         System.out.println("Create product '" + productName + "' successfully!");
+                                        break;
                                     }
                                 } catch (Exception e) {
                                     System.out.println("Invalid value Integer, please try again!" + "\n");
                                 }
-                                break;
                             }
                             break;
                         } catch (Exception e) {
@@ -101,7 +103,8 @@ public class ProductService {
                 switch (chooseFunc) {
                     case 1 -> {
                         if (Utils.checkUserIsAdmin(user)) {
-                            handleProductAfterSelect(scanner, menu, selectProduct(scanner, products), products);
+                            Product product = selectProduct(scanner, products);
+                            if (product != null) handleProductAfterSelect(scanner, menu, product, products);
                         }
                     }
                     case 2 -> {
@@ -125,7 +128,9 @@ public class ProductService {
                 return products.get(productCode);
             }
             else {
-                System.out.println("Product with code '" + productCode + "' doesn't exist, please re-enter!");
+                System.out.println("Product with code '" + productCode + "' doesn't exist");
+                if (Utils.stayMenu(scanner)) continue;
+                else return null;
             }
         }
     }
@@ -140,10 +145,12 @@ public class ProductService {
                     //Edit information of product
                     case 1 -> {
                         editProduct(scanner, menu, product);
+                        return;
                     }
                     //Delete product
                     case 2 -> {
                         deleteProduct(scanner, product, products);
+                        return;
                     }
                     //Back menu
                     case 3 -> {
@@ -198,7 +205,10 @@ public class ProductService {
                             System.out.println("Enter new VAT rate of this product: (1. 0% / 2. 5% / 3. 10%)");
                             try {
                                 int chooseVAT = Integer.parseInt(scanner.nextLine());
-                                if (!Utils.checkValidPositiveNumber(chooseVAT) || chooseVAT > 3) continue;
+                                if (!Utils.checkValidPositiveNumber(chooseVAT) || chooseVAT > 3) {
+                                    System.out.println("Invalid value, please re-enter!");
+                                    continue;
+                                }
                                 product.setVATRate(product.getVATRate(chooseVAT));  //Set VAT rate
                                 product.setVATRateString(product.getVATRateString(product.getVATRate()));  //Set VAT rate String
                                 System.out.println("Change product's VAT rate successfully!");
@@ -226,8 +236,8 @@ public class ProductService {
         System.out.println("Do you want to delete this product? (Y/N)");
         String choose = scanner.nextLine();
         if (choose.equalsIgnoreCase("Y")) {
-            System.out.println("Delete product with code '" + product.getProductCode() + "' successfully!");
             products.remove(product.getProductCode());
+            System.out.println("Delete product with code '" + product.getProductCode() + "' successfully!");
         }
     }
 }

@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -18,7 +19,7 @@ public class Invoice {
     //@Setter(AccessLevel.NONE)
     private Integer invoiceNo;
     private InvoiceTemplate invoiceTemplate;
-    private LocalDateTime invoiceDate;
+    private LocalDate invoiceDate;
     private String description;
     private Seller seller;
     private Customer customer;
@@ -30,7 +31,7 @@ public class Invoice {
     private boolean isInvoicePublished;
     private boolean isInvoiceDeleted;
 
-    public Invoice(InvoiceTemplate invoiceTemplate, LocalDateTime invoiceDate, String description, Seller seller, Customer customer, User user,  int paymentMethod,  Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
+    public Invoice(InvoiceTemplate invoiceTemplate, LocalDate invoiceDate, String description, Seller seller, Customer customer, User user,  int paymentMethod,  Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         this.invoiceId = ++autoId;
         this.invoiceNo = null;
         this.invoiceTemplate = invoiceTemplate;

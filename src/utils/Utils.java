@@ -34,7 +34,7 @@ public class Utils {
     }
     public static boolean isValidPassword(String password) {
         // Định dạng regex cho mật khẩu
-        String passwordRegex = "^(?=.*[A-Z])(?=.*[.,-_;])(?!.*\\s).{7,15}$";
+        String passwordRegex = "^(?=.*[A-Z])(?=.*[.,-_;])(?!.*\\s).{8,15}$";
         Pattern pattern = Pattern.compile(passwordRegex);
         Matcher matcher = pattern.matcher(password);
         return matcher.matches();

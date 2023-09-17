@@ -4,6 +4,7 @@ import entities.*;
 import service.invoice.InvoiceService;
 import service.invoice.InvoiceTemplateService;
 import service.product.ProductService;
+import utils.Show;
 import utils.Utils;
 import view.Menu;
 
@@ -99,7 +100,7 @@ public class SellerService {
             int choose = Integer.parseInt(scanner.nextLine());
             switch (choose) {
                 case 1 -> {
-                    System.out.println(seller);   //view information
+                    Show.showInfoSellerCompany(seller);   //view information
                 }
                 case 2 -> {
                     handleEditCompanyInformation(scanner, menu, user, seller);

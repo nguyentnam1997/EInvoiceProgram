@@ -24,27 +24,23 @@ public class CustomerService {
                     System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
                     try {
                         int choose = Integer.parseInt(scanner.nextLine());
-                        switch (choose) {
-                            case 1 -> {
+                        if (choose == 1) {
+                            System.out.println("Enter buyer name:");
+                            String buyerName = scanner.nextLine();
+                            return new Customer(identityInfoService.inputIdentityAsOrganization(scanner), true, buyerName);
+                        }
+                        else if (choose == 2) {
+                            while (true) {
                                 System.out.println("Enter buyer name:");
                                 String buyerName = scanner.nextLine();
-                                return new Customer(identityInfoService.inputIdentityAsOrganization(scanner), true, buyerName);
-                            }
-                            case 2 -> {
-                                while (true) {
-                                    System.out.println("Enter buyer name:");
-                                    String buyerName = scanner.nextLine();
-                                    if (buyerName.trim().isEmpty()) {
-                                        System.out.println("Buyer name can't be null, please re-enter!");
-                                        continue;
-                                    }
-                                    return new Customer(identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);
+                                if (buyerName.trim().isEmpty()) {
+                                    System.out.println("Buyer name can't be null, please re-enter!");
+                                    continue;
                                 }
-                            }
-                            default -> {
-                                System.out.println("Invalid value, please re-enter!");
+                                return new Customer(identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);
                             }
                         }
+                        else System.out.println("Invalid value, please re-enter!");
                     } catch (Exception e) {
                         System.out.println("Invalid value Integer, please try again!" + "\n");
                     }
@@ -157,8 +153,7 @@ public class CustomerService {
     public void editCustomer(Scanner scanner, Menu menu, Customer customer) {
         if (customer.isOrganization()) {
             editCustomerIsOrganization(scanner, menu, customer);
-        }
-        else {
+        } else {
             editCustomerIsPersonal(scanner, menu, customer);
         }
     }

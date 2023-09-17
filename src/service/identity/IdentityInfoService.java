@@ -8,7 +8,7 @@ import java.util.Scanner;
 public class IdentityInfoService {
     public IdentityInfo inputIdentityAsOrganization(Scanner scanner) {
         while (true) {
-            System.out.println("\n" + "Enter the company's tax code:");
+            System.out.print("\n" + "Enter the company's tax code: ");
             try {
                 int taxCode = Integer.parseInt(scanner.nextLine());
                 if (!Utils.isValidTaxCode(taxCode)) {

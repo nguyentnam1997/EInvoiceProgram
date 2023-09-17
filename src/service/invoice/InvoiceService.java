@@ -6,6 +6,7 @@ import service.identity.IdentityInfoService;
 import utils.Utils;
 import view.Menu;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -65,7 +66,7 @@ public class InvoiceService extends IdentityInfoService {
                     continue;
                 }
                 InvoiceTemplate invoiceTemplate = invoiceTemplates.get(invTempSerial);
-                LocalDateTime invoiceDate = LocalDateTime.now();
+                LocalDate invoiceDate = LocalDate.now();
                 System.out.println("\n" + "Enter description of invoice:");
                 String description = scanner.nextLine();
                 Customer customer = inputCustomerInInvoice(scanner, customers, identityInfoService, customerService);  //nhập thông tin customer
@@ -75,13 +76,15 @@ public class InvoiceService extends IdentityInfoService {
                     System.out.println("\n" + "Enter payment method of invoice: (1. TM / 2. CK / 3. TM/CK) ");
                     try {
                         int paymentMethod = Integer.parseInt(scanner.nextLine());
-                        if (!Utils.checkValidPositiveNumber(paymentMethod) || paymentMethod > 3) continue;
+                        if (!Utils.checkValidPositiveNumber(paymentMethod) || paymentMethod > 3) {
+                            System.out.println("Invalid value, please re-enter!");
+                            continue;
+                        }
                         if (products.isEmpty()) {
                             System.out.println("\n" + "----------  Information of products: ---------");
                             System.out.println("Product list is empty, please create first!");
                             return null;
-                        }
-                        else {
+                        } else {
                             Map<Integer, ProductInvoiceDetail> productInvoiceDetails = inputProductListToInvoice(scanner, products);
                             System.out.println("Create invoice successful!");
                             return new Invoice(invoiceTemplate, invoiceDate, description, seller, customer, user, paymentMethod, productInvoiceDetails);
@@ -146,14 +149,12 @@ public class InvoiceService extends IdentityInfoService {
         while (true) {
             System.out.println("Enter product code:");
             String productCode = scanner.nextLine();
-            var a = productInvoiceDetails.entrySet().stream().filter(e->e.getValue().getProduct().getProductCode().equalsIgnoreCase(productCode));
+            var a = productInvoiceDetails.entrySet().stream().filter(e -> e.getValue().getProduct().getProductCode().equalsIgnoreCase(productCode));
             if (!products.containsKey(productCode)) {
                 System.out.println("Product with code = '" + productCode + "' doesn't exist, please re-enter!");
-            }
-            else if (a.findAny().isPresent()) {
+            } else if (a.findAny().isPresent()) {
                 System.out.println("Product with code = '" + productCode + "' has been added, please re-enter!");
-            }
-            else {
+            } else {
                 Product product = products.get(productCode);
                 while (true) {
                     System.out.println("Enter quantity of this product / service:");
@@ -166,7 +167,8 @@ public class InvoiceService extends IdentityInfoService {
                                     double discountRate = Double.parseDouble(scanner.nextLine());
                                     if (discountRate >= 0 && discountRate <= 100) {
                                         return new ProductInvoiceDetail(product, quantity, discountRate);
-                                    }
+                                    } else
+                                        System.out.println("Number entered is outside the valid range, please re-enter!");
                                 } catch (Exception e) {
                                     System.out.println("Invalid value Integer, please try again!" + "\n");
                                 }
@@ -181,51 +183,15 @@ public class InvoiceService extends IdentityInfoService {
     }
 
     public void handleSelectInvoice(Scanner scanner, Menu menu, User user, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
-                              Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
+                                    Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService) {
         //System.out.println(invoices);
         menu.menuFunctionInvoice();
         try {
             int choose = Integer.parseInt(scanner.nextLine());
             switch (choose) {
                 case 1 -> {
-                    while (true) {
-                        System.out.println("Enter invoice ID: ");
-                        int selectInvId = Integer.parseInt(scanner.nextLine());
-                        if (!invoices.containsKey(selectInvId)) {
-                            System.out.println("Invoice with ID = '" + selectInvId + "' doesn't exist, please re-enter!");
-                        } else {
-                            while (true) {
-                                menu.menuHandleInvoice();
-                                try {
-                                    int chooseHandleInv = Integer.parseInt(scanner.nextLine());
-                                    switch (chooseHandleInv) {
-                                        case 1 -> {
-                                            //Edit information of invoice.
-                                            editInvoice(scanner, menu, invoices.get(selectInvId), invoiceTemplates, customers,
-                                                    identityInfoService, customerService);
-                                        }
-                                        case 2 -> {
-                                            //Publish invoice
-                                            publishInvoice(scanner, invoices.get(selectInvId));
-                                        }
-                                        case 3 -> {
-                                            //Delete invoice
-                                            deleteInvoice(scanner, user, invoices.get(selectInvId), invoices);
-                                        }
-                                        case 4 -> {
-                                            return;
-                                        }
-                                        default -> {
-                                            System.out.println("Invalid value, please re-enter!");
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    System.out.println("Invalid value Integer, please try again!" + "\n");
-                                }
-                            }
-                        }
-                    }
-
+                    Invoice invoice = selectInvoice(scanner, invoices);
+                    handleInvAfterSelect(scanner, menu, user, invoice, invoices, invoiceTemplates, customers, identityInfoService, customerService);
                 }
                 case 2 -> {
                     return;
@@ -239,38 +205,96 @@ public class InvoiceService extends IdentityInfoService {
         }
     }
 
+    public Invoice selectInvoice(Scanner scanner, Map<Integer, Invoice> invoices) {
+        while (true) {
+            System.out.println("Enter invoice ID: ");
+            int selectInvId = Integer.parseInt(scanner.nextLine());
+            if (!invoices.containsKey(selectInvId)) {
+                System.out.println("Invoice with ID = '" + selectInvId + "' doesn't exist!");
+                if (Utils.stayMenu(scanner)) continue;
+                else return null;
+            } else return invoices.get(selectInvId);
+        }
+    }
+
+    public void handleInvAfterSelect(Scanner scanner, Menu menu, User user, Invoice invoice, Map<Integer, Invoice> invoices, Map<String, InvoiceTemplate> invoiceTemplates,
+                                     Map<String, Customer> customers, IdentityInfoService identityInfoService, CustomerService customerService) {
+        while (true) {
+            menu.menuHandleInvoice();
+            try {
+                int chooseHandleInv = Integer.parseInt(scanner.nextLine());
+                switch (chooseHandleInv) {
+                    case 1 -> {
+                        //Edit information of invoice.
+                        handleEditInvoice(scanner, menu, user, invoice, invoiceTemplates, customers,
+                                identityInfoService, customerService);
+                    }
+                    case 2 -> {
+                        //Publish invoice
+                        publishInvoice(scanner, invoice);
+                    }
+                    case 3 -> {
+                        //Delete invoice
+                        deleteInvoice(scanner, user, invoice, invoices);
+                    }
+                    case 4 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!" + "\n");
+            }
+        }
+    }
+
+    public void handleEditInvoice(Scanner scanner, Menu menu, User user, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers,
+                                  IdentityInfoService identityInfoService, CustomerService customerService) {
+        if (invoice.isInvoicePublished()) {
+            System.out.println("This invoice was published and can't be edited!");
+        } else {
+            if (!user.isAdmin()) {
+                if (invoice.getUser().getUsername().equalsIgnoreCase(user.getUsername())) {
+                    editInvoice(scanner, menu, invoice, invoiceTemplates, customers, identityInfoService, customerService);
+                } else {
+                    System.out.println("This invoice wasn't created by this user so can't edit!");
+                }
+            } else {
+                editInvoice(scanner, menu, invoice, invoiceTemplates, customers, identityInfoService, customerService);
+            }
+        }
+    }
+
     public void editInvoice(Scanner scanner, Menu menu, Invoice invoice, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Customer> customers,
                             IdentityInfoService identityInfoService, CustomerService customerService) {
-        if (invoice.isInvoicePublished()) {
-            System.out.println("This invoice has been published and can't be edited!");
-        } else {
-            while (true) {
-                menu.menuEditInvoice();
-                try {
-                    int choose = Integer.parseInt(scanner.nextLine());
-                    if (!Utils.checkValidPositiveNumber(choose)) continue;
-                    switch (choose) {
-                        case 1 -> {
-                            //Edit invoice's template
-                            editTemplateInInvoice(scanner, invoice, invoiceTemplates);
-                        }
-                        case 2 -> {
-                            //Edit invoice's customer
-                            editCustomerInInvoice(scanner, invoice, customers, identityInfoService, customerService);
-                        }
-                        case 3 -> {
-                            //Edit invoice's products
-                        }
-                        case 4 -> {
-                            return;
-                        }
-                        default -> {
-                            System.out.println("Invalid value, please re-enter!");
-                        }
+        while (true) {
+            menu.menuEditInvoice();
+            try {
+                int choose = Integer.parseInt(scanner.nextLine());
+                if (!Utils.checkValidPositiveNumber(choose)) continue;
+                switch (choose) {
+                    case 1 -> {
+                        //Edit invoice's template
+                        editTemplateInInvoice(scanner, invoice, invoiceTemplates);
                     }
-                } catch (Exception e) {
-                    System.out.println("Invalid value Integer, please try again!" + "\n");
+                    case 2 -> {
+                        //Edit invoice's customer
+                        editCustomerInInvoice(scanner, invoice, customers, identityInfoService, customerService);
+                    }
+                    case 3 -> {
+                        //Edit invoice's products
+                    }
+                    case 4 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
                 }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!" + "\n");
             }
         }
     }
@@ -304,12 +328,16 @@ public class InvoiceService extends IdentityInfoService {
     }
 
     public void publishInvoice(Scanner scanner, Invoice invoice) {
-        System.out.println("Are you sure to publish this invoice? (Y/N)");
-        String choose = scanner.nextLine();
-        if (choose.equalsIgnoreCase("Y")) {
-            System.out.println("Invoice published successfully!");
-            invoice.setInvoicePublished(true);
-            invoice.setInvoiceNo();
+        if (invoice.isInvoicePublished()) {
+            System.out.println("This invoice has already been published!");
+        } else {
+            System.out.println("Are you sure to publish this invoice? (Y/N)");
+            String choose = scanner.nextLine();
+            if (choose.equalsIgnoreCase("Y")) {
+                System.out.println("Invoice published successfully!");
+                invoice.setInvoicePublished(true);
+                invoice.setInvoiceNo();
+            }
         }
     }
 

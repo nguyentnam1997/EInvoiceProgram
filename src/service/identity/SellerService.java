@@ -12,14 +12,14 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class SellerService {
-    public void loginService(Scanner scanner, Menu menu, Map<String, User> users, Map<String, Product> products, Map<String, Customer> customers, Map<Integer, Invoice> invoices,
+    public void loginService(Scanner scanner, Menu menu, Map<String, User> users, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails, Map<String, Customer> customers, Map<Integer, Invoice> invoices,
                              Map<String, InvoiceTemplate> invoiceTemplates, UserService userService, SellerService sellerService, InvoiceService invoiceService,
                              IdentityInfoService identityInfoService, CustomerService customerService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
         System.out.println("\n" + "========== WELCOME TO INVOICE PROGRAM ===========");
         Seller seller = registerService(scanner, users, identityInfoService);
         while (true) {
             User user = userService.login(scanner, seller, users, sellerService);
-            handleAfterLogin(scanner, menu, user, seller, users, invoiceTemplates, products, customers, invoices,
+            handleAfterLogin(scanner, menu, user, seller, users, invoiceTemplates, products, productInvoiceDetails, customers, invoices,
                     identityInfoService, customerService, userService, invoiceService, productService, invoiceTemplateService);
         }
 
@@ -66,8 +66,8 @@ public class SellerService {
     }
 
     public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
-                                 Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService,
-                                 UserService userService, InvoiceService invoiceService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
+                                 Map<Integer, ProductInvoiceDetail> productInvoiceDetails, Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService,
+                                 CustomerService customerService, UserService userService, InvoiceService invoiceService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
         while (true) {
             menu.menuOptionsAfterLogin();
             int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
@@ -79,7 +79,7 @@ public class SellerService {
                 //Invoices management
                 case 3 ->
                         invoiceService.handleManageInvoice(scanner, menu, user, seller, invoiceTemplates, products, customers,
-                                invoices, identityInfoService, customerService, invoiceTemplateService);
+                                invoices, productInvoiceDetails, identityInfoService, customerService, invoiceTemplateService);
                 //Products management
                 case 4 -> productService.handleManageProduct(scanner, menu, user, products);
                 //Customers management

@@ -4,6 +4,7 @@ import entities.Product;
 import entities.User;
 import utils.Utils;
 import view.Menu;
+import view.Show;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -22,7 +23,7 @@ public class ProductService {
                             System.out.println("List of products is empty, please create first!");
                         }
                         else {
-                            System.out.println(products);
+                            Show.showInfoProducts(products);
                             //Select product
                             handleSelectProduct(scanner, menu, user, products);
                         }

@@ -17,11 +17,11 @@ public class SellerService {
                              IdentityInfoService identityInfoService, CustomerService customerService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
         System.out.println("\n" + "========== WELCOME TO INVOICE PROGRAM ===========");
         Seller seller = registerService(scanner, users, identityInfoService);
-        do {
+        while (true) {
             User user = userService.login(scanner, seller, users, sellerService);
             handleAfterLogin(scanner, menu, user, seller, users, invoiceTemplates, products, customers, invoices,
                     identityInfoService, customerService, userService, invoiceService, productService, invoiceTemplateService);
-        } while (true);
+        }
 
         //if (utils.wantContinue(scanner)) continue;
         //break;
@@ -37,7 +37,7 @@ public class SellerService {
             System.out.print("\n" + "Enter username: ");
             String username = scanner.nextLine();
             if (!Utils.isValidUsername(username)) {
-                System.out.println("Invalid username, please try again!" + "\n");
+                System.out.println("Invalid username, please try again!");
                 continue;
             }
             while (true) {
@@ -95,43 +95,50 @@ public class SellerService {
     }
 
     public void handleManageCompany(Scanner scanner, Menu menu, User user, Seller seller) {
-        do {
+        while (true) {
             menu.menuManageCompany();
-            int choose = Integer.parseInt(scanner.nextLine());
-            switch (choose) {
-                case 1 -> {
-                    Show.showInfoSellerCompany(seller);   //view information
+            try {
+                int choose = Integer.parseInt(scanner.nextLine());
+                switch (choose) {
+                    case 1 -> Show.showInfoSellerCompany(seller);   //view information
+                    case 2 -> handleEditCompanyInformation(scanner, menu, user, seller);
+                    case 3 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid input, please re-enter");
+                    }
                 }
-                case 2 -> {
-                    handleEditCompanyInformation(scanner, menu, user, seller);
-                }
-                case 3 -> {
-                    return;
-                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!" + "\n");
             }
             /*if (Utils.stayMenu(scanner)) continue;
             break;*/
-        } while (true);
-
+        }
     }
 
     public void handleEditCompanyInformation(Scanner scanner, Menu menu, User user, Seller seller) {
-        if (!Utils.checkUserIsAdmin(user)) {
-            System.out.println("This user don't have permission to perform this function!");
-        } else {
+        if (Utils.checkUserIsAdmin(user)) {
             while (true) {
                 menu.menuEditCompanyInformation();
-                int chooseEdit = Integer.parseInt(scanner.nextLine());
-                switch (chooseEdit) {
-                    case 1 -> editCompanyName(scanner, seller);
-                    case 2 -> editCompanyAddress(scanner, seller);
-                    case 3 -> editCompanyEmail(scanner, seller);
-                    case 4 -> editCompanyHotline(scanner, seller);
-                    case 5 -> editCompanyBankAccount(scanner, seller);
-                    case 6 -> {
-                        //handleEditCompanyInformation(scanner, menu, seller);
-                        return;
+                try {
+                    int chooseEdit = Integer.parseInt(scanner.nextLine());
+                    switch (chooseEdit) {
+                        case 1 -> editCompanyName(scanner, seller);
+                        case 2 -> editCompanyAddress(scanner, seller);
+                        case 3 -> editCompanyEmail(scanner, seller);
+                        case 4 -> editCompanyHotline(scanner, seller);
+                        case 5 -> editCompanyBankAccount(scanner, seller);
+                        case 6 -> {
+                            //handleEditCompanyInformation(scanner, menu, seller);
+                            return;
+                        }
+                        default -> {
+                            System.out.println("Invalid input, please re-enter");
+                        }
                     }
+                } catch (Exception e) {
+                    System.out.println("Invalid value Integer, please try again!" + "\n");
                 }
                 //if (utils.wantContinue(scanner)) continue;
                 //break;
@@ -141,7 +148,7 @@ public class SellerService {
 
     public void editCompanyName(Scanner scanner, Seller seller) {
         System.out.println("Old company's name was " + "'" + seller.getName() + "'");
-        do {
+        while (true) {
             System.out.println("Enter the new company's name:");
             String newCompanyName = scanner.nextLine();
             if (seller.getName().equalsIgnoreCase(newCompanyName)) {
@@ -152,13 +159,12 @@ public class SellerService {
                 seller.setName(newCompanyName);
             }
             break;
-        } while (true);
-
+        }
     }
 
     public void editCompanyAddress(Scanner scanner, Seller seller) {
         System.out.println("Old company's address was " + "'" + seller.getAddress() + "'");
-        do {
+        while (true) {
             System.out.println("Enter the new company's address:");
             String newCompanyAddress = scanner.nextLine();
             if (seller.getAddress().equalsIgnoreCase(newCompanyAddress)) {
@@ -169,12 +175,12 @@ public class SellerService {
                 seller.setAddress(newCompanyAddress);
             }
             break;
-        } while (true);
+        }
     }
 
     public void editCompanyEmail(Scanner scanner, Seller seller) {
         System.out.println("Old company's email was " + "'" + seller.getEmail() + "'");
-        do {
+        while (true) {
             System.out.println("Enter the new company's email:");
             String newCompanyEmail = scanner.nextLine();
             if (seller.getEmail().equalsIgnoreCase(newCompanyEmail)) {
@@ -185,23 +191,27 @@ public class SellerService {
                 seller.setEmail(newCompanyEmail);
             }
             break;
-        } while (true);
+        }
     }
 
     public void editCompanyHotline(Scanner scanner, Seller seller) {
         System.out.println("Old company's hotline was " + "'" + seller.getHotline() + "'");
-        do {
+        while (true) {
             System.out.println("Enter the new company's hotline:");
-            int newCompanyHotline = Integer.parseInt(scanner.nextLine());
-            if (seller.getHotline() == newCompanyHotline) {
-                System.out.println("New company's hotline can't be the same as old hotline, try again!");
-                continue;
-            } else {
-                System.out.println("Company's hotline was successfully changed!");
-                seller.setHotline(newCompanyHotline);
+            try {
+                int newCompanyHotline = Integer.parseInt(scanner.nextLine());
+                if (seller.getHotline() == newCompanyHotline) {
+                    System.out.println("New company's hotline can't be the same as old hotline, try again!");
+                    continue;
+                } else {
+                    System.out.println("Company's hotline was successfully changed!");
+                    seller.setHotline(newCompanyHotline);
+                }
+                break;
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!" + "\n");
             }
-            break;
-        } while (true);
+        }
     }
 
     public void editCompanyBankAccount(Scanner scanner, Seller seller) {

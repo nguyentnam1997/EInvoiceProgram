@@ -2,8 +2,10 @@ package service.identity;
 
 import entities.Seller;
 import entities.User;
+import jdk.jshell.execution.Util;
 import utils.Utils;
 import view.Menu;
+import view.Show;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -102,7 +104,7 @@ public class UserService {
                 int choose = Integer.parseInt(scanner.nextLine());
                 switch (choose) {
                     case 1 -> {
-                        System.out.println(user);   //view information
+                        Show.showInfoUser(user);   //view information
                     }
                     case 2 -> {
                         editUserInformation(scanner, menu, user);

@@ -74,20 +74,42 @@ public class Menu {
     }
     public void menuHandleInvoice() {
         System.out.println("\n" + "------------- 3.2.1. Handle Invoice --------------");
-        System.out.println("3.2.1.1. Edit information of invoice.");
-        System.out.println("3.2.1.2. Publish invoice.");
-        System.out.println("3.2.1.3. Delete invoice.");
-        System.out.println("3.2.1.4. Back to previous menu.");
+        System.out.println("3.2.1.1. Show details of invoice.");
+        System.out.println("3.2.1.2. Edit information of invoice.");
+        System.out.println("3.2.1.3. Publish invoice.");
+        System.out.println("3.2.1.4. Delete invoice.");
+        System.out.println("3.2.1.5. Back to previous menu.");
         System.out.println("Choose options:");
     }
     public void menuEditInvoice() {
-        System.out.println("\n" + "------------- 3.2.1.1 Edit information of invoice --------------");
-        System.out.println("3.2.1.1.1. Edit invoice's template.");
-        System.out.println("3.2.1.1.2. Edit invoice's customer.");
-        System.out.println("3.2.1.1.3. Edit invoice's products.");
-        System.out.println("3.2.1.1.4. Back to previous menu.");
+        System.out.println("\n" + "------------- 3.2.1.2 Edit information of invoice --------------");
+        System.out.println("3.2.1.2.1. Edit invoice's template.");
+        System.out.println("3.2.1.2.2. Edit invoice's customer.");
+        System.out.println("3.2.1.2.3. Edit invoice's products.");
+        System.out.println("3.2.1.2.4. Back to previous menu.");
         System.out.println("Choose options:");
     }
+    public void menuEditProductInvoice() {
+        System.out.println("\n" + "------------- 3.2.1.2.4 Edit invoice's products --------------");
+        System.out.println("3.2.1.2.4.1. Add product to invoice.");
+        System.out.println("3.2.1.2.4.2. Edit product in invoice.");
+        System.out.println("3.2.1.2.4.3. Delete product in invoice.");
+        System.out.println("3.2.1.2.4.4. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
+    public void menuChooseProductInvoice() {
+        System.out.println("\n" + "-------------------------------------");
+        System.out.println("1. Select invoice's product you want to edit.");
+        System.out.println("2. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
+    public void menuEditProductInvoiceDetail() {
+        System.out.println("1. Edit quantity of invoice's product.");
+        System.out.println("2. Edit discount rate of invoice's product.");
+        System.out.println("3. Back to previous menu.");
+        System.out.println("Choose options:");
+    }
+
     public void menuManageProduct() {
         System.out.println("\n" + "---------- 4. Products management ----------");
         System.out.println("4.1. Show products list information.");

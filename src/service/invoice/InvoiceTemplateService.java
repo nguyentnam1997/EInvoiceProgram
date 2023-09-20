@@ -4,6 +4,7 @@ import entities.InvoiceTemplate;
 import entities.User;
 import utils.Utils;
 import view.Menu;
+import view.Show;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -17,7 +18,7 @@ public class InvoiceTemplateService {
                 switch (choose) {
                     case 1 -> {
                         if (!Utils.checkInvTemplatesIsEmpty(invoiceTemplates)) {
-                            System.out.println(invoiceTemplates);
+                            Show.showInfoInvoiceTemplates(invoiceTemplates);
                         }  //in danh sách, XEM LẠI
                     }
                     case 2 -> {

@@ -6,6 +6,7 @@ import entities.Product;
 import entities.User;
 import utils.Utils;
 import view.Menu;
+import view.Show;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -27,7 +28,7 @@ public class CustomerService {
                         if (choose == 1) {
                             System.out.println("Enter buyer name:");
                             String buyerName = scanner.nextLine();
-                            return new Customer(identityInfoService.inputIdentityAsOrganization(scanner), true, buyerName);
+                            return new Customer(customerCode, identityInfoService.inputIdentityAsOrganization(scanner), true, buyerName);
                         }
                         else if (choose == 2) {
                             while (true) {
@@ -37,7 +38,7 @@ public class CustomerService {
                                     System.out.println("Buyer name can't be null, please re-enter!");
                                     continue;
                                 }
-                                return new Customer(identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);
+                                return new Customer(customerCode, identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);
                             }
                         }
                         else System.out.println("Invalid value, please re-enter!");
@@ -65,9 +66,14 @@ public class CustomerService {
                 switch (choose) {
                     //Show customer list information
                     case 1 -> {
-                        System.out.println(customers);
-                        //Select product
-                        handleSelectCustomer(scanner, menu, user, customers);
+                        if (customers.isEmpty()) {
+                            System.out.println("List of customers is empty, please create first!");
+                        }
+                        else {
+                            Show.showInfoCustomers(customers);
+                            //Select product
+                            handleSelectCustomer(scanner, menu, user, customers);
+                        }
                     }
                     //Create new product
                     case 2 -> {
@@ -76,6 +82,9 @@ public class CustomerService {
                     //Back menu
                     case 3 -> {
                         return;
+                    }
+                    default -> {
+                        System.out.println("Invalid input, please re-enter");
                     }
                 }
             } catch (Exception e) {

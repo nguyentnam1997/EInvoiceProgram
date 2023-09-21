@@ -103,7 +103,7 @@ public class Menu {
         System.out.println("2. Back to previous menu.");
         System.out.println("Choose options:");
     }
-    public void menuEditProductInvoiceDetail() {
+    public void menuEditProductInvAfterSelect() {
         System.out.println("1. Edit quantity of invoice's product.");
         System.out.println("2. Edit discount rate of invoice's product.");
         System.out.println("3. Back to previous menu.");

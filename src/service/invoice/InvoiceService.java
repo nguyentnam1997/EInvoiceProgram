@@ -287,7 +287,7 @@ public class InvoiceService extends IdentityInfoService {
                     }
                     case 3 -> {
                         //Edit invoice's products
-                        editProductInInvoice(scanner, menu, invoice, products, productInvoiceDetails);
+                        handleEditProductInInvoice(scanner, menu, invoice, products, productInvoiceDetails);
                     }
                     case 4 -> {
                         return;
@@ -329,50 +329,149 @@ public class InvoiceService extends IdentityInfoService {
         invoice.setCustomer(inputCustomerInInvoice(scanner, customers, identityInfoService, customerService));
         System.out.println("Customer edited successfully!");
     }
-    public void editProductInInvoice(Scanner scanner, Menu menu, Invoice invoice, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
-        menu.menuEditProductInvoice();
-        try {
-            int choose = Integer.parseInt(scanner.nextLine());
-            switch (choose) {
-                case 1 -> {
-                    //Add product invoice
-                    addProductInInvoice(scanner, invoice, products, productInvoiceDetails);
+    public void handleEditProductInInvoice(Scanner scanner, Menu menu, Invoice invoice, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
+        while (true) {
+            menu.menuEditProductInvoice();
+            try {
+                int choose = Integer.parseInt(scanner.nextLine());
+                switch (choose) {
+                    case 1 -> {
+                        //Add product invoice
+                        addProductInInvoice(scanner, invoice, products, productInvoiceDetails);
+                    }
+                    case 2 -> {
+                        //Edit product invoice
+                        editProductInvoice(scanner, menu, invoice, productInvoiceDetails);
+                    }
+                    case 3 -> {
+                        //Delete product invoice
+                        deleteProductInInvoice(scanner, invoice);
+                    }
+                    case 4 -> {
+                        reCalculatePriceOfInvoice(invoice);  //Tính lại giá tiền của hoá đơn rồi thoát
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
                 }
-                case 2 -> {
-                    //Edit product invoice
-                }
-                case 3 -> {
-                    //Delete product invoice
-                    deleteProductInInvoice(scanner, invoice, productInvoiceDetails);
-                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
             }
-        } catch (Exception e) {
-            System.out.println("Invalid value Integer, please try again!");
         }
     }
     public void addProductInInvoice(Scanner scanner, Invoice invoice, Map<String, Product> products, Map<Integer,ProductInvoiceDetail> productInvoiceDetails) {
         ProductInvoiceDetail newProductInv = inputProductInvoiceDetail( scanner,  productInvoiceDetails.size(), products, productInvoiceDetails);
         productInvoiceDetails.put(newProductInv.getProductInvoiceId(), newProductInv);
-        invoice.setTotalVATPrice(invoice.calculateTotalVATInvoice(productInvoiceDetails));  //Tính lại giá VAT của invoice
-        invoice.setTotalPrice(invoice.calculateTotalPriceInvoice(productInvoiceDetails));   //Tính lại thành tiền của invoice
+        invoice.setProductInvoiceDetails(productInvoiceDetails);
         System.out.println("Add invoice's product with ID'" + newProductInv.getProductInvoiceId() + "' successfully!");
     }
-    public void deleteProductInInvoice(Scanner scanner, Invoice invoice, Map<Integer,ProductInvoiceDetail> productInvoiceDetails) {
+    public void editProductInvoice(Scanner scanner, Menu menu, Invoice invoice, Map<Integer,ProductInvoiceDetail> productInvoiceDetails) {
+        Show.showInfoProductInvoiceDetails(productInvoiceDetails);
+        while (true) {
+            menu.menuChooseProductInvoice();
+            try {
+                int choose = Integer.parseInt(scanner.nextLine());
+                switch (choose) {
+                    case 1 -> {
+                        editProductInInvAfterSelect(scanner, menu, invoice, selectProductInInvoice(scanner, invoice));
+                    }
+                    case 2 -> {
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
+            }
+        }
+    }
+    public ProductInvoiceDetail selectProductInInvoice(Scanner scanner, Invoice invoice) {
+        while (true) {
+            System.out.println("Enter invoice's product ID: ");
+            int productInvoiceId = Integer.parseInt(scanner.nextLine());
+            if (!invoice.getProductInvoiceDetails().containsKey(productInvoiceId)) {
+                System.out.println("Invoice's product with id '" + productInvoiceId + "' doesn't exist, please re-enter!");
+            }
+            else {
+                return invoice.getProductInvoiceDetails().get(productInvoiceId);
+            }
+        }
+    }
+    public void editProductInInvAfterSelect(Scanner scanner, Menu menu, Invoice invoice, ProductInvoiceDetail productInvoiceDetail) {
+        while (true) {
+            menu.menuEditProductInvAfterSelect();
+            try {
+                int choose = Integer.parseInt(scanner.nextLine());
+                switch (choose) {
+                    case 1 -> {
+                        editQuantityOfInvoiceProduct(scanner, productInvoiceDetail);
+                    }
+                    case 2 -> {
+                        editDiscountOfInvoiceProduct(scanner, productInvoiceDetail);
+                    }
+                    case 3 -> {
+                        reCalculatePriceOfInvoice(invoice);  //Tính lại giá tiền của hoá đơn rồi thoát
+                        return;
+                    }
+                    default -> {
+                        System.out.println("Invalid value, please re-enter!");
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
+            }
+        }
+    }
+    public void editQuantityOfInvoiceProduct(Scanner scanner, ProductInvoiceDetail productInvoiceDetail) {
+        while (true) {
+            System.out.println("Enter new quantity of invoice's product: ");
+            try {
+                int newQuantity = Integer.parseInt(scanner.nextLine());
+                if (Utils.checkValidPositiveNumber(newQuantity)) {
+                    productInvoiceDetail.setQuantity(newQuantity); //Gán lại số lượng mới
+                    reCalculatePriceOfInvoiceProduct(productInvoiceDetail); //Tính lại VAT, tổng tiền
+                    System.out.println("Edit new quantity successfully!");
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
+            }
+        }
+    }
+    public void editDiscountOfInvoiceProduct(Scanner scanner, ProductInvoiceDetail productInvoiceDetail) {
+        while (true) {
+            System.out.println("Enter new discount rate of invoice's product: ");
+            try {
+                double newDiscountRate = Double.parseDouble(scanner.nextLine());
+                if (Utils.checkValidPositiveNumber(newDiscountRate)) {
+                    productInvoiceDetail.setDiscountRate(newDiscountRate); //Gán lại discount rate mới
+                    reCalculatePriceOfInvoiceProduct(productInvoiceDetail); //Tính lại VAT, tổng tiền
+                    System.out.println("Edit new discount rate successfully!");
+                    break;
+                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
+            }
+        }
+    }
+    public void deleteProductInInvoice(Scanner scanner, Invoice invoice) {
         while (true) {
             System.out.println("Enter invoice's product ID want to delete:");
             try {
-                int inputDeleteID = Integer.parseInt(scanner.nextLine());
-                if (!productInvoiceDetails.containsKey(inputDeleteID)) {
-                    System.out.println("Invoice's product with ID '" + inputDeleteID + "' doesn't exist, please re-enter!");
+                int valueDelProductId = Integer.parseInt(scanner.nextLine());
+                if (!invoice.getProductInvoiceDetails().containsKey(valueDelProductId)) {
+                    System.out.println("Invoice's product with ID '" + valueDelProductId + "' doesn't exist, please re-enter!");
                 }
                 else {
                     System.out.println("Are you sure to delete this invoice's product ? (Y/N)");
                     String choose = scanner.nextLine();
                     if (choose.equalsIgnoreCase("Y")) {
-                        productInvoiceDetails.remove(inputDeleteID);
-                        invoice.setTotalVATPrice(invoice.calculateTotalVATInvoice(productInvoiceDetails)); //Tính lại giá VAT của invoice
-                        invoice.setTotalPrice(invoice.calculateTotalPriceInvoice(productInvoiceDetails));   //Tính lại thành tiền của invoice
-                        System.out.println("Delete invoice's product with ID '" + inputDeleteID + "' successfully!");
+                        invoice.getProductInvoiceDetails().remove(valueDelProductId);
+                        System.out.println("Delete invoice's product with ID '" + valueDelProductId + "' successfully!");
+                        break;
                     }
                 }
             } catch (Exception e) {
@@ -381,7 +480,14 @@ public class InvoiceService extends IdentityInfoService {
         }
 
     }
-
+    public void reCalculatePriceOfInvoiceProduct(ProductInvoiceDetail productInvoiceDetail) {
+        productInvoiceDetail.calculateVATPrice(productInvoiceDetail.getProduct());  //Tính lại VAT
+        productInvoiceDetail.calculateTotalPrice(productInvoiceDetail.getProduct());    //Tính lại tổng tiền
+    }
+    public void reCalculatePriceOfInvoice(Invoice invoice) {
+        invoice.setTotalVATPrice(invoice.calculateTotalVATInvoice(invoice.getProductInvoiceDetails())); //Tính lại giá VAT của invoice
+        invoice.setTotalPrice(invoice.calculateTotalPriceInvoice(invoice.getProductInvoiceDetails()));   //Tính lại thành tiền của invoice
+    }
     public void publishInvoice(Scanner scanner, Invoice invoice) {
         if (invoice.isInvoicePublished()) {
             System.out.println("This invoice has already been published!");

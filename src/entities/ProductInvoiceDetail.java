@@ -36,6 +36,6 @@ public class ProductInvoiceDetail {
     }
     public double calculateTotalPrice(Product product) {
         return (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * getQuantity() +
-                (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * product.getVATRate();
+                calculateVATPrice(product);
     }
 }

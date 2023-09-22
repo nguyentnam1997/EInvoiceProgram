@@ -13,12 +13,12 @@ import java.util.Scanner;
 
 public class SellerService {
     public void loginService(Scanner scanner, Menu menu, Map<String, User> users, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails, Map<String, Customer> customers, Map<Integer, Invoice> invoices,
-                             Map<String, InvoiceTemplate> invoiceTemplates, UserService userService, SellerService sellerService, InvoiceService invoiceService,
+                             Map<String, InvoiceTemplate> invoiceTemplates, UserService userService, InvoiceService invoiceService,
                              IdentityInfoService identityInfoService, CustomerService customerService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
         System.out.println("\n" + "========== WELCOME TO INVOICE PROGRAM ===========");
         Seller seller = registerService(scanner, users, identityInfoService);
         while (true) {
-            User user = userService.login(scanner, seller, users, sellerService);
+            User user = userService.login(scanner, seller, users);
             handleAfterLogin(scanner, menu, user, seller, users, invoiceTemplates, products, productInvoiceDetails, customers, invoices,
                     identityInfoService, customerService, userService, invoiceService, productService, invoiceTemplateService);
         }

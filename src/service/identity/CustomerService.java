@@ -14,7 +14,7 @@ import java.util.Scanner;
 public class CustomerService {
     public Customer inputCustomer(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
         while (true) {
-            System.out.println("\n" + "Enter customer code:");
+            System.out.print("Enter customer code: ");
             String customerCode = scanner.nextLine();
             if (customerCode.trim().isEmpty()) {
                 System.out.println("Value can't null, please try again!");
@@ -25,23 +25,27 @@ public class CustomerService {
                     System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
                     try {
                         int choose = Integer.parseInt(scanner.nextLine());
-                        if (choose == 1) {
-                            System.out.println("Enter buyer name:");
-                            String buyerName = scanner.nextLine();
-                            return new Customer(customerCode, identityInfoService.inputIdentityAsOrganization(scanner), true, buyerName);
-                        }
-                        else if (choose == 2) {
-                            while (true) {
-                                System.out.println("Enter buyer name:");
+                        switch (choose) {
+                            case 1 -> {
+                                System.out.print("Enter buyer name: ");
                                 String buyerName = scanner.nextLine();
-                                if (buyerName.trim().isEmpty()) {
-                                    System.out.println("Buyer name can't be null, please re-enter!");
-                                    continue;
+                                return new Customer(customerCode, identityInfoService.inputIdentityAsOrganization(scanner), true, buyerName);
+                            }
+                            case 2 -> {
+                                while (true) {
+                                    System.out.print("Enter buyer name: ");
+                                    String buyerName = scanner.nextLine();
+                                    if (buyerName.trim().isEmpty()) {
+                                        System.out.println("Buyer name can't be null, please re-enter!");
+                                        continue;
+                                    }
+                                    return new Customer(customerCode, identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);
                                 }
-                                return new Customer(customerCode, identityInfoService.inputIdentityAsPersonal(scanner), false, buyerName);
+                            }
+                            default -> {
+                                System.out.println("Invalid value Integer, please try again!");
                             }
                         }
-                        else System.out.println("Invalid value, please re-enter!");
                     } catch (Exception e) {
                         System.out.println("Invalid value Integer, please try again!" + "\n");
                     }

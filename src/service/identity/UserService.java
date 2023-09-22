@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class UserService {
-    public User login(Scanner scanner, Seller seller, Map<String, User> users, SellerService sellerService) {
+    public User login(Scanner scanner, Seller seller, Map<String, User> users) {
         System.out.println("\n" + "========= LOGIN ==========");
         do {
             System.out.print("Enter your username: ");
@@ -45,6 +45,7 @@ public class UserService {
                         }
                         case 2 -> {
                             forgotPassword(scanner, seller);
+                            System.out.println("-------- Re-enter password --------");
                             continue;
                         }
                         default -> {
@@ -63,21 +64,21 @@ public class UserService {
 
     public void forgotPassword(Scanner scanner, Seller seller) {
         while (true) {
-            System.out.println("\n" + "Enter your username:");
+            System.out.print("Enter your username: ");
             String inputUsername = scanner.nextLine();
             if (!seller.getUsers().containsKey(inputUsername)) {
                 System.out.println("Username " + inputUsername + " doesn't exist, please try again!");
                 continue;
             } else {
                 while (true) {
-                    System.out.println("\n" + "Enter your email:");
+                    System.out.print("\n" + "Enter your email: ");
                     String inputEmail = scanner.nextLine();
                     if (!seller.getUsers().get(inputUsername).getEmail().equalsIgnoreCase(inputEmail)) {
                         System.out.println("Wrong email, please try again!");
                         continue;
                     } else {
                         while (true) {
-                            System.out.println("\n" + "Enter your new password:");
+                            System.out.print("\n" + "Enter your new password:");
                             String newPassword = scanner.nextLine();
                             if (seller.getUsers().get(inputUsername).getPassword().equalsIgnoreCase(newPassword)) {
                                 System.out.println("New password can't be the same as old password, try again!");
@@ -158,7 +159,7 @@ public class UserService {
                 while (true) {
                     if (!checkCurrentUserEmail(scanner, user)) continue;
                     else {
-                        System.out.println("\n" + "Enter your new password");
+                        System.out.print("\n" + "Enter your new password: ");
                         String newPass = scanner.nextLine();
                         if (user.getPassword().equalsIgnoreCase(newPass)) {
                             System.out.println("New password can't be the same as old password, try again!");
@@ -200,17 +201,17 @@ public class UserService {
         if (Utils.checkUserIsAdmin(user)) {
             System.out.println("------- 2.3. Create new user -------");
             while (true) {
-                System.out.println("Enter your username:");
+                System.out.print("Enter your username: ");
                 String username = scanner.nextLine();
                 if (!checkExistsUsername(username, users)) continue;
                 else {
                     while (true) {
-                        System.out.println("Enter your email:");
+                        System.out.print("\n" + "Enter your email: ");
                         String email = scanner.nextLine();
                         if (checkExistsEmail(email, users)) continue;
                         else {
                             while (true) {
-                                System.out.println("Enter your password:");
+                                System.out.print("\n" + "Enter your password: ");
                                 String password = scanner.nextLine();
                                 if (!Utils.isValidPassword(password)) {
                                     System.out.println("Invalid password, please try again!");
@@ -240,9 +241,10 @@ public class UserService {
     }
 
     public void changeStatusUser(Scanner scanner, User user, Map<String, User> users) {
+        Show.showInfoUsers(users);
         if (Utils.checkUserIsAdmin(user)) {
             while (true) {
-                System.out.println("Enter username want to change status: ");
+                System.out.print("Enter username want to change status: ");
                 String username = scanner.nextLine();
                 if (!users.containsKey(username)) {
                     System.out.println("Username " + username + " doesn't exist.");
@@ -258,11 +260,11 @@ public class UserService {
                         switch (choose) {
                             case 1 -> {
                                 thisUser.setAdmin(!thisUser.isAdmin());  //thay đổi ngược lại quyền hiện tại
-                                System.out.println("Change permission successful");
+                                System.out.println("Change permission successful!");
                             }
                             case 2 -> {
                                 thisUser.setActive(!thisUser.isActive());   //thay đổi ngược lại trạng thái hoạt động hiện tại
-                                System.out.println("Change active status successful");
+                                System.out.println("Change active status successful!");
                             }
                             default -> {
                                 System.out.println("Invalid input, please re-enter!");
@@ -306,7 +308,7 @@ public class UserService {
     }
 
     public boolean checkCurrentUserPassword(Scanner scanner, User user) {
-        System.out.println("Enter your current password:");
+        System.out.print("Enter your current password: ");
         String password = scanner.nextLine();
         if (!user.getPassword().equals(password)) {
             System.out.println("Incorrect password, try again!");

@@ -13,8 +13,13 @@ public class Show {
         tableList.print();
     }
     public static void showInfoUser(User user) {
-        TableList tableList = new TableList(2, "User name", "Email").sortBy(0).withUnicode(true);
-        tableList.addRow(user.getUsername(), user.getEmail());
+        TableList tableList = new TableList(4, "User name", "Email", "Is admin?", "Is active?").sortBy(0).withUnicode(true);
+        tableList.addRow(user.getUsername(), user.getEmail(), String.valueOf(user.isAdmin()), String.valueOf(user.isActive()));
+        tableList.print();
+    }
+    public static void showInfoUsers(Map<String, User> users) {
+        TableList tableList = new TableList(4, "User name", "Email", "Is admin?", "Is active?").sortBy(0).withUnicode(true);
+        users.forEach((key, value) -> tableList.addRow(value.getUsername(), value.getEmail(), String.valueOf(value.isAdmin()), String.valueOf(value.isActive())));
         tableList.print();
     }
     public static void showInfoProducts(Map<String, Product> products) {
@@ -30,7 +35,7 @@ public class Show {
         tableList.print();
     }
     public static void showInfoInvoiceTemplates(Map<String, InvoiceTemplate> invoiceTemplates) {
-        TableList tableList = new TableList(4, "Template serial", "Template name", "Is active?").sortBy(0).withUnicode(true);
+        TableList tableList = new TableList(3, "Template serial", "Template name", "Is active?").sortBy(0).withUnicode(true);
         invoiceTemplates.forEach((key, value) -> tableList.addRow(value.getTemplateSerial(), value.getTemplateName(), String.valueOf(value.isActive())));
         tableList.print();
     }

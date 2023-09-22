@@ -27,7 +27,7 @@ public class IdentityInfoService {
                             System.out.print("\n" + "Enter the company's email: ");
                             String companyEmail = scanner.nextLine();
                             if (!Utils.isValidEmail(companyEmail)) {
-                                System.out.print("Invalid email, please re-enter!");
+                                System.out.println("Invalid email, please re-enter!");
                                 continue;
                             }
                             while (true) {
@@ -56,27 +56,27 @@ public class IdentityInfoService {
 
     public IdentityInfo inputIdentityAsPersonal(Scanner scanner) {
         while (true) {
-            System.out.println("\n" + "Enter the personal's address:");
+            System.out.print("\n" + "Enter the personal's address: ");
             String personalAddress = scanner.nextLine();
             if (Utils.checkValidStringIsNull(personalAddress)) continue;
             while (true) {
-                System.out.println("\n" + "Enter the personal's email:");
+                System.out.print("\n" + "Enter the personal's email: ");
                 String personalEmail = scanner.nextLine();
                 if (!Utils.isValidEmail(personalEmail)) {
                     System.out.println("Invalid email, please re-enter!");
                     continue;
                 }
                 while (true) {
-                    System.out.println("\n" + "Enter the personal's phone number:");
+                    System.out.print("\n" + "Enter the personal's phone number: ");
                     try {
                         int phoneNumber = Integer.parseInt(scanner.nextLine());
                         if (String.valueOf(phoneNumber).length() != 10) {
                             System.out.println("Phone number must have 10 numbers, please re-enter!");
                             continue;
                         }
-                        System.out.println("\n" + "Enter the personal's bank account:");
+                        System.out.print("\n" + "Enter the personal's bank account: ");
                         String bankAccount = scanner.nextLine();
-                        return new IdentityInfo(personalAddress, personalEmail, phoneNumber, bankAccount);
+                        return new IdentityInfo(personalAddress, personalEmail, phoneNumber, bankAccount);  //bắt exception thằng này
                     } catch (Exception e) {
                         System.out.println("Invalid value Integer, please try again!");
                     }

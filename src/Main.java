@@ -20,6 +20,7 @@ public class Main {
         Map<String, User> users = new HashMap<>();
         Map<String, InvoiceTemplate> invoiceTemplates = new HashMap<>();
         Map<String, Product > products = new HashMap<>();
+        Map<Integer, ProductInvoiceDetail> productInvoiceDetails = new HashMap<>();
         Map<String, Customer > customers = new HashMap<>();
         Map<Integer, Invoice> invoices = new HashMap<>();
         IdentityInfoService identityInfoService = new IdentityInfoService();
@@ -29,7 +30,7 @@ public class Main {
         CustomerService customerService = new CustomerService();
         ProductService productService = new ProductService();
         InvoiceTemplateService invoiceTemplateService = new InvoiceTemplateService();
-        sellerService.loginService(scanner,  menu,  users, products, customers, invoices, invoiceTemplates,
-                userService, sellerService, invoiceService, identityInfoService, customerService, productService, invoiceTemplateService);
+        sellerService.loginService(scanner,  menu,  users, products, productInvoiceDetails, customers, invoices, invoiceTemplates,
+                userService, invoiceService, identityInfoService, customerService, productService, invoiceTemplateService);
     }
 }

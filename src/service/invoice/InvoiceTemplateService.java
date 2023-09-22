@@ -46,7 +46,7 @@ public class InvoiceTemplateService {
         if (Utils.checkUserIsAdmin(user)) {
             System.out.println("----------- Create invoice template ------------");
             while (true) {
-                System.out.println("\n" + "Enter invoice template series:");
+                System.out.print("Enter invoice template series: 1C23T");
                 String templateSeries = scanner.nextLine();
                 if (!Utils.isValidTemplateSeries(templateSeries)) {
                     System.out.println("Invalid template series, please try again!");

@@ -21,8 +21,7 @@ public class ProductService {
                     case 1 -> {
                         if (products.isEmpty()) {
                             System.out.println("List of products is empty, please create first!");
-                        }
-                        else {
+                        } else {
                             Show.showInfoProducts(products);
                             //Select product
                             handleSelectProduct(scanner, menu, user, products);
@@ -49,20 +48,19 @@ public class ProductService {
     public void createProduct(Scanner scanner, User user, Map<String, Product> products) {
         System.out.println("-------- 4.2. Create product --------");
         while (true) {
-            System.out.println("Enter product code:");
+            System.out.print("Enter product code: ");
             String productCode = scanner.nextLine();
             if (Utils.checkValidStringIsNull(productCode)) continue;
             else if (products.containsKey(productCode)) {
                 System.out.println("Product with code '" + productCode + "' already exist, please re-enter!");
                 continue;
-            }
-            else {
+            } else {
                 while (true) {
-                    System.out.println("Enter product name:");
+                    System.out.print("\n" + "Enter product name: ");
                     String productName = scanner.nextLine();
                     if (Utils.checkValidStringIsNull(productName)) continue;
                     while (true) {
-                        System.out.println("Enter unit price of product:");
+                        System.out.print("\n" + "Enter unit price of product: ");
                         try {
                             double unitPrice = Double.parseDouble(scanner.nextLine());
                             if (!Utils.checkValidPositiveNumber(unitPrice)) continue;
@@ -72,8 +70,7 @@ public class ProductService {
                                     int input = Integer.parseInt(scanner.nextLine());
                                     if (!Utils.checkValidPositiveNumber(input) || input > 3) {
                                         System.out.println("Invalid value, please re-enter!");
-                                    }
-                                    else {
+                                    } else {
                                         Product product = new Product(productCode, productName, unitPrice, input);
                                         products.put(productCode, product);
                                         System.out.println("Create product '" + productName + "' successfully!");
@@ -123,12 +120,11 @@ public class ProductService {
 
     public Product selectProduct(Scanner scanner, Map<String, Product> products) {
         while (true) {
-            System.out.println("Enter product code:");
+            System.out.print("Enter product code: ");
             String productCode = scanner.nextLine();
             if (products.containsKey(productCode)) {
                 return products.get(productCode);
-            }
-            else {
+            } else {
                 System.out.println("Product with code '" + productCode + "' doesn't exist");
                 if (Utils.stayMenu(scanner)) continue;
                 else return null;
@@ -232,6 +228,7 @@ public class ProductService {
             }
         }
     }
+
     public void deleteProduct(Scanner scanner, Product product, Map<String, Product> products) {
         System.out.println("--------- Delete product ----------");
         System.out.println("Do you want to delete this product? (Y/N)");

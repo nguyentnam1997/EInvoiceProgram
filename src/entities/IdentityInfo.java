@@ -32,8 +32,8 @@ public class IdentityInfo {
         this.bankAccount = "";
     }
     public IdentityInfo(String address, String email, int hotline, String bankAccount) {   //constructor for Personal
-        this.taxCode = null;
-        this.name = null;
+        this.taxCode = 0;
+        this.name = "";
         this.address = address;
         this.email = email;
         this.hotline = hotline;

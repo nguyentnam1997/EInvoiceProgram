@@ -13,13 +13,13 @@ public class ProductInvoiceDetailService {
     public ProductInvoiceDetail inputProductInvoiceDetail(Scanner scanner, Product product) {
         //Invoice invoice = new Invoice();
         while (true) {
-            System.out.println("Enter quantity of this product / service:");
+            System.out.print("Enter quantity of this product / service: ");
             try {
                 int quantity = Integer.parseInt(scanner.nextLine());
                 if (!Utils.checkValidPositiveNumber(quantity)) continue;
                 while (true) {
                     try {
-                        System.out.println("Enter discount rate of this product / service:");
+                        System.out.print("\n" + "Enter discount rate of this product / service: ");
                         double discountRate = Double.parseDouble(scanner.nextLine());
                         if (discountRate < 0 || discountRate > 100) {
                             System.out.println("Number entered is outside the valid range, please re-enter!");
@@ -28,11 +28,11 @@ public class ProductInvoiceDetailService {
                             return new ProductInvoiceDetail(product, quantity, discountRate);
                         }
                     } catch (Exception e) {
-                        System.out.println("Invalid value Integer, please try again!" + "\n");
+                        System.out.println("Invalid value Integer, please try again!");
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }

@@ -33,7 +33,7 @@ public class Invoice {
 
     public Invoice(InvoiceTemplate invoiceTemplate, LocalDate invoiceDate, String description, Seller seller, Customer customer, User user,  int paymentMethod,  Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         this.invoiceId = ++autoId;
-        this.invoiceNo = null;
+        this.invoiceNo = 0;
         this.invoiceTemplate = invoiceTemplate;
         this.invoiceDate = invoiceDate;
         this.description = description;

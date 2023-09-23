@@ -74,7 +74,7 @@ public class CustomerService {
                             System.out.println("List of customers is empty, please create first!");
                         }
                         else {
-                            Show.showInfoCustomers(customers);
+                            //Show.showInfoCustomers(customers);
                             //Select product
                             handleSelectCustomer(scanner, menu, user, customers);
                         }
@@ -99,6 +99,7 @@ public class CustomerService {
 
     public void handleSelectCustomer(Scanner scanner, Menu menu, User user, Map<String, Customer> customers) {
         while (true) {
+            Show.showInfoCustomers(customers);
             menu.menuFunctionCustomer();
             try {
                 int chooseFunc = Integer.parseInt(scanner.nextLine());
@@ -148,6 +149,7 @@ public class CustomerService {
                     //Delete product
                     case 2 -> {
                         deleteCustomer(scanner, customer, customers);
+                        return;
                     }
                     //Back menu
                     case 3 -> {

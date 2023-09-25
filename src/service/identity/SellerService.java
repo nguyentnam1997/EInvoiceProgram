@@ -32,9 +32,9 @@ public class SellerService {
     public Seller registerService(Scanner scanner, Map<String, User> users, IdentityInfoService identityInfoService) {
         System.out.println("Please register for the service first!");
         IdentityInfo identity = identityInfoService.inputIdentityAsOrganization(scanner);
-        System.out.print("-------- Enter admin account --------");
+        System.out.println("-------- Enter admin account --------");
         while (true) {
-            System.out.print("\n" + "Enter username: ");
+            System.out.print("Enter username: ");
             String username = scanner.nextLine();
             if (!Utils.isValidUsername(username)) {
                 System.out.println("Invalid username, please try again!");
@@ -56,7 +56,7 @@ public class SellerService {
                     }
                     User user = new User(username, password, accountEmail, true);
                     users.put(username, user);
-                    System.out.println("\n" + "Register successful!!!");
+                    System.out.println("Register successful!!!");
                     return new Seller(identity.getTaxCode(), identity.getName(), identity.getAddress(),
                             identity.getEmail(), identity.getHotline(), identity.getBankAccount(), users);
                 }

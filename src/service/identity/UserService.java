@@ -78,7 +78,7 @@ public class UserService {
                         continue;
                     } else {
                         while (true) {
-                            System.out.print("\n" + "Enter your new password:");
+                            System.out.print("\n" + "Enter your new password: ");
                             String newPassword = scanner.nextLine();
                             if (seller.getUsers().get(inputUsername).getPassword().equalsIgnoreCase(newPassword)) {
                                 System.out.println("New password can't be the same as old password, try again!");

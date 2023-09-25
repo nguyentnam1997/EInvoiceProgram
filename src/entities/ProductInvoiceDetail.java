@@ -32,10 +32,9 @@ public class ProductInvoiceDetail {
 //       return discountRate + "%";
 //    }
     public double calculateVATPrice(Product product) {
-        return (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * product.getVATRate();
+        return ((product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * product.getVATRate()) * getQuantity();
     }
     public double calculateTotalPrice(Product product) {
-        return (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * getQuantity() +
-                calculateVATPrice(product);
+        return (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * getQuantity() + calculateVATPrice(product);
     }
 }

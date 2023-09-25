@@ -22,7 +22,6 @@ public class ProductService {
                         if (products.isEmpty()) {
                             System.out.println("List of products is empty, please create first!");
                         } else {
-                            Show.showInfoProducts(products);
                             //Select product
                             handleSelectProduct(scanner, menu, user, products);
                         }
@@ -77,12 +76,12 @@ public class ProductService {
                                         break;
                                     }
                                 } catch (Exception e) {
-                                    System.out.println("Invalid value Integer, please try again!" + "\n");
+                                    System.out.println("Invalid value Integer, please try again!");
                                 }
                             }
                             break;
                         } catch (Exception e) {
-                            System.out.println("Invalid value Integer, please try again!" + "\n");
+                            System.out.println("Invalid value Integer, please try again!");
                         }
                     }
                     break;
@@ -94,6 +93,7 @@ public class ProductService {
 
     public void handleSelectProduct(Scanner scanner, Menu menu, User user, Map<String, Product> products) {
         while (true) {
+            Show.showInfoProducts(products);
             menu.menuFunctionProduct();
             try {
                 int chooseFunc = Integer.parseInt(scanner.nextLine());

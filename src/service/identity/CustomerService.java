@@ -12,14 +12,10 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class CustomerService {
-    public Customer inputCustomer(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
+    public Customer inputCustomer(Scanner scanner, String customerCode, IdentityInfoService identityInfoService) {
         while (true) {
-            System.out.print("Enter customer code: ");
-            String customerCode = scanner.nextLine();
             if (customerCode.trim().isEmpty()) {
                 System.out.println("Value can't null, please try again!");
-            } else if (customers.containsKey(customerCode)) {
-                System.out.println("Customer with code '" + customerCode + "' already exist, please re-enter!");
             } else {
                 while (true) {
                     System.out.println("This customer is organization or personal? (1. Organization / 2. Personal)");
@@ -56,9 +52,17 @@ public class CustomerService {
 
     public void createCustomer(Scanner scanner, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
         System.out.println("-------- 5.2. Create new customer --------");
-        Customer customer = inputCustomer(scanner, customers, identityInfoService);
-        customers.put(customer.getCustomerCode(), customer);
-        System.out.println("Create new customer successfully!");
+        while (true) {
+            System.out.print("Enter customer code: ");
+            String customerCode = scanner.nextLine();
+            if (customers.containsKey(customerCode)) {
+                System.out.println("Customer with code '" + customerCode + "' already exist, please re-enter!");
+                continue;
+            }
+            Customer customer = inputCustomer(scanner, customerCode, identityInfoService);
+            customers.put(customer.getCustomerCode(), customer);
+            System.out.println("Create new customer successfully!");
+        }
     }
 
     public void handleManageCustomer(Scanner scanner, Menu menu, User user, Map<String, Customer> customers, IdentityInfoService identityInfoService) {
@@ -72,8 +76,7 @@ public class CustomerService {
                     case 1 -> {
                         if (customers.isEmpty()) {
                             System.out.println("List of customers is empty, please create first!");
-                        }
-                        else {
+                        } else {
                             //Show.showInfoCustomers(customers);
                             //Select product
                             handleSelectCustomer(scanner, menu, user, customers);

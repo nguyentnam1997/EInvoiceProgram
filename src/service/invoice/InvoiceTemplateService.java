@@ -52,6 +52,10 @@ public class InvoiceTemplateService {
                     System.out.println("Invalid template series, please try again!");
                     continue;
                 }
+                if (invoiceTemplates.containsKey("1C23T" + templateSeries.toUpperCase())) {
+                    System.out.println("Invoice template with serial '" + "1C23T" + templateSeries.toUpperCase() + "' already exist, please re-enter!");
+                    continue;
+                }
                 InvoiceTemplate invTemp = new InvoiceTemplate(templateSeries);
                 invoiceTemplates.put(invTemp.getTemplateSerial(), invTemp);
                 System.out.println("Create new invoice template successful!");
@@ -64,14 +68,15 @@ public class InvoiceTemplateService {
         if (Utils.checkUserIsAdmin(user)) {
             if (!Utils.checkInvTemplatesIsEmpty(invoiceTemplates)) {
                 while (true) {
-                    System.out.println("Enter invoice template serial want to change status: ");
+                    Show.showInfoInvoiceTemplates(invoiceTemplates);
+                    System.out.print("Enter invoice template serial want to change status: ");
                     String templateSerial = scanner.nextLine();
-                    if (!invoiceTemplates.containsKey(templateSerial)) {
-                        System.out.println("Invoice template with serial " + templateSerial + " doesn't exist.");
+                    if (!invoiceTemplates.containsKey(templateSerial.toUpperCase())) {
+                        System.out.println("Invoice template with serial '" + templateSerial.toUpperCase() + "' doesn't exist.");
                         if (Utils.stayMenu(scanner)) continue;
                     } else {
-                        InvoiceTemplate invoiceTemplate = invoiceTemplates.get(templateSerial);
-                        System.out.println("Invoice template " + templateSerial + " with status as '" +
+                        InvoiceTemplate invoiceTemplate = invoiceTemplates.get(templateSerial.toUpperCase());
+                        System.out.println("Invoice template " + templateSerial.toUpperCase() + " with status as '" +
                                 invoiceTemplate.getActiveStatus() + "', do you want to change? (Y/N)");
                         String choose = scanner.nextLine();
                         if (choose.equalsIgnoreCase("Y")) {

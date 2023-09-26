@@ -26,12 +26,13 @@ public class Invoice {
     private User user;
     private String paymentMethod;
     private Map<Integer, ProductInvoiceDetail> productInvoiceDetails;
+    private double totalDiscountPrice;
     private double totalVATPrice;
     private double totalPrice;
     private boolean isInvoicePublished;
     private boolean isInvoiceDeleted;
 
-    public Invoice(InvoiceTemplate invoiceTemplate, LocalDate invoiceDate, String description, Seller seller, Customer customer, User user,  int paymentMethod,  Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
+    public Invoice(InvoiceTemplate invoiceTemplate, LocalDate invoiceDate, String description, Seller seller, Customer customer, User user, int paymentMethod, Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         this.invoiceId = ++autoId;
         this.invoiceNo = 0;
         this.invoiceTemplate = invoiceTemplate;
@@ -42,11 +43,13 @@ public class Invoice {
         this.user = user;
         this.paymentMethod = getPaymentMethod(paymentMethod);
         this.productInvoiceDetails = productInvoiceDetails;
-        this.totalVATPrice = calculateTotalVATInvoice(getProductInvoiceDetails());
-        this.totalPrice = calculateTotalPriceInvoice(getProductInvoiceDetails());
+        this.totalDiscountPrice = calculateDiscountPriceInvoice(productInvoiceDetails);
+        this.totalVATPrice = calculateTotalVATInvoice(productInvoiceDetails);
+        this.totalPrice = calculateTotalPriceInvoice(productInvoiceDetails);
         this.isInvoicePublished = false;
         this.isInvoiceDeleted = false;
     }
+
     public String getPaymentMethod(int paymentMethod) {
         if (paymentMethod == 1) return "TM";
         else if (paymentMethod == 2) return "CK";
@@ -62,16 +65,40 @@ public class Invoice {
         this.invoiceNo = getAutoInvNo(isInvoicePublished);
     }
 
+    public double calculateDiscountPriceInvoice(Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
+        double discountPriceInv = 0;
+        for (Map.Entry<Integer, ProductInvoiceDetail> entry : productInvoiceDetails.entrySet()) {
+            discountPriceInv = discountPriceInv + entry.getValue().calculateDiscountPrice(entry.getValue().getProduct())
+                    * entry.getValue().getQuantity();
+        }
+        return discountPriceInv;
+    }
+
+    public double calculateTotalUnitPriceInvoice(Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
+        double totalUnitPrice = 0;
+        for (Map.Entry<Integer, ProductInvoiceDetail> entry : productInvoiceDetails.entrySet()) {
+            totalUnitPrice = totalUnitPrice + entry.getValue().getProduct().getUnitPrice() * entry.getValue().getQuantity();
+//                    (
+//                            (entry.getValue().getProduct().getUnitPrice() - (entry.getValue().getProduct().getUnitPrice() *
+//                                    (entry.getValue().getDiscountRate() / 100)
+//                            )
+//                            ) * entry.getValue().getQuantity()
+//                    );
+        }
+        return totalUnitPrice;
+    }
+
     public double calculateTotalVATInvoice(Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         double totalVAT = 0;
-        for (Map.Entry<Integer, ProductInvoiceDetail> entry: productInvoiceDetails.entrySet()) {
+        for (Map.Entry<Integer, ProductInvoiceDetail> entry : productInvoiceDetails.entrySet()) {
             totalVAT = totalVAT + entry.getValue().getVATPrice();
         }
         return totalVAT;
     }
+
     public double calculateTotalPriceInvoice(Map<Integer, ProductInvoiceDetail> productInvoiceDetails) {
         double totalPrice = 0;
-        for (Map.Entry<Integer, ProductInvoiceDetail> entry: productInvoiceDetails.entrySet()) {
+        for (Map.Entry<Integer, ProductInvoiceDetail> entry : productInvoiceDetails.entrySet()) {
             totalPrice = totalPrice + entry.getValue().getTotalPrice();
         }
         return totalPrice;

@@ -204,27 +204,30 @@ public class InvoiceService extends IdentityInfoService {
                                     Map<Integer, ProductInvoiceDetail> productInvoiceDetails, Map<String, Customer> customers, Map<Integer, Invoice> invoices,
                                     IdentityInfoService identityInfoService, CustomerService customerService) {
         while (true) {
-            Show.showInfoInvoices(invoices);
-            menu.menuFunctionInvoice();
-            try {
-                int choose = Integer.parseInt(scanner.nextLine());
-                switch (choose) {
-                    case 1 -> {
-                        Invoice invoice = selectInvoice(scanner, invoices);
-                        if (invoice != null) {
-                            handleInvAfterSelect(scanner, menu, user, invoice, invoices, invoiceTemplates, customers, products, productInvoiceDetails, identityInfoService, customerService);
+            if (!Utils.checkInvoicesIsEmpty(invoices)) {
+                Show.showInfoInvoices(invoices);
+                menu.menuFunctionInvoice();
+                try {
+                    int choose = Integer.parseInt(scanner.nextLine());
+                    switch (choose) {
+                        case 1 -> {
+                            Invoice invoice = selectInvoice(scanner, invoices);
+                            if (invoice != null) {
+                                handleInvAfterSelect(scanner, menu, user, invoice, invoices, invoiceTemplates, customers, products, productInvoiceDetails, identityInfoService, customerService);
+                            }
+                        }
+                        case 2 -> {
+                            return;
+                        }
+                        default -> {
+                            System.out.println("Invalid value, please re-enter!");
                         }
                     }
-                    case 2 -> {
-                        return;
-                    }
-                    default -> {
-                        System.out.println("Invalid value, please re-enter!");
-                    }
+                } catch (Exception e) {
+                    System.out.println("Invalid value Integer, please try again!");
                 }
-            } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!");
             }
+            else break;
         }
     }
 
@@ -250,6 +253,7 @@ public class InvoiceService extends IdentityInfoService {
                 switch (chooseHandleInv) {
                     case 1 -> {
                         //Show invoice details
+                        Show.showInfoInvoiceDetails(invoice);
                     }
                     case 2 -> {
                         //Edit information of invoice.

@@ -15,7 +15,7 @@ public class ProductInvoiceDetail {
     private Product product;
     private int quantity;
     private double discountRate;
-    //private String discountRateString;
+    private double discountPrice;
     private double VATPrice;
     private double totalPrice;
 
@@ -24,6 +24,7 @@ public class ProductInvoiceDetail {
         this.product = product;
         this.quantity = quantity;
         this.discountRate = discountRate;
+        this.discountPrice = calculateDiscountPrice(product);
         //this.discountRateString = getDiscountRate(this.discountRate);
         this.VATPrice = calculateVATPrice(getProduct());
         this.totalPrice = calculateTotalPrice(getProduct());
@@ -31,10 +32,13 @@ public class ProductInvoiceDetail {
 //    public String getDiscountRate(double discountRate) {
 //       return discountRate + "%";
 //    }
+    public double calculateDiscountPrice(Product product) {
+        return product.getUnitPrice() * (getDiscountRate() / 100);
+    }
     public double calculateVATPrice(Product product) {
-        return ((product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * product.getVATRate()) * getQuantity();
+        return ((product.getUnitPrice() - calculateDiscountPrice(product)) * product.getVATRate()) * getQuantity() ;
     }
     public double calculateTotalPrice(Product product) {
-        return (product.getUnitPrice() - (product.getUnitPrice() * getDiscountRate() / 100)) * getQuantity() + calculateVATPrice(product);
+        return (product.getUnitPrice() - calculateDiscountPrice(product)) * getQuantity() + calculateVATPrice(product);
     }
 }

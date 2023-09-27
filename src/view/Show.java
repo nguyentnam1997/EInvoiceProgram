@@ -51,8 +51,9 @@ public class Show {
                 "Is published?", "Is deleted?", "User").sortBy(0).withUnicode(true);
         invoices.forEach((key, value) -> tableList.addRow(String.valueOf(value.getInvoiceId()), String.valueOf(value.getInvoiceNo()), String.valueOf(value.getInvoiceDate()),
                 value.getInvoiceTemplate().getTemplateSerial(), value.getCustomer().getName(), value.getCustomer().getBuyerName(),
-                String.valueOf(value.calculateTotalUnitPriceInvoice(value.getProductInvoiceDetails())), String.valueOf(value.calculateDiscountPriceInvoice(value.getProductInvoiceDetails())), String.valueOf(value.getTotalVATPrice()),
-                String.valueOf(value.getTotalPrice()), String.valueOf(value.isInvoicePublished()), String.valueOf(value.isInvoiceDeleted()), value.getUser().getUsername()));
+                String.valueOf(value.calculateTotalUnitPriceInvoice(value.getProductInvoiceDetails())), String.valueOf(value.calculateDiscountPriceInvoice(value.getProductInvoiceDetails())),
+                String.valueOf(value.getTotalVATPrice()), String.valueOf(value.getTotalPrice()), String.valueOf(value.isInvoicePublished()), String.valueOf(value.isInvoiceDeleted()),
+                value.getUser().getUsername()));
         tableList.print();
     }
 
@@ -66,33 +67,35 @@ public class Show {
     }
 
     public static void showInfoInvoiceDetails(Invoice invoice) {
-        TableList tableList = new TableList(2, "Title", "Information").sortBy(0).withUnicode(true);
-        System.out.println("=========== Information of Invoice with ID '" + invoice.getInvoiceId() + "' ============");
+        TableList tableList = new TableList(2, "Title", "Information").withUnicode(true);
+        System.out.println("=================== Information of Invoice with ID '" + invoice.getInvoiceId() + "' =====================");
         tableList.addRow("Is published invoice?", String.valueOf(invoice.isInvoicePublished()));
         tableList.addRow("Is deleted invoice?", String.valueOf(invoice.isInvoiceDeleted()));
         tableList.addRow("Invoice ID: ", String.valueOf(invoice.getInvoiceId()));
         tableList.addRow("Invoice No: ", String.valueOf(invoice.getInvoiceNo()));
         tableList.addRow("Invoice Template: ", invoice.getInvoiceTemplate().getTemplateSerial());
         tableList.addRow("Invoice Date: ", String.valueOf(invoice.getInvoiceDate()));
-        tableList.addRow("==================", "Seller ======================");
-        tableList.addRow("Seller's tax code: ", String.valueOf(invoice.getSeller().getTaxCode()));
-        tableList.addRow("Seller's name: ", invoice.getSeller().getName());
-        tableList.addRow("Seller's address: ", invoice.getSeller().getAddress());
-        tableList.addRow("Seller's hotline: ", String.valueOf(invoice.getSeller().getHotline()));
-        tableList.addRow("Seller's bank account: ", invoice.getSeller().getBankAccount());
-        tableList.addRow("==================", "Customer =====================");
-        tableList.addRow("Customer's tax code: ", String.valueOf(invoice.getCustomer().getTaxCode()));
-        tableList.addRow("Customer's name: ", invoice.getCustomer().getName());
-        tableList.addRow("Customer's buyer name: ", invoice.getCustomer().getBuyerName());
-        tableList.addRow("Customer's address: ", invoice.getCustomer().getAddress());
-        tableList.addRow("Customer's phone number: ", String.valueOf(invoice.getCustomer().getHotline()));
-        tableList.addRow("Customer's bank account: ", invoice.getCustomer().getBankAccount());
-        tableList.addRow("Customer's hotline: ", String.valueOf(invoice.getCustomer().getHotline()));
-        tableList.addRow("==================", "List of products invoice =====================");
-        showInfoProductInvoiceDetails(invoice.getProductInvoiceDetails());
+        tableList.addRow("==========================", "================================");
+        tableList.addRow("Seller's tax code:", String.valueOf(invoice.getSeller().getTaxCode()));
+        tableList.addRow("Seller's name:", invoice.getSeller().getName());
+        tableList.addRow("Seller's address:", invoice.getSeller().getAddress());
+        tableList.addRow("Seller's hotline:", String.valueOf(invoice.getSeller().getHotline()));
+        tableList.addRow("Seller's bank account:", invoice.getSeller().getBankAccount());
+        tableList.addRow("==========================", "================================");
+        tableList.addRow("Customer's tax code:", String.valueOf(invoice.getCustomer().getTaxCode()));
+        tableList.addRow("Customer's name:", invoice.getCustomer().getName());
+        tableList.addRow("Customer's buyer name:", invoice.getCustomer().getBuyerName());
+        tableList.addRow("Customer's address:", invoice.getCustomer().getAddress());
+        tableList.addRow("Customer's phone number:", String.valueOf(invoice.getCustomer().getHotline()));
+        tableList.addRow("Customer's bank account:", invoice.getCustomer().getBankAccount());
+        tableList.addRow("Customer's hotline:", String.valueOf(invoice.getCustomer().getHotline()));
+        tableList.addRow("==========================", "================================");
         tableList.addRow("Total unit price:", String.valueOf(invoice.calculateTotalUnitPriceInvoice(invoice.getProductInvoiceDetails())));
         tableList.addRow("Total discount price:", String.valueOf(invoice.calculateDiscountPriceInvoice(invoice.getProductInvoiceDetails())));
         tableList.addRow("Total VAT price:", String.valueOf(invoice.getTotalVATPrice()));
         tableList.addRow("Total price:", String.valueOf(invoice.getTotalPrice()));
+        tableList.print();
+        System.out.println("========================== List of products invoice ==========================");
+        showInfoProductInvoiceDetails(invoice.getProductInvoiceDetails());
     }
 }

@@ -62,6 +62,7 @@ public class CustomerService {
             Customer customer = inputCustomer(scanner, customerCode, identityInfoService);
             customers.put(customer.getCustomerCode(), customer);
             System.out.println("Create new customer successfully!");
+            break;
         }
     }
 
@@ -101,27 +102,32 @@ public class CustomerService {
     }
 
     public void handleSelectCustomer(Scanner scanner, Menu menu, User user, Map<String, Customer> customers) {
-        while (true) {
-            Show.showInfoCustomers(customers);
-            menu.menuFunctionCustomer();
-            try {
-                int chooseFunc = Integer.parseInt(scanner.nextLine());
-                if (!Utils.checkValidPositiveNumber(chooseFunc)) continue;
-                switch (chooseFunc) {
-                    case 1 -> {
-                        if (Utils.checkUserIsAdmin(user)) {
-                            handleCustomerAfterSelect(scanner, menu, selectCustomer(scanner, customers), customers);
+        if (customers.isEmpty()) {
+            System.out.println("List of customer is empty, please create first!");
+        }
+        else {
+            while (true) {
+                Show.showInfoCustomers(customers);
+                menu.menuFunctionCustomer();
+                try {
+                    int chooseFunc = Integer.parseInt(scanner.nextLine());
+                    if (!Utils.checkValidPositiveNumber(chooseFunc)) continue;
+                    switch (chooseFunc) {
+                        case 1 -> {
+                            if (Utils.checkUserIsAdmin(user)) {
+                                handleCustomerAfterSelect(scanner, menu, selectCustomer(scanner, customers), customers);
+                            }
+                        }
+                        case 2 -> {
+                            return;
+                        }
+                        default -> {
+                            System.out.println("Invalid value, please re-enter!");
                         }
                     }
-                    case 2 -> {
-                        return;
-                    }
-                    default -> {
-                        System.out.println("Invalid value, please re-enter!");
-                    }
+                } catch (Exception e) {
+                    System.out.println("Invalid value Integer, please try again!");
                 }
-            } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }

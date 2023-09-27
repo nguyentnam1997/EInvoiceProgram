@@ -12,14 +12,14 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class SellerService {
-    public void loginService(Scanner scanner, Menu menu, Map<String, User> users, Map<String, Product> products, Map<Integer, ProductInvoiceDetail> productInvoiceDetails, Map<String, Customer> customers, Map<Integer, Invoice> invoices,
+    public void loginService(Scanner scanner, Menu menu, Map<String, User> users, Map<String, Product> products, Map<String, Customer> customers, Map<Integer, Invoice> invoices,
                              Map<String, InvoiceTemplate> invoiceTemplates, UserService userService, InvoiceService invoiceService,
                              IdentityInfoService identityInfoService, CustomerService customerService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
         System.out.println("\n" + "========== WELCOME TO INVOICE PROGRAM ===========");
         Seller seller = registerService(scanner, users, identityInfoService);
         while (true) {
             User user = userService.login(scanner, seller, users);
-            handleAfterLogin(scanner, menu, user, seller, users, invoiceTemplates, products, productInvoiceDetails, customers, invoices,
+            handleAfterLogin(scanner, menu, user, seller, users, invoiceTemplates, products, customers, invoices,
                     identityInfoService, customerService, userService, invoiceService, productService, invoiceTemplateService);
         }
 
@@ -66,30 +66,34 @@ public class SellerService {
     }
 
     public void handleAfterLogin(Scanner scanner, Menu menu, User user, Seller seller, Map<String, User> users, Map<String, InvoiceTemplate> invoiceTemplates, Map<String, Product> products,
-                                 Map<Integer, ProductInvoiceDetail> productInvoiceDetails, Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService,
-                                 CustomerService customerService, UserService userService, InvoiceService invoiceService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
+                                 Map<String, Customer> customers, Map<Integer, Invoice> invoices, IdentityInfoService identityInfoService, CustomerService customerService,
+                                 UserService userService, InvoiceService invoiceService, ProductService productService, InvoiceTemplateService invoiceTemplateService) {
         while (true) {
             menu.menuOptionsAfterLogin();
-            int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
-            switch (chooseAfterLogin) {
-                //Company management
-                case 1 -> handleManageCompany(scanner, menu, user, seller);
-                //User management
-                case 2 -> userService.handleManageUser(scanner, menu, user, users);
-                //Invoices management
-                case 3 ->
-                        invoiceService.handleManageInvoice(scanner, menu, user, seller, invoiceTemplates, products, customers,
-                                invoices, productInvoiceDetails, identityInfoService, customerService, invoiceTemplateService);
-                //Products management
-                case 4 -> productService.handleManageProduct(scanner, menu, user, products);
-                //Customers management
-                case 5 -> customerService.handleManageCustomer(scanner, menu, user, customers, identityInfoService);
-                case 6 -> {
-                    if (!Utils.stayMenu(scanner)) return;//chức năng Logout;
+            try {
+                int chooseAfterLogin = Integer.parseInt(scanner.nextLine());
+                switch (chooseAfterLogin) {
+                    //Company management
+                    case 1 -> handleManageCompany(scanner, menu, user, seller);
+                    //User management
+                    case 2 -> userService.handleManageUser(scanner, menu, user, users);
+                    //Invoices management
+                    case 3 ->
+                            invoiceService.handleManageInvoice(scanner, menu, user, seller, invoiceTemplates, products, customers,
+                                    invoices, identityInfoService, customerService, invoiceTemplateService);
+                    //Products management
+                    case 4 -> productService.handleManageProduct(scanner, menu, user, products);
+                    //Customers management
+                    case 5 -> customerService.handleManageCustomer(scanner, menu, user, customers, identityInfoService);
+                    case 6 -> {
+                        if (!Utils.stayMenu(scanner)) return;//chức năng Logout;
+                    }
+                    default -> {
+                        System.out.println("Invalid input, please re-enter");
+                    }
                 }
-                default -> {
-                    System.out.println("Invalid input, please re-enter");
-                }
+            } catch (Exception e) {
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
@@ -110,7 +114,7 @@ public class SellerService {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
+                System.out.println("Invalid value Integer, please try again!");
             }
             /*if (Utils.stayMenu(scanner)) continue;
             break;*/

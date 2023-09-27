@@ -173,7 +173,7 @@ public class ProductService {
                     case 1 -> {
                         //Edit product name
                         while (true) {
-                            System.out.println("Enter new name of this product:");
+                            System.out.print("Enter new name of this product: ");
                             String newProductName = scanner.nextLine();
                             if (Utils.checkValidStringIsNull(newProductName)) continue;
                             product.setProductName(newProductName);
@@ -184,7 +184,7 @@ public class ProductService {
                     case 2 -> {
                         //Edit product unit price
                         while (true) {
-                            System.out.println("Enter new unit price of this product:");
+                            System.out.print("Enter new unit price of this product: ");
                             try {
                                 double newUnitPrice = Double.parseDouble(scanner.nextLine());
                                 if (!Utils.checkValidPositiveNumber(newUnitPrice)) continue;

@@ -30,7 +30,7 @@ public class Main {
         CustomerService customerService = new CustomerService();
         ProductService productService = new ProductService();
         InvoiceTemplateService invoiceTemplateService = new InvoiceTemplateService();
-        sellerService.loginService(scanner,  menu,  users, products, productInvoiceDetails, customers, invoices, invoiceTemplates,
+        sellerService.loginService(scanner,  menu,  users, products, customers, invoices, invoiceTemplates,
                 userService, invoiceService, identityInfoService, customerService, productService, invoiceTemplateService);
     }
 }

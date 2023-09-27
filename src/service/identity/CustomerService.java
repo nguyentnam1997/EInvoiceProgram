@@ -96,7 +96,7 @@ public class CustomerService {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
@@ -169,7 +169,7 @@ public class CustomerService {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
@@ -191,9 +191,9 @@ public class CustomerService {
                 switch (choose) {
                     case 1 -> {
                         //Edit organization's name
-                        System.out.println("5.1.1.1.1. Edit organization's name:");
+                        System.out.println("--------- 5.1.1.1.1. Edit organization's name: -----------");
                         while (true) {
-                            System.out.println("Enter new organization's name:");
+                            System.out.print("Enter new organization's name: ");
                             String newOrgName = scanner.nextLine();
                             if (Utils.checkValidStringIsNull(newOrgName)) continue;
                             customer.setName(newOrgName);
@@ -203,9 +203,9 @@ public class CustomerService {
                     }
                     case 2 -> {
                         //Edit organization's address
-                        System.out.println("5.1.1.1.2. Edit organization's address:");
+                        System.out.println("--------- 5.1.1.1.2. Edit organization's address: -----------");
                         while (true) {
-                            System.out.println("Enter new organization's address:");
+                            System.out.print("Enter new organization's address: ");
                             String newOrgAddress = scanner.nextLine();
                             if (Utils.checkValidStringIsNull(newOrgAddress)) continue;
                             customer.setAddress(newOrgAddress);
@@ -215,9 +215,9 @@ public class CustomerService {
                     }
                     case 3 -> {
                         //Edit organization's email
-                        System.out.println("5.1.1.1.3. Edit organization's email:");
+                        System.out.println("--------- 5.1.1.1.3. Edit organization's email: -----------");
                         while (true) {
-                            System.out.println("Enter new organization's email:");
+                            System.out.print("Enter new organization's email: ");
                             String newOrgEmail = scanner.nextLine();
                             if (!Utils.isValidEmail(newOrgEmail)) {
                                 System.out.println("Invalid email, please re-enter!");
@@ -230,9 +230,9 @@ public class CustomerService {
                     }
                     case 4 -> {
                         //Edit organization's hotline
-                        System.out.println("5.1.1.1.4. Edit organization's hotline:");
+                        System.out.println("--------- 5.1.1.1.4. Edit organization's hotline: ---------");
                         while (true) {
-                            System.out.println("Enter new organization's hotline:");
+                            System.out.print("Enter new organization's hotline: ");
                             try {
                                 int newOrgHotline = Integer.parseInt(scanner.nextLine());
                                 if (String.valueOf(newOrgHotline).length() != 10) {
@@ -249,8 +249,8 @@ public class CustomerService {
                     }
                     case 5 -> {
                         //Edit organization's bank account
-                        System.out.println("5.1.1.1.5. Edit organization's bank account:");
-                        System.out.println("Enter new organization's bank account:");
+                        System.out.println("--------- 5.1.1.1.5. Edit organization's bank account: ---------");
+                        System.out.print("Enter new organization's bank account: ");
                         String newOrgBankAccount = scanner.nextLine();
                         customer.setBankAccount(newOrgBankAccount);
                         System.out.println("Change organization's bank account successfully!");
@@ -263,7 +263,7 @@ public class CustomerService {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
@@ -277,9 +277,9 @@ public class CustomerService {
                 switch (choose) {
                     case 1 -> {
                         //Edit personal's name
-                        System.out.println("5.1.1.1.1. Edit personal's name:");
+                        System.out.println("--------- 5.1.1.1.1. Edit personal's name: ---------");
                         while (true) {
-                            System.out.println("Enter new personal's name:");
+                            System.out.print("Enter new personal's name: ");
                             String newBuyerName = scanner.nextLine();
                             if (Utils.checkValidStringIsNull(newBuyerName)) continue;
                             customer.setBuyerName(newBuyerName);
@@ -289,9 +289,9 @@ public class CustomerService {
                     }
                     case 2 -> {
                         //Edit personal's address
-                        System.out.println("5.1.1.1.2. Edit personal's address:");
+                        System.out.println("--------- 5.1.1.1.2. Edit personal's address: ---------");
                         while (true) {
-                            System.out.println("Enter new personal's address:");
+                            System.out.print("Enter new personal's address: ");
                             String newPsAddress = scanner.nextLine();
                             if (Utils.checkValidStringIsNull(newPsAddress)) continue;
                             customer.setAddress(newPsAddress);
@@ -301,9 +301,9 @@ public class CustomerService {
                     }
                     case 3 -> {
                         //Edit personal's email
-                        System.out.println("5.1.1.1.3. Edit personal's email:");
+                        System.out.println("--------- 5.1.1.1.3. Edit personal's email: ---------");
                         while (true) {
-                            System.out.println("Enter new personal's email:");
+                            System.out.print("Enter new personal's email: ");
                             String newPsEmail = scanner.nextLine();
                             if (!Utils.isValidEmail(newPsEmail)) {
                                 System.out.println("Invalid email, please re-enter!");
@@ -316,9 +316,9 @@ public class CustomerService {
                     }
                     case 4 -> {
                         //Edit personal's phone number
-                        System.out.println("5.1.1.1.4. Edit personal's phone number:");
+                        System.out.println("--------- 5.1.1.1.4. Edit personal's phone number: ---------");
                         while (true) {
-                            System.out.println("Enter new personal's phone number:");
+                            System.out.print("Enter new personal's phone number: ");
                             try {
                                 int newPsPhone = Integer.parseInt(scanner.nextLine());
                                 if (String.valueOf(newPsPhone).length() != 10) {
@@ -335,8 +335,8 @@ public class CustomerService {
                     }
                     case 5 -> {
                         //Edit personal's bank account
-                        System.out.println("5.1.1.1.5. Edit personal's bank account:");
-                        System.out.println("Enter new personal's bank account:");
+                        System.out.println("--------- 5.1.1.1.5. Edit personal's bank account: ---------");
+                        System.out.print("Enter new personal's bank account: ");
                         String newPsBankAccount = scanner.nextLine();
                         customer.setBankAccount(newPsBankAccount);
                         System.out.println("Change personal's bank account successfully!");
@@ -349,7 +349,7 @@ public class CustomerService {
                     }
                 }
             } catch (Exception e) {
-                System.out.println("Invalid value Integer, please try again!" + "\n");
+                System.out.println("Invalid value Integer, please try again!");
             }
         }
     }
